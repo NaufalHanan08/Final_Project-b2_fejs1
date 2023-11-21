@@ -1,5 +1,6 @@
-# React + Vite
+# Final_Project-b2_fejs1
 
+Final Project MOOC kelompok b2
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
