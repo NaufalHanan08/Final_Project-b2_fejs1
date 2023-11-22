@@ -3,6 +3,7 @@ import Carousel from "../components/Carousel";
 import Navbar from "../components/Navbar";
 import CourseList from "../components/courselist/CourseList";
 import Benefits from "../components/Benefits";
+import Footer from "../components/Footer";
 
 function HomePage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -40,6 +41,7 @@ function HomePage() {
         </div>
       )}
       <Benefits />
+      <Footer/>
     </>
   );
 }
