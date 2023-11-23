@@ -4,31 +4,6 @@ function Navbar() {
   const [navbar, setNavbar] = useState(false);
 
   return (
-    // <div className="flex w-full bg-gray-700 text-slate-400 justify-between items-center p-5">
-    //   <a href="#" className="text-2xl font-bold text-white">
-    //     ByteAcademy
-    //   </a>
-
-    //   <div className="flex gap-14">
-    //     <a href="">HOME</a>
-    //     <a href="">ABOUT</a>
-    //     <a href="">CONTACT US</a>
-    //   </div>
-
-    //   <div className="flex gap-3 align-center">
-    //     <div className="border-2 me-4">
-    //       <input
-    //         type="text"
-    //         placeholder="Search here..."
-    //         className="w-30 h-8 outline-none text-black px-3"
-    //       />
-    //       <button className="px-2">Search</button>
-    //     </div>
-    //     <button className="text-lime-600 font-medium">LOGIN</button>
-    //     <button className="text-lime-600 font-medium">REGISTER</button>
-    //   </div>
-    // </div>
-
     <nav className="w-full bg-gray-700 shadow py-2">
       <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
         <div>
