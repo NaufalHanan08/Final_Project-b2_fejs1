@@ -11,7 +11,7 @@ function Hero() {
             reiciendis dolorum vitae placeat doloremque ducimus.
           </h2>
           <div>
-            <button className="text-white font-semibold bg-teal-900 border border-teal-900 hover:bg-teal-600 hover:border-teal-900 hover:text-teal-900 transition-all duration-300 rounded-lg py-2 px-3 mt-5">Daftar Sekarang</button>
+            <button className="text-white font-semibold bg-gray-800 border border-gray-800 hover:bg-teal-600 hover:border-gray-800 hover:text-gray-800 transition-all duration-300 rounded-lg py-2 px-3 mt-5">Daftar Sekarang</button>
           </div>
         </div>
         <div>
