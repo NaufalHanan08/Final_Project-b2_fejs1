@@ -26,7 +26,7 @@ export default function CardComponent() {
         <>
             <div className="grid gap-2 lg:grid-cols-4 p-5">
                 {posts.map((items, key) => (
-                    <div className="w-full rounded-lg shadow-md lg:max-w-sm hover:shadow-md hover:shadow-black" key={key}>
+                    <div className="w-full rounded-lg shadow-md lg:max-w-sm hover:shadow-md hover:shadow-black transition-all" key={key}>
                         <img
                             className="object-cover w-full h-48"
                             src={items.img}
@@ -40,7 +40,7 @@ export default function CardComponent() {
                             <p className="mb-2 leading-normal">
                             {items.content}
                             </p>
-                            <button className="px-4 py-2 text-sm text-white bg-teal-900 rounded shadow">
+                            <button className="px-4 py-2 text-sm text-white bg-gray-800 rounded shadow">
                                 Read more
                             </button>
                         </div>

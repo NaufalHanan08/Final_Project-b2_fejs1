@@ -3,6 +3,7 @@ import CourseList from "../components/courselist/CourseList";
 import Benefits from "../components/Benefits";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
+import RegisterBanner from "../components/RegisterBanner";
 
 function HomePage() {
   return (
@@ -11,6 +12,7 @@ function HomePage() {
       <Hero />
       <CourseList />
       <Benefits />
+      <RegisterBanner/>
       <Footer />
     </>
   );

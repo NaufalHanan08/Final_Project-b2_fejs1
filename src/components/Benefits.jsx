@@ -2,14 +2,14 @@ function Benefits() {
   return (
     <div className="benefits-img w-full flex justify-end">
       <div className="benefits-content md:w-2/4 w-full py-28 px-10 overflow-hidden">
-        <h3 className="bg-teal-900 text-white font-bold ps-5 shadow-md">
-          LEARN ANYTHING
+        <h3 className="bg-gray-800 text-white font-bold ps-5 shadow-md">
+          <span className="text-teal-600">LEARN</span> ANYTHING
         </h3>
         <h1 className="text-black font-bold text-4xl mb-14 overflow-hidden">
           Benefits About Online Learning Expertise
         </h1>
         <div className="flex flex-col gap-3">
-          <a href="" className="bg-slate-100 hover:bg-teal-900 p-10 text-black hover:text-white transition-all duration-300">
+          <a href="" className="bg-slate-100 hover:bg-gray-800 p-10 text-black hover:text-white transition-all duration-300">
             <h2 className="text-2xl font-bold mb-3">Online Courses</h2>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam
@@ -18,7 +18,7 @@ function Benefits() {
               adipisci odio omnis. Expedita!
             </p>
           </a>
-          <a href="" className="bg-slate-100 hover:bg-teal-900 p-10 text-black hover:text-white transition-all duration-300">
+          <a href="" className="bg-slate-100 hover:bg-gray-800 p-10 text-black hover:text-white transition-all duration-300">
             <h2 className="text-2xl font-bold mb-3">Earn A Certificates</h2>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod,
@@ -27,7 +27,7 @@ function Benefits() {
               facilis rerum nostrum. Neque, provident architecto?
             </p>
           </a>
-          <a href="" className="bg-slate-100 hover:bg-teal-900 p-10 text-black hover:text-white transition-all duration-300">
+          <a href="" className="bg-slate-100 hover:bg-gray-800 p-10 text-black hover:text-white transition-all duration-300">
             <h2 className="text-2xl font-bold mb-3">Learn with Expert</h2>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit.

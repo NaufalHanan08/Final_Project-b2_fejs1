@@ -1,4 +1,4 @@
-import CardComponent from "./CardComponent";
+import CourseCard from "./CourseCard";
 
 function CourseList() {
   return (
@@ -12,7 +12,7 @@ function CourseList() {
         sequi at ipsa obcaecati, consectetur consequatur eos, odio vero ducimus
         culpa qui saepe distinctio eveniet soluta. Quidem vero a ullam nam?
       </p>
-      <CardComponent/>
+      <CourseCard/>
     </div>
   );
 }
