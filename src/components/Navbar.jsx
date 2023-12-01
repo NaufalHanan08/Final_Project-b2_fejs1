@@ -94,8 +94,8 @@ function Navbar() {
                 <a href="#" onClick={() => navigate('/about')} className="text-gray-300 hover:text-teal-900 block px-3 py-2 rounded-md text-base font-medium">
                   ABOUT
                 </a>
-                <a href="#" className="text-gray-300 hover:text-teal-900 block px-3 py-2 rounded-md text-base font-medium">
-                  COURSES
+                <a href="#" onClick={() => navigate('/courses')} className="text-gray-300 hover:text-teal-900 block px-3 py-2 rounded-md text-base font-medium">
+                  ABOUT
                 </a>
                 <Link to="/Login">
                   <button className="w-24 mr-3 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">Login</button>
