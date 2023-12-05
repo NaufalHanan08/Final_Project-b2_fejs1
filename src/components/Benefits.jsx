@@ -1,10 +1,10 @@
-import benefitsbg from "../assets/benefitsbg.jpg"
+// import benefitsbg from "../assets/benefitsbg.jpg"
 
 function Benefits() {
   return (
-    <div className="w-full lg:h-screen h-fit flex justify-center">
-      <img src={benefitsbg} alt="" className="lg:block hidden object-cover border-2 rounded-full bg-teal-600" />
-      <div className="benefits-content lg:w-2/4 w-full py-2 md:px-10 px-4 overflow-hidden">
+    <div className="w-full h-fit flex justify-center">
+      {/* <img src={benefitsbg} alt="" className="lg:block hidden object-cover border-2 rounded-full bg-teal-600" /> */}
+      <div className="benefits-content w-full py-2 md:px-10 px-4 overflow-hidden">
         <h3 className="bg-gray-800 text-white font-bold ps-5 shadow-md">
           <span className="text-teal-600">LEARN</span> ANYTHING
         </h3>
