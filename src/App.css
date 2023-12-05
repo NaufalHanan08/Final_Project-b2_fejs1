@@ -7,21 +7,14 @@ html {
 }
 
 .bg-hero {
-  /* background-image: url(./assets/bg-hero-resize.jpg); */
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  /* background-attachment: fixed; */
   object-fit: cover;
 }
 
-/* .hero-content {
-  background-color: rgb(32, 124, 186, 0.6);
-  background-attachment: fixed;
-} */
-
 .benefits-img {
-  background-image: url(./assets/benefitsimg.jpg);
+  background-image: url(./assets/benefitsbg.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -40,5 +33,11 @@ html {
   background-size: cover;
   background-attachment: fixed;
   object-fit: cover;
+}
+
+@media (max-width: 1279.5px) {
+  .benefits-img {
+      background-image: none;
+  }
 }
 
