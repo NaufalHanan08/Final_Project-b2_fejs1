@@ -9,6 +9,7 @@ import ForgotPasswordPage from './pages/authentication/ForgotPasswordPage';
 import OneTimePasswordPage from './pages/authentication/OneTimePasswordPage';
 import Payment from './pages/payment/Payment';
 import AllCourse from './components/courselist/Courses';
+import CourseDetail from './components/coursedetail/CourseDetail';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/otp" element={<OneTimePasswordPage />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/detail" element={<CourseDetail />} />
       </Routes>
     </BrowserRouter>
   );
