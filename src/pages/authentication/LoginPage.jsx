@@ -3,53 +3,75 @@ import { Link } from 'react-router-dom';
 
 export function LoginPage() {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <Card color="transparent" shadow={false}>
-        <Typography variant="h4" color="blue-gray">
-          Sign In
-        </Typography>
-        <Typography color="gray" className="mt-1 font-normal">
-          Welcome back! Log in to your account.
-        </Typography>
-        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-          <div className="mb-1 flex flex-col gap-6">
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Your Email
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="name@mail.com"
-              className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: 'before:content-none after:content-none',
-              }}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Password
-            </Typography>
-            <Input
-              type="password"
-              size="lg"
-              placeholder="********"
-              className="!border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: 'before:content-none after:content-none',
-              }}
-            />
-          </div>
-          <Link to="/forgot-password" className="text-blue-600 hover:underline mb-4">
-            Forgot Password?
-          </Link>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white mt-6" fullWidth>
-            Sign In
-          </Button>
-          <Typography color="gray" className="mt-4 text-center font-normal">
-            Don't have an account?{' '}
-            <Link to="/register" className="font-medium text-gray-900">
-              Sign Up
-            </Link>
+    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <Card className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-6">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <Typography variant="h2" className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            Sign in to your account
           </Typography>
+        </div>
+
+        <form className="mt-10 space-y-6" action="#" method="POST">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              Email address
+            </label>
+            <div className="mt-2">
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                size="md"
+                placeholder="name@mail.com"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                Password
+              </label>
+              <div className="text-sm">
+                <Link to="/forgot-password" className="font-semibold text-teal-600 hover:text-gray-800">
+                  Forgot password?
+                </Link>
+              </div>
+            </div>
+            <div className="mt-2">
+              <Input
+                id="password"
+                place
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                size="md"
+                placeholder="********"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Button
+              type="submit"
+              className="flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Sign in
+            </Button>
+          </div>
         </form>
+
+        <p className="mt-10 text-center text-sm text-gray-500">
+          Don't have an account?{' '}
+          <Link to="/register" className="font-semibold leading-6 text-teal-600 hover:text-gray-800">
+            Sign Up
+          </Link>
+        </p>
       </Card>
     </div>
   );

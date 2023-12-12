@@ -8,19 +8,35 @@ import AboutPage from './pages/AboutPage';
 import ForgotPasswordPage from './pages/authentication/ForgotPasswordPage';
 import OneTimePasswordPage from './pages/authentication/OneTimePasswordPage';
 import Payment from './pages/payment/Payment';
+import AuthLayout from './components/layout/AuthLayout';
+import DashboardUser from './pages/dashboard/DashboardUser';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/otp" element={<OneTimePasswordPage />} />
-        <Route path="/payment" element={<Payment />} />
+        <Route path="/dashboard-user/*" element={<DashboardUser />} />
+
+        {/* Halaman Authentication */}
+        <Route
+          path="/*"
+          element={
+            <AuthLayout>
+              <Routes>
+                <Route index element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/otp" element={<OneTimePasswordPage />} />
+                <Route path="/payment" element={<Payment />} />
+              </Routes>
+            </AuthLayout>
+          }
+        />
+
+        {/* Halaman Dashboard */}
       </Routes>
     </BrowserRouter>
   );
