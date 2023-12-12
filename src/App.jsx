@@ -10,6 +10,7 @@ import OneTimePasswordPage from './pages/authentication/OneTimePasswordPage';
 import Payment from './pages/payment/Payment';
 import AuthLayout from './components/layout/AuthLayout';
 import DashboardUser from './pages/dashboard/DashboardUser';
+import CoursePage from './pages/course/CoursePage';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/dashboard-user/*" element={<DashboardUser />} />
+        <Route path="/course" element={<CoursePage />} />
+        <Route path="/*" element={<HomePage />} />
 
         {/* Halaman Authentication */}
         <Route
@@ -25,7 +28,6 @@ function App() {
           element={
             <AuthLayout>
               <Routes>
-                <Route index element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -35,8 +37,6 @@ function App() {
             </AuthLayout>
           }
         />
-
-        {/* Halaman Dashboard */}
       </Routes>
     </BrowserRouter>
   );
