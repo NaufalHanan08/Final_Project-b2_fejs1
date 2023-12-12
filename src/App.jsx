@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import HomePage from './pages/HomePage';
 import LoginPage from './pages/authentication/LoginPage';
 import RegisterPage from './pages/authentication/RegisterPage';
 import SearchPage from './pages/SearchPage';
@@ -20,7 +19,6 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/dashboard-user/*" element={<DashboardUser />} />
         <Route path="/course" element={<CoursePage />} />
-        <Route path="/*" element={<HomePage />} />
 
         {/* Halaman Authentication */}
         <Route
