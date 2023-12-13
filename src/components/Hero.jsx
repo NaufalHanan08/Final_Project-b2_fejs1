@@ -1,4 +1,4 @@
-import heroimg from "../assets/heroimg.png"
+import heroimg from '../assets/heroimg.png';
 
 function Hero() {
   return (
@@ -6,9 +6,7 @@ function Hero() {
       <div className="bg-hero w-full md:h-fit md:block flex flex-col-reverse items-center md:px-6 px-5">
         <div className="hero-content  lg:w-3/5 md:w-2/4 w-full md:py-28 py-5 md:mb-0 mb-20 md:mt-10 mt-0 overflow-hidden md:block flex flex-col items-center">
           <h1 className="sm:text-4xl text-2xl font-bold text-white py-2 md:text-start text-center">Belajar Pemrograman Bersama Ahlinya di ByteAcademy</h1>
-          <h2 className="md:text-2xl text-lg font-light text-white py-6 md:text-start text-center">
-            Tidak ada kata terlambat untuk belajar
-          </h2>
+          <h2 className="md:text-2xl text-lg font-light text-white py-6 md:text-start text-center">Tidak ada kata terlambat untuk belajar</h2>
           <div>
             <button className="text-white font-semibold bg-gray-800 border border-gray-800 hover:bg-teal-600 hover:border-gray-800 hover:text-gray-800 transition-all duration-300 rounded-lg py-2 px-3 mt-5">Daftar Sekarang</button>
           </div>

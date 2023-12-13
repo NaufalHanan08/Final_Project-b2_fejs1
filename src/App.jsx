@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import HomePage from './pages/HomePage';
 import LoginPage from './pages/authentication/LoginPage';
 import RegisterPage from './pages/authentication/RegisterPage';
 import SearchPage from './pages/SearchPage';
@@ -10,6 +11,8 @@ import Payment from './pages/payment/Payment';
 import AuthLayout from './components/layout/AuthLayout';
 import DashboardUser from './pages/dashboard/DashboardUser';
 import CoursePage from './pages/course/CoursePage';
+import AllCourse from './components/courselist/Courses';
+import CourseDetail from './components/coursedetail/CourseDetail';
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/dashboard-user/*" element={<DashboardUser />} />
         <Route path="/course" element={<CoursePage />} />
+        <Route path="/courses" element={<AllCourse />} />
+        <Route path="/detail" element={<CourseDetail />} />
+        <Route path="/" element={<HomePage />} />
 
         {/* Halaman Authentication */}
         <Route

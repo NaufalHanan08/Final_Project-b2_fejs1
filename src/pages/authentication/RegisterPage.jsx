@@ -1,7 +1,41 @@
-import { Input, Button, Typography, Card } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
+import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import axios from 'axios';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function RegisterPage() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Kirim data ke API menggunakan metode POST
+      const response = await axios.post('http://byteacademy.as.r.appspot.com/api/v1/auth/register', {
+        username,
+        email,
+        password,
+        name,
+        phoneNumber,
+      });
+
+      // Tanggapi respons dari API
+      console.log('Register success:', response.data);
+
+      // Arahkan pengguna ke halaman home setelah berhasil mendaftar
+      navigate('/');
+    } catch (error) {
+      // Tangani kesalahan jika terjadi
+      console.error('Register error:', error.response.data);
+      setError('Registration failed. Please check your input and try again.');
+    }
+  };
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <Card className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-6">
@@ -11,13 +45,35 @@ export function RegisterPage() {
           </Typography>
         </div>
 
-        <form className="mt-10 space-y-6" action="#" method="POST">
+        <form className="mt-10 space-y-6" action="#" method="POST" onSubmit={handleRegister}>
+          <div>
+            <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
+              Your Username
+            </Typography>
+            <div className="mt-2">
+              <Input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
+                required
+                size="md"
+                placeholder="Your Username"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
           <div>
             <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
               Your Name
             </Typography>
             <div className="mt-2">
               <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 id="name"
                 name="name"
                 type="text"
@@ -36,6 +92,8 @@ export function RegisterPage() {
             </Typography>
             <div className="mt-2">
               <Input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 id="email"
                 name="email"
                 type="email"
@@ -50,10 +108,32 @@ export function RegisterPage() {
 
           <div>
             <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
+              Your Phonenumber
+            </Typography>
+            <div className="mt-2">
+              <Input
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                id="phonenumber"
+                name="phonenumber"
+                type="tel"
+                autoComplete="phonenumber"
+                required
+                size="md"
+                placeholder="Your Phonenumber"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
               Password
             </Typography>
             <div className="mt-2">
               <Input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 id="password"
                 name="password"
                 type="password"
@@ -65,6 +145,7 @@ export function RegisterPage() {
               />
             </div>
           </div>
+          {error && <div className="text-red-500 text-sm font-medium">{error}</div>}
 
           <div>
             <Button

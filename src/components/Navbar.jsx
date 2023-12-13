@@ -45,7 +45,6 @@ function Navbar() {
                   <a href="#" onClick={() => navigate('/about')} className="text-gray-300 hover:text-teal-900 px-3 py-2 rounded-md text-sm font-medium">
                     ABOUT
                   </a>
-
                   <a href="#" className="text-gray-300 hover:text-teal-900 px-3 py-2 rounded-md text-sm font-medium">
                     COURSES
                   </a>
