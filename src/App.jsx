@@ -13,6 +13,7 @@ import DashboardUser from './pages/dashboard/DashboardUser';
 import CoursePage from './pages/course/CoursePage';
 import AllCourse from './components/courselist/Courses';
 import CourseDetail from './components/coursedetail/CourseDetail';
+import ConfirmationChangePassword from './pages/authentication/ConfirmationChangePassword';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/courses" element={<AllCourse />} />
         <Route path="/detail" element={<CourseDetail />} />
         <Route path="/" element={<HomePage />} />
+        <Route path="/confirmation-change-pass" element={<ConfirmationChangePassword />} />
 
         {/* Halaman Authentication */}
         <Route

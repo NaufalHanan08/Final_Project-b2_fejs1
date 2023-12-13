@@ -7,8 +7,8 @@ function ForgotPasswordPage() {
         <div className="text-center">
           <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Forgot password?</h1>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Remember your password?
-            <Link to="/login" className="text-blue-600 decoration-2 hover:underline font-medium">
+            Remember your password?{' '}
+            <Link to="/login" className="text-teal-600 font-semibold leading-6 text-teal-600 hover:text-gray-800">
               Login here
             </Link>
           </p>
@@ -30,7 +30,7 @@ function ForgotPasswordPage() {
               </div>
               <button
                 type="submit"
-                className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+                className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-teal-600 text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
               >
                 Reset password
               </button>
