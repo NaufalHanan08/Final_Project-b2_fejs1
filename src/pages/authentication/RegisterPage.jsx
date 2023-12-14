@@ -1,9 +1,10 @@
+// RegisterPage.js
+import { useState } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import axios from 'axios';
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-export function RegisterPage() {
+function RegisterPage() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,11 +13,22 @@ export function RegisterPage() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const handleGenerateOTP = async () => {
+    try {
+      const response = await axios.post('http://byteacademy.as.r.appspot.com/api/v1/auth/generate-otp-register', {
+        phoneNumber,
+      });
+
+      console.log('OTP generated successfully:', response.data);
+    } catch (error) {
+      console.error('Error generating OTP:', error.response.data);
+    }
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      // Kirim data ke API menggunakan metode POST
       const response = await axios.post('http://byteacademy.as.r.appspot.com/api/v1/auth/register', {
         username,
         email,
@@ -25,17 +37,17 @@ export function RegisterPage() {
         phoneNumber,
       });
 
-      // Tanggapi respons dari API
       console.log('Register success:', response.data);
 
-      // Arahkan pengguna ke halaman home setelah berhasil mendaftar
-      navigate('/');
+      // Setelah berhasil mendaftar, generate OTP dan arahkan ke halaman OTP
+      await handleGenerateOTP();
+      navigate('/otp'); // Sesuaikan dengan path halaman OTP yang Anda miliki
     } catch (error) {
-      // Tangani kesalahan jika terjadi
       console.error('Register error:', error.response.data);
       setError('Registration failed. Please check your input and try again.');
     }
   };
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <Card className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-6">
