@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 function ChangePhoneNumber() {
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const history = useHistory();
+  // const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ function ChangePhoneNumber() {
 
         setSuccessMessage('OTP berhasil terkirim.');
         // Navigasi ke halaman ConfirmationChangePhonenumber
-        history.push('/ConfirmationChangePhonenumber');
+        // history.push('/ConfirmationChangePhonenumber');
       } else {
         setError('Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi.');
       }
