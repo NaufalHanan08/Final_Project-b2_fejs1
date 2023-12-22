@@ -5,14 +5,13 @@ import aboutimg from "../assets/aboutimg.png";
 import Team from "../components/aboutcomponent/Team";
 
 function AboutPage() {
-
   return (
     <>
       <Navbar />
       <div>
         <div className="about-bg flex flex-col w-full h-screen  bg-teal-600">
           <div className=" w-full h-screen flex items-center md:justify-start justify-center px-10 ">
-            <div className="about-title flex items-center px-8 py-5 lg:ml-24 ml-0 md:mb-20 md:mt-0 mt-20 shadow-md shadow-gray-800 rounded-md">
+            <div className="flex items-center px-8 py-5 lg:ml-24 ml-0 md:mb-20 md:mt-0 mt-20 shadow-2xl rounded-md">
               <h1 className="text-white font-bold text-2xl flex items-center gap-3">
                 ABOUT{" "}
                 <span>
@@ -43,12 +42,11 @@ function AboutPage() {
               ABOUT <span className="text-teal-600">US</span>
             </h1>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi
-              quisquam vel minima omnis ad illum qui, odit voluptates dolore
-              inventore dicta fugit enim dolores laboriosam nostrum veniam
-              deleniti laborum rerum? Officiis blanditiis, quae perferendis,
-              reiciendis id unde velit vitae facilis molestias eos ut culpa
-              dolore sapiente!
+              ByteAcademy adalah platform edukasi teknologi terbaik di Indonesia
+              yang melayani pembelajaran dengan materi yang terbukti baik secara
+              global dan nasional. Visi ByteAcademy adalah menjadikan mahasiswa
+              Indonesia terdepan dan terpandang di bidang teknologi secara
+              global dan mewujudkan era teknologi yang maju.
             </p>
           </div>
 
@@ -57,7 +55,7 @@ function AboutPage() {
           </div>
         </div>
       </div>
-      <Team/>
+      <Team />
       <Footer />
     </>
   );

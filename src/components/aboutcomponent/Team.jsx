@@ -4,8 +4,8 @@ import { FaInstagramSquare } from "react-icons/fa";
 const teams = [
   {
     foto: "https://placehold.co/600x500",
-    nama: "Nama Anggota",
-    jabatan: "Jabatan",
+    nama: "Adam Anwar",
+    jabatan: "Scrum Master",
     link: {
       linkedinLink:
         "https://www.linkedin.com/in/muhammad-zaqi-hidayat-564443279/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BOHrpdCpuReSZBRqxH5BoOQ%3D%3D",
@@ -16,8 +16,8 @@ const teams = [
   },
   {
     foto: "https://placehold.co/600x500",
-    nama: "Nama Anggota",
-    jabatan: "Jabatan",
+    nama: "Resa Riyan",
+    jabatan: "Tech Lead Backend",
     link: {
       linkedinLink:
         "https://www.linkedin.com/in/muhammad-zaqi-hidayat-564443279/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BOHrpdCpuReSZBRqxH5BoOQ%3D%3D",
@@ -28,8 +28,8 @@ const teams = [
   },
   {
     foto: "https://placehold.co/600x500",
-    nama: "Nama Anggota",
-    jabatan: "Jabatan",
+    nama: " M Zaqi Hidayat",
+    jabatan: "Tech Lead Frontend",
     link: {
       linkedinLink:
         "https://www.linkedin.com/in/muhammad-zaqi-hidayat-564443279/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BOHrpdCpuReSZBRqxH5BoOQ%3D%3D",
@@ -40,8 +40,8 @@ const teams = [
   },
   {
     foto: "https://placehold.co/600x500",
-    nama: "Nama Anggota",
-    jabatan: "Jabatan",
+    nama: "Akbar Oktaviadi",
+    jabatan: "Backend Developer",
     link: {
       linkedinLink:
         "https://www.linkedin.com/in/muhammad-zaqi-hidayat-564443279/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BOHrpdCpuReSZBRqxH5BoOQ%3D%3D",
@@ -52,8 +52,8 @@ const teams = [
   },
   {
     foto: "https://placehold.co/600x500",
-    nama: "Nama Anggota",
-    jabatan: "Jabatan",
+    nama: "Naufal Hanan",
+    jabatan: "Frontend Developer",
     link: {
       linkedinLink:
         "https://www.linkedin.com/in/muhammad-zaqi-hidayat-564443279/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BOHrpdCpuReSZBRqxH5BoOQ%3D%3D",
@@ -64,8 +64,8 @@ const teams = [
   },
   {
     foto: "https://placehold.co/600x500",
-    nama: "Nama Anggota",
-    jabatan: "Jabatan",
+    nama: "Najib Sauqi R",
+    jabatan: "Backend Developer",
     link: {
       linkedinLink:
         "https://www.linkedin.com/in/muhammad-zaqi-hidayat-564443279/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BOHrpdCpuReSZBRqxH5BoOQ%3D%3D",
@@ -76,8 +76,8 @@ const teams = [
   },
   {
     foto: "https://placehold.co/600x500",
-    nama: "Nama Anggota",
-    jabatan: "Jabatan",
+    nama: "Lutfi Isnan Safrudin",
+    jabatan: "Backend Developer",
     link: {
       linkedinLink:
         "https://www.linkedin.com/in/muhammad-zaqi-hidayat-564443279/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BOHrpdCpuReSZBRqxH5BoOQ%3D%3D",
@@ -90,31 +90,34 @@ const teams = [
 
 function Team() {
   return (
-    <div className="p-10">
+    <div className="px-10 py-20">
       <div className="text-center">
-        <h1 className="text-4xl py-1 font-bold mb-10">Meet Our <span className="text-teal-600">Team</span></h1>
+        <h1 className="text-4xl py-1 font-bold mb-10">
+          Meet Our <span className="text-teal-600">Team</span>
+        </h1>
       </div>
 
-      <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 py-5">
         {teams.map((team, index) => (
-          <div className="border-2 p-2" key={index}>
+          <div className="shadow-lg rounded-lg py-2 px-4" key={index}>
             <img src={team.foto} alt={team.nama} />
             <div>
-              <h2 className="text-xl font-semibold mt-5">{team.nama}</h2>
-              <h3 className="text-lg text-gray-600 font-semibold">{team.jabatan}</h3>
+              <h2 className="text-xl font-bold mt-5">{team.nama}</h2>
+              <h3 className="text-sm text-gray-600 font-medium">
+                {team.jabatan}
+              </h3>
               <ul className="flex mb-5 justify-end">
                 <li>
                   <a href={team.link.linkedinLink}>
-                    <FaLinkedin />
+                    <FaLinkedin className="text-teal-600" />
                   </a>
                 </li>
                 <li>
                   <a href={team.link.instagramLink}>
-                    <FaInstagramSquare />
+                    <FaInstagramSquare className="text-teal-600" />
                   </a>
                 </li>
               </ul>
-              <p>{team.deskripsi}</p>
             </div>
           </div>
         ))}

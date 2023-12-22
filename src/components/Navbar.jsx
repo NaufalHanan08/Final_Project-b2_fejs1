@@ -22,13 +22,14 @@ function Navbar() {
     };
   }, [scrolled]);
 
-  const navbar = `bg-${scrolled ? "gray-800" : "teal-800"} fixed w-full z-50`;
+  const navbar = `bg-${scrolled ? "gray-800" : "teal-600"} fixed w-full z-50`;
 
   return (
     <div>
       <nav
         className={
-          navbar + "bg-gray-800 fixed w-full z-50 transition-all duration-300"
+          navbar +
+          "bg-gray-800 border-b-2 border-teal-600 fixed w-full z-50 transition-all duration-300"
         }
       >
         <div className="mx-auto px-4 sm:px-6">
@@ -63,6 +64,7 @@ function Navbar() {
 
                   <a
                     href="#"
+                    onClick={() => navigate("/courses")}
                     className="text-gray-300 hover:text-teal-900 px-3 py-2 rounded-md text-sm font-medium"
                   >
                     COURSES

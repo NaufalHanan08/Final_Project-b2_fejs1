@@ -12,7 +12,7 @@ function HomePage() {
       <Hero />
       <CourseList />
       <Benefits />
-      <RegisterBanner/>
+      <RegisterBanner />
       <Footer />
     </>
   );
