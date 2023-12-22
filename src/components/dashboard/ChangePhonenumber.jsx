@@ -1,13 +1,46 @@
 import { useState } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import { useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function ChangePhoneNumber() {
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const history = useHistory();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Tambahkan logika pengiriman data ke server atau sesuai kebutuhan aplikasi Anda
-    console.log('Nomor Telepon Berhasil Diubah:', newPhoneNumber);
+
+    try {
+      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone', {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneNumber: newPhoneNumber,
+        }),
+      });
+
+      console.log('Nomor Telepon Berhasil Diubah:', newPhoneNumber);
+      console.log('Response:', response);
+
+      if (response.ok) {
+        // Simpan nomor telepon baru ke dalam cookie
+        Cookies.set('newPhoneNumber', newPhoneNumber);
+
+        setSuccessMessage('OTP berhasil terkirim.');
+        // Navigasi ke halaman ConfirmationChangePhonenumber
+        history.push('/ConfirmationChangePhonenumber');
+      } else {
+        setError('Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi.');
+      }
+    } catch (error) {
+      setError('Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi.');
+      console.error('Error mengubah nomor telepon:', error);
+    }
   };
 
   return (
@@ -48,6 +81,9 @@ function ChangePhoneNumber() {
               Ganti Nomor Telepon
             </Button>
           </div>
+
+          {successMessage && <div className="mt-4 text-center text-green-500 text-sm">{successMessage}</div>}
+          {error && <div className="mt-4 text-center text-red-500 text-sm">{error}</div>}
         </form>
       </Card>
     </div>
