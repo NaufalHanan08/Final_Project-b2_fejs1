@@ -1,15 +1,47 @@
 import { useState } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 function ChangePassword() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleChangePassword = async (e) => {
     e.preventDefault();
-    // Tambahkan logika pengiriman data ke server atau sesuai kebutuhan aplikasi Anda
-    console.log('Password Changed:', oldPassword, newPassword, confirmPassword);
+
+    // Mendapatkan accessToken dari cookie
+    const accessToken = Cookies.get('accessToken');
+
+    try {
+      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/setting/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          currentPassword: oldPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Password berhasil diubah!');
+        // Handle redirect or other actions if needed
+        navigate('/profile'); // Ganti '/profile' dengan halaman tujuan setelah perubahan kata sandi
+      } else {
+        const data = await response.json();
+        setError(data.message || 'Gagal mengganti kata sandi');
+      }
+    } catch (error) {
+      console.error('Terjadi kesalahan saat mengganti kata sandi:', error.message);
+      setError('Terjadi kesalahan yang tidak terduga.');
+    }
   };
 
   return (
@@ -17,14 +49,14 @@ function ChangePassword() {
       <Card className="mt-[-20px] sm:mx-auto sm:w-full sm:max-w-sm p-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Typography variant="h2" className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Change Password
+            Ubah Kata Sandi
           </Typography>
         </div>
 
-        <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-10 space-y-6" onSubmit={handleChangePassword}>
           <div>
             <label htmlFor="oldPassword" className="block text-sm font-medium leading-6 text-gray-900">
-              Old Password
+              Kata Sandi Lama
             </label>
             <div className="mt-2">
               <Input
@@ -36,7 +68,7 @@ function ChangePassword() {
                 size="md"
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
-                placeholder="Enter Old Password"
+                placeholder="Masukkan Kata Sandi Lama"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -44,7 +76,7 @@ function ChangePassword() {
 
           <div>
             <label htmlFor="newPassword" className="block text-sm font-medium leading-6 text-gray-900">
-              New Password
+              Kata Sandi Baru
             </label>
             <div className="mt-2">
               <Input
@@ -56,7 +88,7 @@ function ChangePassword() {
                 size="md"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Enter New Password"
+                placeholder="Masukkan Kata Sandi Baru"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -64,7 +96,7 @@ function ChangePassword() {
 
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
-              Confirm New Password
+              Konfirmasi Kata Sandi Baru
             </label>
             <div className="mt-2">
               <Input
@@ -76,18 +108,20 @@ function ChangePassword() {
                 size="md"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm New Password"
+                placeholder="Konfirmasi Kata Sandi Baru"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
+
+          {error && <div className="mt-4 text-red-500 text-sm font-medium">{error}</div>}
 
           <div>
             <Button
               type="submit"
               className="flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Change Password
+              Ubah Kata Sandi
             </Button>
           </div>
         </form>

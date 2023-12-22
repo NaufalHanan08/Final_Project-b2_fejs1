@@ -14,6 +14,7 @@ import CoursePage from './pages/course/CoursePage';
 import AllCourse from './components/courselist/Courses';
 import CourseDetail from './components/coursedetail/CourseDetail';
 import ConfirmationChangePassword from './pages/authentication/ConfirmationChangePassword';
+import ConfirmationEmail from './pages/authentication/ConfirmationEmail';
 
 function App() {
   return (
@@ -26,7 +27,8 @@ function App() {
         <Route path="/courses" element={<AllCourse />} />
         <Route path="/detail" element={<CourseDetail />} />
         <Route path="/" element={<HomePage />} />
-        <Route path="/confirmation-change-pass" element={<ConfirmationChangePassword />} />
+        <Route path="/email-verify-forgot-password" element={<ConfirmationChangePassword />} />
+        <Route path="/email-verify-register" element={<ConfirmationEmail />} />
 
         {/* Halaman Authentication */}
         <Route
