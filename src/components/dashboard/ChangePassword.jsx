@@ -1,19 +1,17 @@
 import { useState } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
 
 function ChangePassword() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
-    // Mendapatkan accessToken dari cookie
     const accessToken = Cookies.get('accessToken');
 
     try {
@@ -31,16 +29,29 @@ function ChangePassword() {
       });
 
       if (response.ok) {
-        console.log('Password berhasil diubah!');
-        // Handle redirect or other actions if needed
-        navigate('/profile'); // Ganti '/profile' dengan halaman tujuan setelah perubahan kata sandi
+        setSuccessMessage('Kata sandi berhasil diubah!');
+        setError('');
+
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 5000);
       } else {
         const data = await response.json();
+        setSuccessMessage('');
         setError(data.message || 'Gagal mengganti kata sandi');
+
+        setTimeout(() => {
+          setError('');
+        }, 5000);
       }
     } catch (error) {
       console.error('Terjadi kesalahan saat mengganti kata sandi:', error.message);
+      setSuccessMessage('');
       setError('Terjadi kesalahan yang tidak terduga.');
+
+      setTimeout(() => {
+        setError('');
+      }, 5000);
     }
   };
 
@@ -114,8 +125,6 @@ function ChangePassword() {
             </div>
           </div>
 
-          {error && <div className="mt-4 text-red-500 text-sm font-medium">{error}</div>}
-
           <div>
             <Button
               type="submit"
@@ -124,6 +133,17 @@ function ChangePassword() {
               Ubah Kata Sandi
             </Button>
           </div>
+
+          {successMessage && (
+            <div className="mt-4 text-green-500 text-center">
+              <p>{successMessage}</p>
+            </div>
+          )}
+          {error && (
+            <div className="mt-4 text-red-600 text-center">
+              <p>{error}</p>
+            </div>
+          )}
         </form>
       </Card>
     </div>

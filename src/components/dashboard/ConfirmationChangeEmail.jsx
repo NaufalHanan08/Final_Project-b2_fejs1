@@ -11,6 +11,7 @@ const ConfirmationChangeEmail = () => {
   useEffect(() => {
     // Lakukan verifikasi ketika komponen dimount dengan token dari URL
     if (token) {
+      console.log('Token dari URL:', token);
       verifyEmailChange(token);
     }
   }, [token]);
@@ -56,10 +57,13 @@ const ConfirmationChangeEmail = () => {
         }
       );
 
-      setVerificationStatus(response.data.message);
+      setVerificationStatus(response.data.message); // Jika verifikasi berhasil, redirect ke halaman dashboard-user
+      if (response.data.success) {
+        history.push('/dashboard-user');
+      }
     } catch (error) {
-      console.error('Error resending verification link', error);
-      setVerificationStatus('Terjadi kesalahan saat mengirim ulang tautan verifikasi. Silakan coba lagi.');
+      console.error('Error verifying email change', error);
+      setVerificationStatus('Terjadi kesalahan saat memverifikasi perubahan email. Silakan coba lagi.');
     }
   };
 
@@ -68,7 +72,7 @@ const ConfirmationChangeEmail = () => {
       <Card className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Typography variant="h2" className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Verifikasi Email
+            Verifikasi Ganti Email
           </Typography>
         </div>
 

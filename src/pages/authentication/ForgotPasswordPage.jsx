@@ -8,8 +8,6 @@ function ForgotPasswordPage() {
 
   const handleEmailChange = (e) => {
     const emailValue = e.target.value;
-    console.log('email :', emailValue);
-
     setEmail(emailValue);
   };
 
@@ -27,14 +25,13 @@ function ForgotPasswordPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Something went wrong');
+        throw new Error(errorData.message || 'Terjadi kesalahan');
       }
 
-      setSuccess('Password reset instructions sent. Check your email.');
+      setSuccess('Instruksi reset password telah dikirim. Silakan cek email Anda.');
       setError('');
     } catch (error) {
-      console.log('Server response:', error);
-      setError(error.message || 'Something went wrong');
+      setError(error.message || 'Terjadi kesalahan');
       setSuccess('');
     }
   };
@@ -43,11 +40,11 @@ function ForgotPasswordPage() {
     <main id="content" role="main" className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 p-4 sm:p-7">
         <div className="text-center">
-          <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Forgot password?</h1>
+          <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Lupa password?</h1>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Remember your password?{' '}
+            Ingat password Anda?{' '}
             <Link to="/login" className="text-teal-600 font-semibold leading-6 text-teal-600 hover:text-gray-800">
-              Login here
+              Masuk di sini
             </Link>
           </p>
         </div>
@@ -57,7 +54,7 @@ function ForgotPasswordPage() {
             <div className="grid gap-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-bold ml-1 mb-2 dark:text-white">
-                  Email address
+                  Alamat Email
                 </label>
                 <div className="relative">
                   <input
@@ -71,9 +68,6 @@ function ForgotPasswordPage() {
                     aria-describedby="email-error"
                   />
                 </div>
-                <p className={`text-xs ${error ? 'text-red-600' : 'text-green-600'} mt-2`} id="email-error">
-                  {error || success}
-                </p>
               </div>
               <button
                 type="submit"
@@ -82,6 +76,16 @@ function ForgotPasswordPage() {
                 Reset password
               </button>
             </div>
+            {error && (
+              <div className="mt-4 text-red-600 text-center">
+                <p>{error}</p>
+              </div>
+            )}
+            {success && (
+              <div className="mt-4 text-green-600 text-center">
+                <p>{success}</p>
+              </div>
+            )}
           </form>
         </div>
       </div>

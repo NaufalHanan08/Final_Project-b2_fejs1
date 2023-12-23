@@ -28,7 +28,7 @@ function ChangeEmail() {
 
       if (response.ok) {
         Cookies.set('newEmail', newEmail); // Simpan email baru di dalam cookie
-        setSuccessMessage(`Email berhasil diubah. Tautan verifikasi telah dikirim ke ${newEmail}`);
+        setSuccessMessage(`Tautan verifikasi telah dikirim ke ${newEmail}, silakan cek email anda`);
         console.log('Email Berhasil Diubah:', data);
       } else {
         setError(data.error);

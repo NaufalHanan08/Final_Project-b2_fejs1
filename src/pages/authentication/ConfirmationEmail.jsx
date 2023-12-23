@@ -47,33 +47,33 @@ const ConfirmationEmail = () => {
 
   const resendVerificationLink = async () => {
     try {
-      // Mengambil alamat email dari cookie
       const emailFromCookie = Cookies.get('registeredEmail');
 
-      if (emailFromCookie) {
-        const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/auth/generate-email-register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email: emailFromCookie }),
-        });
-
-        const responseData = await response.json();
-
-        if (responseData.success) {
-          setVerificationStatus('Tautan verifikasi baru telah dikirim ke email Anda.');
-        } else {
-          console.error('Failed to resend verification link:', responseData.message);
-
-          if (responseData.message.includes('User not found or already verified')) {
-            setVerificationStatus('Email tidak ditemukan atau sudah diverifikasi sebelumnya.');
-          } else {
-            setVerificationStatus('Gagal mengirim ulang tautan verifikasi. Coba lagi nanti.');
-          }
-        }
-      } else {
+      if (!emailFromCookie) {
         setVerificationStatus('Alamat email tidak ditemukan. Silakan coba lagi.');
+        return;
+      }
+
+      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/auth/generate-email-register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: emailFromCookie }),
+      });
+
+      const responseData = await response.json();
+
+      if (responseData.success) {
+        setVerificationStatus('Tautan verifikasi baru telah dikirim ke email Anda.');
+      } else {
+        console.error('Failed to resend verification link:', responseData.message);
+
+        if (responseData.message.includes('User not found or already verified')) {
+          setVerificationStatus('Email tidak ditemukan atau sudah diverifikasi sebelumnya.');
+        } else {
+          setVerificationStatus('Gagal mengirim ulang tautan verifikasi. Coba lagi nanti.');
+        }
       }
     } catch (error) {
       console.error('Error resending verification link:', error);

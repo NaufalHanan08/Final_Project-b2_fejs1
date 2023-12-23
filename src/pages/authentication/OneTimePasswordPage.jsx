@@ -8,6 +8,7 @@ function OneTimePasswordPage() {
   const inputRefs = useRef([]);
   const location = useLocation();
   const [showNotification, setShowNotification] = useState(false);
+  const [error, setError] = useState('');
 
   const phoneNumber = location.state?.phoneNumber || '';
 
@@ -40,9 +41,11 @@ function OneTimePasswordPage() {
         setShowNotification(true);
       } else {
         console.error('Verifikasi gagal:', response.data);
+        setError('Verifikasi gagal. Silakan coba lagi.');
       }
     } catch (error) {
       console.error('Error selama verifikasi:', error);
+      setError('Terjadi kesalahan selama verifikasi. Silakan coba lagi.');
     }
   };
 
@@ -56,6 +59,7 @@ function OneTimePasswordPage() {
       console.log('OTP baru dihasilkan dan dikirimkan dengan berhasil');
     } catch (error) {
       console.error('Error selama menghasilkan dan mengirimkan OTP baru:', error);
+      setError('Terjadi kesalahan saat mengirim ulang OTP. Silakan coba lagi.');
     }
   };
 
@@ -114,6 +118,13 @@ function OneTimePasswordPage() {
                   >
                     Daftar
                   </Button>
+
+                  {/* Pesan error ditampilkan di sini */}
+                  {error && (
+                    <div className="mt-4 text-red-600 text-center">
+                      <p>{error}</p>
+                    </div>
+                  )}
 
                   <Typography variant="p" className="mt-10 text-center text-sm text-gray-500">
                     Belum menerima kode?{' '}

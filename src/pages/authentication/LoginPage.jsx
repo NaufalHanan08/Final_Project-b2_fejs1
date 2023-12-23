@@ -1,3 +1,4 @@
+// Import statements
 import { useState } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,6 +8,7 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -47,9 +49,12 @@ export function LoginPage() {
         }
       } else {
         // Handle error login, misalnya, tampilkan pesan error
-        console.error('Login gagal');
+        const data = await response.json();
+        setError(data.error || 'Login gagal');
+        console.error('Login gagal:', data);
       }
     } catch (error) {
+      setError('Terjadi kesalahan saat login');
       console.error('Terjadi kesalahan saat login:', error);
     }
   };
@@ -119,6 +124,7 @@ export function LoginPage() {
               Masuk
             </Button>
           </div>
+          {error && <div className="mt-4 text-center text-red-500 text-sm">{error}</div>}
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">
