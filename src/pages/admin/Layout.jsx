@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 import Navbar from "../../components/admin/Navbar";
+import React from "react";
+import axios from "axios";
 
 const Card = ({ children, className }) => (
   <div className={`bg-secondary shadow-none ${className}`}>{children}</div>
@@ -59,18 +61,38 @@ const Layout = ({ children }) => {
     console.log("Keluar sekarang juga!");
   };
 
-  const summary = [
-    { id: 1, total: 450, title: "Active Users", color: "text-success" },
-    { id: 2, total: 25, title: "Active Class" },
-    { id: 3, total: 20, title: "Premium Class" },
-  ];
+  const [dashboardData, setDashboardData] = React.useState({
+    activeUser: 0,
+    nonActiveUser: 0,
+    activeCourse: 0,
+    nonActiveCourse: 0,
+    premiumCourse: 0,
+    freeCourse: 0,
+  });
+
+  React.useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await axios.get(
+          "http://byteacademy.as.r.appspot.com/api/v1/admin/dashboard"
+        );
+
+        const { results } = response.data;
+
+        setDashboardData(results);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   const menu = [
     { id: 1, path: "/dashboard", label: "Dashboard" },
     { id: 2, path: "/kelolakelas", label: "Kelola Kelas" },
     { id: 3, path: "/Keluar", label: "Keluar", onClick: handleLogout },
   ];
-
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -103,25 +125,47 @@ const Layout = ({ children }) => {
       {/* Main Content */}
       <div className="flex flex-col flex-1">
         <Navbar />
-        <div className=" items-center flex justify-between space-x-14 my-2 px-16 py-14 overflow-hidden">
-          {summary.map((item) => (
-            <Card
-              key={item.id}
-              className="flex flex-1 w-1/3 items-center my-auto h-24 bg-teal-600 rounded-md overflow-hidden"
-            >
-              <CardHeader className="text-4xl text-white p-3 ms-6 rounded-sm">
-                <FontAwesomeIcon icon={faUserGroup} />
-              </CardHeader>
-              <CardContent className="py-10 ">
-                <CardTitle className="text-2xl text-white font-semibold">
-                  {item.total}
-                </CardTitle>
-                <CardDescription className="text-white">
-                  {item.title}
-                </CardDescription>
-              </CardContent>
-            </Card>
-          ))}
+        <div className=" items-center flex justify-between space-x-14 my-2 px-16 pt-4 pb-16 overflow-hidden">
+          <Card className="flex flex-1 w-1/3 items-center my-auto h-24 bg-teal-600 rounded-md overflow-hidden">
+            <CardHeader className="text-4xl text-white p-3 ms-6 rounded-sm">
+              <FontAwesomeIcon icon={faUserGroup} />
+            </CardHeader>
+            <CardContent className="py-10 ">
+              <CardTitle className="text-2xl text-white font-semibold">
+                {dashboardData.activeUser}
+              </CardTitle>
+              <CardDescription className="text-white">
+                Active Users
+              </CardDescription>
+            </CardContent>
+          </Card>
+          <Card className="flex flex-1 w-1/3 items-center my-auto h-24 bg-teal-600 rounded-md overflow-hidden">
+            <CardHeader className="text-4xl text-white p-3 ms-6 rounded-sm">
+              <FontAwesomeIcon icon={faUserGroup} />
+            </CardHeader>
+            <CardContent className="py-10 ">
+              <CardTitle className="text-2xl text-white font-semibold">
+                {dashboardData.activeCourse}
+              </CardTitle>
+              <CardDescription className="text-white">
+                Active Class
+              </CardDescription>
+            </CardContent>
+          </Card>
+          <Card className="flex flex-1 w-1/3 items-center my-auto h-24 bg-teal-600 rounded-md overflow-hidden">
+            <CardHeader className="text-4xl text-white p-3 ms-6 rounded-sm">
+              <FontAwesomeIcon icon={faUserGroup} />
+            </CardHeader>
+            <CardContent className="py-10 ">
+              <CardTitle className="text-2xl text-white font-semibold">
+                {dashboardData.premiumCourse}
+              </CardTitle>
+              <CardDescription className="text-white">
+                Premium Class
+              </CardDescription>
+            </CardContent>
+          </Card>
+          {/* ... (card lainnya) */}
         </div>
 
         <div className="p-4 overflow-y-scroll">{children}</div>

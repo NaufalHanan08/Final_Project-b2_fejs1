@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Filter from "../../components/admin/Filter";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const Dashboard = () => {
   const [filterType, setFilterType] = useState("DESC");
@@ -55,6 +57,32 @@ const Dashboard = () => {
     },
   ];
 
+  useEffect(() => {
+    const fetchCourseDetail = async () => {
+      try {
+        const accessToken = Cookies.get("accessToken");
+
+        // Set headers with accessToken
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
+        const response = await axios.get(
+          `http://byteacademy.as.r.appspot.com/api/v1/admin/category?page=0`,
+          { headers }
+        );
+        console.log("Course Detail:", response.data);
+
+      } catch (error) {
+        console.error("Error fetching course detail:", error);
+      } finally {
+        console.log("loading");
+      }
+    };
+
+    fetchCourseDetail();
+  }, []);
+
   const handleFilterChange = (newFilterType) => {
     setFilterType(newFilterType);
   };
@@ -99,7 +127,7 @@ const Dashboard = () => {
           <caption className="text-lg font-semibold mb-4">
             Tabel Status Pembayaran.
           </caption>
-          <thead className="bg-gray-200 text-sm h-12 sticky top-0 z-10">
+          <thead className="bg-gray-200 text-sm sticky top-0 z-10">
             <tr>
               <th className="py-2 px-4 text-left text-teal-600 font-bold">
                 ID

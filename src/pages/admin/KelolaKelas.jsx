@@ -2,23 +2,29 @@ import { useState, useEffect, useCallback } from "react";
 import Filter from "../../components/admin/Filter";
 import TambahKelasPopup from "../../components/admin/TambahKelasPopup";
 import { Button } from "@material-tailwind/react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 const KelolaKelas = () => {
   const [kelasData, setKelasData] = useState([]);
   const [isTambahPopupOpen, setIsTambahPopupOpen] = useState(false);
   const [inputData, setInputData] = useState({
-    category: "",
     courseName: "",
-    courseType: "",
-    level: "",
+    instructorName: "",
     price: 0,
+    courseDuration: 0,
+    courseDescription: "",
+    targetMarket: "",
+    slugCourse: "",
+    pathCourseImage: "",
+    groupLink: "",
+    courseType: "FREE",
+    courseLevel: "BEGINNER",
+    courseStatus: "ACTIVE",
+    slugCategory: "",
   });
   const [filterType, setFilterType] = useState("DESC");
   const [searchText, setSearchText] = useState("");
-
-  const generateRandomId = useCallback(() => {
-    return Math.random().toString(36).substr(2, 6);
-  }, []);
 
   const handleSort = useCallback(
     (data) => {
@@ -39,20 +45,48 @@ const KelolaKelas = () => {
   );
 
   useEffect(() => {
-    fetch("http://localhost:8000/course")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Data from API:", data);
-        const sortedData = handleSort(data);
-        setKelasData(
-          sortedData.map((course) => ({
-            ...course,
-            slugCourse: generateRandomId(),
-          }))
-        );
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, [handleSort, generateRandomId]);
+    const fetchKelasData = async () => {
+      try {
+        const accessToken = Cookies.get("accessToken");
+        if (!accessToken) {
+          console.error("Token tidak ditemukan.");
+          return;
+        }
+
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        };
+
+        const [page0Response, page1Response] = await Promise.all([
+          axios.get(
+            "http://byteacademy.as.r.appspot.com/api/v1/admin/course?page=0",
+            {
+              headers: headers,
+            }
+          ),
+          axios.get(
+            "http://byteacademy.as.r.appspot.com/api/v1/admin/course?page=1",
+            {
+              headers: headers,
+            }
+          ),
+        ]);
+
+        const page0Data = page0Response.data.results.content;
+        const page1Data = page1Response.data.results.content;
+
+        const combinedData = [...page0Data, ...page1Data];
+
+        const sortedData = handleSort(combinedData);
+        setKelasData(sortedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchKelasData();
+  }, [handleSort]);
 
   const toggleTambahPopup = () => {
     setIsTambahPopupOpen(!isTambahPopupOpen);
@@ -66,15 +100,33 @@ const KelolaKelas = () => {
     });
   };
 
-  const handleTambahKelas = () => {
-    const newCourse = {
-      slugCourse: generateRandomId(),
-      category: "Demo Category",
-      ...inputData,
-    };
+  const handleTambahKelas = async () => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      if (!accessToken) {
+        console.error("Token tidak ditemukan.");
+        return;
+      }
 
-    setKelasData([...kelasData, newCourse]);
-    setIsTambahPopupOpen(false);
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      await axios.post(
+        "http://byteacademy.as.r.appspot.com/api/v1/admin/course",
+        inputData,
+        {
+          headers: headers,
+        }
+      );
+
+      // Memperbarui state dengan menambahkan data baru
+      setKelasData([...kelasData, inputData]);
+      setIsTambahPopupOpen(false);
+    } catch (error) {
+      console.error("Error creating course:", error);
+    }
   };
 
   const handleFilterChange = (value) => {
@@ -99,14 +151,36 @@ const KelolaKelas = () => {
       String(course.price).toLowerCase().includes(searchText.toLowerCase())
   );
 
-  const handleDelete = (slugCourse) => {
-    // Menyalin data kelas kecuali yang memiliki slugCourse sesuai dengan yang dihapus
-    const updatedData = kelasData.filter(
-      (course) => course.slugCourse !== slugCourse
-    );
+  const handleDelete = async (slugCourse) => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      if (!accessToken) {
+        console.error("Token tidak ditemukan.");
+        return;
+      }
 
-    // Mengupdate state dengan data yang baru
-    setKelasData(updatedData);
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      // Make the DELETE request to the API using the slugCourse
+      await axios.delete(
+        `http://byteacademy.as.r.appspot.com/api/v1/admin/course/${slugCourse}`,
+        {
+          headers: headers,
+        }
+      );
+
+      // Update the state by filtering out the deleted course
+      const updatedData = kelasData.filter(
+        (course) => course.slugCourse !== slugCourse
+      );
+
+      setKelasData(updatedData);
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    }
   };
 
   return (
@@ -146,7 +220,9 @@ const KelolaKelas = () => {
             {filteredData.map((course) => (
               <tr key={course.slugCourse} className="text-sm">
                 <td className="py-2 px-4 text-sm">{course.slugCourse}</td>
-                <td className="py-2 px-4 text-sm">{course.category}</td>
+                <td className="py-2 px-4 text-sm">
+                  {course.category.categoryName}
+                </td>
                 <td className="py-2 px-4 text-sm">{course.courseName}</td>
                 <td
                   className={`py-2 px-4 ${

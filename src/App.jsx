@@ -13,9 +13,12 @@ import DashboardUser from "./pages/dashboard/DashboardUser";
 import AllCourse from "./pages/course/Courses";
 import CourseDetail from "./components/coursedetail/CourseDetail";
 import ConfirmationChangePassword from "./pages/authentication/ConfirmationChangePassword";
+import ConfirmationEmail from "./pages/authentication/ConfirmationEmail";
+import ConfirmationChangeEmail from "./components/dashboard/ConfirmationChangeEmail";
 import Layout from "./pages/admin/Layout";
 import Dashboard from "./pages/admin/Dashboard";
 import KelolaKelas from "./pages/admin/KelolaKelas";
+import AdminLoginPage from "./pages/authentication/AdminLoginPage";
 
 function App() {
   return (
@@ -23,18 +26,20 @@ function App() {
       <Routes>
         <Route path="/search" element={<SearchPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/dashboard-user/*" element={<DashboardUser />} />
         <Route path="/courses" element={<AllCourse />} />
         <Route path="/detail/:slugCourse" element={<CourseDetail />} />
         <Route path="/" element={<HomePage />} />
         <Route
-          path="/confirmation-change-pass"
+          path="/email-verify-forgot-password"
           element={<ConfirmationChangePassword />}
         />
+        <Route path="/email-verify-register" element={<ConfirmationEmail />} />
+        <Route
+          path="/email-verify-change"
+          element={<ConfirmationChangeEmail />}
+        />
 
-        {/* User Dashboard */}
-        <Route path="/dashboard-user/*" element={<DashboardUser />} />
-
-        {/* Admin Dashboard */}
         <Route
           path="/dashboard"
           element={
@@ -59,6 +64,7 @@ function App() {
             <AuthLayout>
               <Routes>
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/admin-login" element={<AdminLoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route
                   path="/forgot-password"
