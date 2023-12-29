@@ -12,20 +12,39 @@ function SearchPage() {
   const [searchResults, setSearchResults] = useState([]);
   const [showCourses, setShowCourses] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch all courses initially
-    axios
-      .get("https://byteacademy.as.r.appspot.com/api/v1/course/search?page=0")
-      .then((res) => {
-        console.log(res.data);
-        setCourses(res.data.results.content);
-      })
-      .catch((err) => console.log("error", err));
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const [page0Response, page1Response] = await Promise.all([
+          axios.get(
+            "https://byteacademy.as.r.appspot.com/api/v1/course/search?page=0"
+          ),
+          axios.get(
+            "https://byteacademy.as.r.appspot.com/api/v1/course/search?page=1"
+          ),
+        ]);
+
+        const page0Data = page0Response.data.results.content;
+        const page1Data = page1Response.data.results.content;
+        const allCourses = [...page0Data, ...page1Data];
+
+        setCourses(allCourses);
+
+        setLoading(false);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleSearch = () => {
-    // Perform search based on the query
     const results = courses.filter(
       (course) =>
         course.category.categoryName
@@ -77,78 +96,86 @@ function SearchPage() {
           </div>
 
           {/* Display search results or all courses */}
-          {showCourses ? (
-            <div className="mt-8">
-              <h2 className="text-2xl font-semibold mb-4 ms-5">
-                Search Results
-              </h2>
-              <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 p-5">
-                {searchResults.map((result) => (
-                  <div
-                    key={result.slugCourse}
-                    className="shadow-lg rounded-2xl"
-                  >
-                    <Link to={`/detail/${result.slugCourse}`}>
-                      <img
-                        className="w-full"
-                        src={result.pathCourseImage}
-                        alt={result.category.categoryName}
-                      />
-                      <div className="px-4 py-2">
-                        <h2 className="lg:text-lg md:text-xl text-md text-teal-600">
-                          {result.category.categoryName}
-                        </h2>
-                        <h1 className="lg:text-xl md:text-2xl sm:text-xl text-lg font-semibold">
-                          {result.courseName}
-                        </h1>
-                        <p className="text-xs font-light">
-                          by {result.instructorName}
-                        </p>
-                        <div className="flex justify-around flex-wrap md:gap-2 py-2">
-                          <p className="text-blue-700 font-bold sm:text-sm text-xs flex items-center gap-1">
-                            <RiShieldStarLine className="text-green-600 text-lg" />
-                            {result.courseLevel} Level
-                          </p>
-                          <p className="sm:text-sm text-xs flex items-center gap-1">
-                            <RiBook3Line className="text-green-600 text-lg" />
-                            {result.totalChapters} Modul
-                          </p>
-                          <p className="sm:text-sm text-xs flex items-center gap-1">
-                            <HiClock className="text-green-600 text-lg" />
-                            {result.courseDuration} Menit
-                          </p>
-                        </div>
-                        <button className="bg-teal-600 text-white text-sm font-medium py-1 px-4 rounded-full">
-                          {result.courseType}
-                        </button>
-                      </div>
-                    </Link>
-                  </div>
-                ))}
-              </div>
+          {loading ? (
+            <div className="w-full h-screen flex justify-center items-center">
+              <div className="custom-loader p-2"></div>
             </div>
           ) : (
-            <div className="mt-8">
-              <h2 className="text-2xl font-semibold mb-4 ms-5">
-                COURSE CATEGORY
-              </h2>
-              <div className="grid md:grid-cols-3 grid-cols-2 gap-4 p-5">
-                {courses.map((course) => (
-                  <div key={course.slugCourse} className="shadow-lg">
-                    <Link>
-                      <img
-                        className=""
-                        src={course.category.pathCategoryImage}
-                        alt={course.category.categoryName}
-                      />
-                      <h1 className="text-center py-2 font-semibold">
-                        {course.category.categoryName}
-                      </h1>
-                    </Link>
+            <>
+              {showCourses ? (
+                <div className="mt-8">
+                  <h2 className="text-2xl font-semibold mb-4 ms-5">
+                    Search Results
+                  </h2>
+                  <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 p-5">
+                    {searchResults.map((result) => (
+                      <div
+                        key={result.slugCourse}
+                        className="shadow-lg rounded-2xl"
+                      >
+                        <Link to={`/detail/${result.slugCourse}`}>
+                          <img
+                            className="w-full"
+                            src={result.pathCourseImage}
+                            alt={result.category.categoryName}
+                          />
+                          <div className="px-4 py-2">
+                            <h2 className="lg:text-lg md:text-xl text-md text-teal-600">
+                              {result.category.categoryName}
+                            </h2>
+                            <h1 className="lg:text-xl md:text-2xl sm:text-xl text-lg font-semibold">
+                              {result.courseName}
+                            </h1>
+                            <p className="text-xs font-light">
+                              by {result.instructorName}
+                            </p>
+                            <div className="flex justify-around flex-wrap md:gap-2 py-2">
+                              <p className="text-blue-700 font-bold sm:text-sm text-xs flex items-center gap-1">
+                                <RiShieldStarLine className="text-green-600 text-lg" />
+                                {result.courseLevel} Level
+                              </p>
+                              <p className="sm:text-sm text-xs flex items-center gap-1">
+                                <RiBook3Line className="text-green-600 text-lg" />
+                                {result.totalChapters} Modul
+                              </p>
+                              <p className="sm:text-sm text-xs flex items-center gap-1">
+                                <HiClock className="text-green-600 text-lg" />
+                                {result.courseDuration} Menit
+                              </p>
+                            </div>
+                            <button className="bg-teal-600 text-white text-sm font-medium py-1 px-4 rounded-full">
+                              {result.courseType}
+                            </button>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
+              ) : (
+                <div className="mt-8">
+                  <h2 className="text-2xl font-semibold mb-4 ms-5">
+                    COURSE CATEGORY
+                  </h2>
+                  <div className="grid md:grid-cols-3 grid-cols-2 gap-4 p-5">
+                    {courses.map((course) => (
+                      <div key={course.slugCourse} className="shadow-lg">
+                        <div>
+                          <img
+                            className=""
+                            src={course.category.pathCategoryImage}
+                            alt={course.category.categoryName}
+                          />
+                          <h1 className="text-center py-2 font-semibold">
+                            {course.category.categoryName}
+                          </h1>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

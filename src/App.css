@@ -11,6 +11,8 @@ html {
   background-position: center;
   background-size: cover;
   object-fit: cover;
+  /* color: #0d9488; */
+  /* color: #1f2937; */
 }
 
 .benefits-img {
@@ -37,7 +39,68 @@ html {
 
 @media (max-width: 1279.5px) {
   .benefits-img {
-      background-image: none;
+    background-image: none;
   }
 }
 
+/* LOADING */
+.custom-loader {
+  width: 50px;
+  height: 50px;
+  display: grid;
+  border: 4px solid #0000;
+  border-radius: 50%;
+  border-color: #0D9488 #0000;
+  animation: s6 1s infinite linear;
+}
+
+.custom-loader::before,
+.custom-loader::after {
+  content: "";
+  grid-area: 1/1;
+  margin: 2px;
+  border: inherit;
+  border-radius: 50%;
+}
+
+.custom-loader::before {
+  border-color: #1F2937 #0000;
+  animation: inherit;
+  animation-duration: .5s;
+  animation-direction: reverse;
+}
+
+.custom-loader::after {
+  margin: 8px;
+}
+
+.notification-button {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: #2d3748;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+}
+
+.notification-canvas {
+  position: fixed;
+  width: 60%;
+  top: 4rem;
+  right: 0;
+  background-color: white;
+  color: #2d3748;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 99;
+}
+
+@keyframes s6 {
+  100% {
+    transform: rotate(1turn)
+  }
+}

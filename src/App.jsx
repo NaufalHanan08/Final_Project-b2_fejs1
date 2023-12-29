@@ -19,6 +19,7 @@ import Layout from "./pages/admin/Layout";
 import Dashboard from "./pages/admin/Dashboard";
 import KelolaKelas from "./pages/admin/KelolaKelas";
 import AdminLoginPage from "./pages/authentication/AdminLoginPage";
+import VideoPlayer from "./components/coursedetail/CourseMaterial";
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
         <Route path="/dashboard-user/*" element={<DashboardUser />} />
         <Route path="/courses" element={<AllCourse />} />
         <Route path="/detail/:slugCourse" element={<CourseDetail />} />
+        <Route path="/material/:slugMaterial" element={<VideoPlayer />} />
+        <Route path="/material/:slugMaterial" element={<CourseDetail />} />
         <Route path="/" element={<HomePage />} />
         <Route
           path="/email-verify-forgot-password"

@@ -1,10 +1,8 @@
 const Navbar = () => {
   return (
-    <nav className="bg-gray-200 font-poppins font-medium px-4 top-0 right-0 w-full z-10 overflow-hidden pt-4 pb-12">
-      <div className="container mx-auto">
-        <div className="flex items-center justify-between h-14 text-gray-800">
-          <div className="text-primary text-2xl font-bold">Hi, Admin! </div>
-        </div>
+    <nav className="bg-teal-600 font-medium px-4 w-full z-10 overflow-hidden md:text-start text-end h-20 flex items-center">
+      <div className="container">
+        <h1 className="text-xl font-bold text-white">Hi, Admin! </h1>
       </div>
     </nav>
   );

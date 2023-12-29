@@ -1,16 +1,97 @@
 import PropTypes from "prop-types";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useState } from "react";
 
-const TambahKelasPopup = ({
-  isVisible,
-  togglePopup,
-  inputData,
-  handleInputChange,
-  handleTambah,
-}) => {
-  const notifySuccess = () => toast.success("Kelas berhasil ditambahkan!");
-  const notifyError = () =>
-    toast.error("Gagal menambahkan kelas. Silakan coba lagi.");
+const TambahKelasPopup = ({ isVisible, togglePopup, setKelasData }) => {
+  const [inputData, setInputData] = useState({
+    courseName: "",
+    instructorName: "",
+    price: 0,
+    courseDuration: 0,
+    courseDescription: "",
+    targetMarket: "",
+    slugCourse: "",
+    pathCourseImage: "",
+    groupLink: "",
+    courseType: "FREE",
+    courseLevel: "BEGINNER",
+    courseStatus: "ACTIVE",
+    slugCategory: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const fetchData = async () => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      if (!accessToken) {
+        console.error("Token tidak ditemukan.");
+        return [];
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      const response = await axios.get(
+        "http://byteacademy.as.r.appspot.com/api/v1/admin/course",
+        { headers }
+      );
+
+      return response.data.results.content;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return [];
+    }
+  };
+
+  const showToastMessage = async () => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      if (!accessToken) {
+        console.error("Token tidak ditemukan.");
+        return;
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      await axios.post(
+        "http://byteacademy.as.r.appspot.com/api/v1/admin/course",
+        inputData,
+        {
+          headers: headers,
+        }
+      );
+
+      const updatedData = await fetchData();
+      setKelasData(updatedData);
+
+      toast.success("Kelas berhasil ditambahkan!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      setTimeout(() => {
+        togglePopup();
+      }, 2000);
+    } catch (error) {
+      toast.error("Gagal menambahkan kelas. Silakan coba lagi.", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -40,6 +121,7 @@ const TambahKelasPopup = ({
     isVisible && (
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-opacity-75 bg-gray-700 z-50 overflow-scroll">
         <div className="bg-white p-8 rounded-md w-96 max-h-full overflow-auto">
+          <h1 className="text-teal-600 font-bold mb-4">BUAT KELAS BARU</h1>
           <div className="mb-4 flex flex-col">
             <label className="mb-2 text-sm">Nama Kelas</label>
             <input
@@ -82,8 +164,8 @@ const TambahKelasPopup = ({
           </div>
           <div className="mb-4 flex flex-col">
             <label className="mb-2 text-sm">Deskripsi Kelas</label>
-            <input
-              type="text"
+            <textarea
+              // type="text"
               name="courseDescription"
               className="border-2 border-gray-200 p-2 rounded-md"
               value={inputData.courseDescription}
@@ -92,8 +174,8 @@ const TambahKelasPopup = ({
           </div>
           <div className="mb-4 flex flex-col">
             <label className="mb-2 text-sm">Target Pasar</label>
-            <input
-              type="text"
+            <textarea
+              // type="text"
               name="targetMarket"
               className="border-2 border-gray-200 p-2 rounded-md"
               value={inputData.targetMarket}
@@ -178,26 +260,22 @@ const TambahKelasPopup = ({
             />
           </div>
           <div className="flex justify-end gap-2 mt-4">
-          <button
-  type="button"
-  className="py-2 px-6 bg-blue-500 text-white rounded-md"
-  onClick={() => {
-    handleTambah();
-    notifySuccess();
-  }}
->
-  Simpan
-</button>
-<button
-  type="button"
-  className="py-2 px-6 bg-red-500 text-white rounded-md"
-  onClick={() => {
-    togglePopup();
-    notifyError();
-  }}
->
-  Batal
-</button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-blue"
+              onClick={() => {
+                showToastMessage();
+              }}
+            >
+              Simpan
+            </button>
+            <button
+              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-gray"
+              onClick={() => {
+                togglePopup();
+              }}
+            >
+              Batal
+            </button>
           </div>
         </div>
         <ToastContainer />
@@ -209,9 +287,7 @@ const TambahKelasPopup = ({
 TambahKelasPopup.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   togglePopup: PropTypes.func.isRequired,
-  inputData: PropTypes.object.isRequired,
-  handleInputChange: PropTypes.func.isRequired,
-  handleTambah: PropTypes.func.isRequired,
+  setKelasData: PropTypes.func.isRequired,
 };
 
 export default TambahKelasPopup;

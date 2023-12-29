@@ -1,10 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
+import { RiMenu5Line } from "react-icons/ri";
+import { RxDashboard } from "react-icons/rx";
+import { SiGoogleclassroom } from "react-icons/si";
+import { ImExit } from "react-icons/im";
 import PropTypes from "prop-types";
 import Navbar from "../../components/admin/Navbar";
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const Card = ({ children, className }) => (
   <div className={`bg-secondary shadow-none ${className}`}>{children}</div>
@@ -57,8 +62,19 @@ CardDescription.propTypes = {
 
 const Layout = ({ children }) => {
   const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const handleLogout = () => {
-    console.log("Keluar sekarang juga!");
+    try {
+      // Hapus AccessToken dari cookie
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+
+      // Redirect ke halaman login setelah logout berhasil
+      window.location.href = "/admin-login";
+    } catch (error) {
+      console.error("Error saat logout:", error);
+    }
   };
 
   const [dashboardData, setDashboardData] = React.useState({
@@ -89,15 +105,55 @@ const Layout = ({ children }) => {
   }, []);
 
   const menu = [
-    { id: 1, path: "/dashboard", label: "Dashboard" },
-    { id: 2, path: "/kelolakelas", label: "Kelola Kelas" },
-    { id: 3, path: "/Keluar", label: "Keluar", onClick: handleLogout },
+    { id: 1, path: "/dashboard", label: "Dashboard", icon: <RxDashboard /> },
+    {
+      id: 2,
+      path: "/kelolakelas",
+      label: "Kelola Kelas",
+      icon: <SiGoogleclassroom />,
+    },
+    {
+      id: 3,
+      path: "/admin-login",
+      label: "Keluar",
+      onClick: handleLogout,
+      icon: <ImExit />,
+    },
   ];
+
   return (
     <div className="flex h-screen">
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="md:hidden fixed top-5 left-3 z-40 p-2 bg-gray-800 text-white rounded-md"
+      >
+        {sidebarOpen ? (
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        ) : (
+          <RiMenu5Line className="w-6 h-6" />
+        )}
+      </button>
+
       {/* Sidebar */}
-      <div className="w-72 h-screen space-y-6 items-center bg-gray-800 text-white">
-        <h1 className="font-bold text-2xl mx-auto w-44 my-8">
+      <div
+        className={`md:w-1/4 sm:w-2/5 w-full h-screen space-y-6 items-center bg-gray-800 text-white fixed z-30 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 md:translate-x-0`}
+      >
+        <h1 className="font-bold text-2xl mx-auto w-fit my-8 mt-16">
           <span className="text-teal-600 underline">Byte</span>Academy
         </h1>
 
@@ -112,9 +168,16 @@ const Layout = ({ children }) => {
                 }
               >
                 {item.onClick ? (
-                  <button onClick={item.onClick}>{item.label}</button>
+                  <button
+                    onClick={item.onClick}
+                    className="flex items-center gap-2"
+                  >
+                    {item.icon} {item.label}
+                  </button>
                 ) : (
-                  <Link to={item.path}>{item.label}</Link>
+                  <Link to={item.path} className="flex items-center gap-2">
+                    {item.icon} {item.label}
+                  </Link>
                 )}
               </div>
             </div>
@@ -123,10 +186,10 @@ const Layout = ({ children }) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col md:w-3/4 w-full h-fit ms-auto">
         <Navbar />
-        <div className=" items-center flex justify-between space-x-14 my-2 px-16 pt-4 pb-16 overflow-hidden">
-          <Card className="flex flex-1 w-1/3 items-center my-auto h-24 bg-teal-600 rounded-md overflow-hidden">
+        <div className="items-center flex flex-wrap w-full justify-center gap-6 sm:px-16 px-4 py-6">
+          <Card className="flex md:w-60 w-full md:justify-start justify-center items-center my-auto h-28 bg-gray-800 rounded-md overflow-hidden">
             <CardHeader className="text-4xl text-white p-3 ms-6 rounded-sm">
               <FontAwesomeIcon icon={faUserGroup} />
             </CardHeader>
@@ -139,7 +202,7 @@ const Layout = ({ children }) => {
               </CardDescription>
             </CardContent>
           </Card>
-          <Card className="flex flex-1 w-1/3 items-center my-auto h-24 bg-teal-600 rounded-md overflow-hidden">
+          <Card className="flex sm:w-60 w-full md:justify-start justify-center items-center my-auto h-28 bg-teal-600 rounded-md overflow-hidden">
             <CardHeader className="text-4xl text-white p-3 ms-6 rounded-sm">
               <FontAwesomeIcon icon={faUserGroup} />
             </CardHeader>
@@ -152,7 +215,7 @@ const Layout = ({ children }) => {
               </CardDescription>
             </CardContent>
           </Card>
-          <Card className="flex flex-1 w-1/3 items-center my-auto h-24 bg-teal-600 rounded-md overflow-hidden">
+          <Card className="flex sm:w-60 w-full md:justify-start justify-center items-center my-auto h-28 bg-gray-800 rounded-md overflow-hidden">
             <CardHeader className="text-4xl text-white p-3 ms-6 rounded-sm">
               <FontAwesomeIcon icon={faUserGroup} />
             </CardHeader>
@@ -165,10 +228,8 @@ const Layout = ({ children }) => {
               </CardDescription>
             </CardContent>
           </Card>
-          {/* ... (card lainnya) */}
         </div>
-
-        <div className="p-4 overflow-y-scroll">{children}</div>
+        <div className="p-4">{children}</div>
       </div>
     </div>
   );

@@ -6,59 +6,10 @@ import Cookies from "js-cookie";
 const Dashboard = () => {
   const [filterType, setFilterType] = useState("DESC");
   const [searchText, setSearchText] = useState("");
-  const dummyPayments = [
-    {
-      id: "johndoe1",
-      kategori: "UI/UX Design",
-      kelasPremium: "Belajar Web Designer dengan Figma",
-      status: "SUDAH BAYAR",
-      metodePembayaran: "Credit Card",
-      tanggalBayar: "21 Sep, 2023 at 2.00 AM",
-    },
-    {
-      id: "johndoe4",
-      kategori: "Digital Marketing",
-      kelasPremium: "Strategi Pemasaran di Era Digital",
-      status: "BELUM BAYAR",
-      metodePembayaran: "Credit Card",
-      tanggalBayar: null,
-    },
-    {
-      id: "johndoe6",
-      kategori: "Data Science",
-      kelasPremium: "Pengenalan ke Big Data",
-      status: "BELUM BAYAR",
-      metodePembayaran: "Credit Card",
-      tanggalBayar: null,
-    },
-    {
-      id: "johndoe3",
-      kategori: "Programming",
-      kelasPremium: "Belajar React.js",
-      status: "SUDAH BAYAR",
-      metodePembayaran: "PayPal",
-      tanggalBayar: "22 Sep, 2023 at 3.30 PM",
-    },
-    {
-      id: "johndoe5",
-      kategori: "UI/UX Design",
-      kelasPremium: "Desain Interaksi untuk Aplikasi Mobile",
-      status: "SUDAH BAYAR",
-      metodePembayaran: "Bank Transfer",
-      tanggalBayar: "23 Sep, 2023 at 10.45 AM",
-    },
-    {
-      id: "johndoe8",
-      kategori: "Digital Marketing",
-      kelasPremium: "Strategi Konten Digital",
-      status: "BELUM BAYAR",
-      metodePembayaran: "Bank Transfer",
-      tanggalBayar: null,
-    },
-  ];
+  const [paymentsData, setPaymentsData] = useState([]);
 
   useEffect(() => {
-    const fetchCourseDetail = async () => {
+    const fetchPaymentsData = async () => {
       try {
         const accessToken = Cookies.get("accessToken");
 
@@ -68,19 +19,19 @@ const Dashboard = () => {
         };
 
         const response = await axios.get(
-          `http://byteacademy.as.r.appspot.com/api/v1/admin/category?page=0`,
+          "http://byteacademy.as.r.appspot.com/api/v1/admin/purchase?page=0",
           { headers }
         );
-        console.log("Course Detail:", response.data);
 
+        console.log(response.data);
+        // Set the payments data from the API response
+        setPaymentsData(response.data.results.content);
       } catch (error) {
-        console.error("Error fetching course detail:", error);
-      } finally {
-        console.log("loading");
+        console.error("Error fetching payments data:", error);
       }
     };
 
-    fetchCourseDetail();
+    fetchPaymentsData();
   }, []);
 
   const handleFilterChange = (newFilterType) => {
@@ -91,32 +42,31 @@ const Dashboard = () => {
     setSearchText(text);
   };
 
-  const filteredPayments = dummyPayments.filter((item) => {
+  const filteredPayments = paymentsData.filter((item) => {
     return (
-      item.id.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.kategori.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.kelasPremium.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.status.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.metodePembayaran.toLowerCase().includes(searchText.toLowerCase()) ||
-      (item.tanggalBayar &&
-        item.tanggalBayar.toLowerCase().includes(searchText.toLowerCase()))
+      item.courseName.toLowerCase().includes(searchText.toLowerCase()) ||
+      item.tokenPurchase.toLowerCase().includes(searchText.toLowerCase()) ||
+      item.amountPaid.toLowerCase().includes(searchText.toLowerCase()) ||
+      item.purchaseStatus.toLowerCase().includes(searchText.toLowerCase())
     );
   });
 
   const sortedPayments = filteredPayments.sort((a, b) => {
-    if (filterType === "ASC") {
-      return a.id.localeCompare(b.id);
-    } else {
-      return b.id.localeCompare(a.id);
+    if (a.id && b.id) {
+      if (filterType === "ASC") {
+        return a.id.localeCompare(b.id);
+      } else {
+        return b.id.localeCompare(a.id);
+      }
     }
+    return 0; // Default case when either a.id or b.id is undefined
   });
 
   return (
     <div className="px-10 font-poppin">
       <div className="flex flex-1 items-center justify-between mb-4 ps-5 bg-gray-800">
         <div className="text-2xl font-semibold text-white">
-          {" "}
-          Status Pembayaran
+          Status <span className="text-teal-600 font-bold">Pembayaran</span>
         </div>
         <div>
           <Filter onFilterChange={handleFilterChange} onSearch={handleSearch} />
@@ -124,40 +74,33 @@ const Dashboard = () => {
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full border border-gray-300">
-          <caption className="text-lg font-semibold mb-4">
-            Tabel Status Pembayaran.
-          </caption>
           <thead className="bg-gray-200 text-sm sticky top-0 z-10">
             <tr>
-              <th className="py-2 px-4 text-left text-teal-600 font-bold">
-                ID
+              <th className="py-2 px-4 text-center text-teal-600 font-bold">
+                Nama Kelas
               </th>
-              <th className="py-2 px-4 text-left font-bold">Kategori</th>
-              <th className="py-2 px-4 text-left font-bold">Kelas Premium</th>
-              <th className="py-2 px-4 text-left font-bold">Status</th>
-              <th className="py-2 px-4 text-left font-bold">
-                Metode Pembayaran
+              <th className="py-2 px-4 text-center font-bold">Status</th>
+              <th className="py-2 px-4 text-center font-bold">
+                Total Terbayar
               </th>
-              <th className="py-2 px-4 text-left font-bold">Tanggal Bayar</th>
             </tr>
           </thead>
           <tbody>
             {sortedPayments.map((item) => (
               <tr key={item.id} className="hover:bg-gray-100">
-                <td className="py-2 px-4 text-sm">{item.id}</td>
-                <td className="py-2 px-4 text-sm">{item.kategori}</td>
-                <td className="py-2 px-4 text-sm">{item.kelasPremium}</td>
+                <td className="py-2 px-4 text-sm">{item.courseName}</td>
                 <td
-                  className={`py-2 px-4 text-sm ${
-                    item.status === "BELUM BAYAR"
+                  className={`py-2 px-4 text-sm text-center ${
+                    item.purchaseStatus === "PENDING"
                       ? "text-red-500"
                       : "text-teal-600"
                   }`}
                 >
-                  {item.status}
+                  {item.purchaseStatus}
                 </td>
-                <td className="py-2 px-4 text-sm">{item.metodePembayaran}</td>
-                <td className="py-2 px-4 text-sm">{item.tanggalBayar}</td>
+                <td className="py-2 px-4 text-sm text-center">
+                  {item.amountPaid}
+                </td>
               </tr>
             ))}
           </tbody>
