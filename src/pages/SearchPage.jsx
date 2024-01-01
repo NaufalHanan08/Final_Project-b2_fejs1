@@ -9,6 +9,7 @@ import { HiClock } from "react-icons/hi2";
 
 function SearchPage() {
   const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [showCourses, setShowCourses] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,12 +37,31 @@ function SearchPage() {
 
         setLoading(false);
       } catch (error) {
-        console.log("Error fetching data:", error);
+        console.log("Error fetching search data:", error);
         setLoading(false);
       }
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        setLoading(true);
+
+        const response = await axios.get(
+          "https://byteacademy.as.r.appspot.com/api/v1/category?page=0"
+        );
+        console.log(response.data);
+        setCategories(response.data.results.content);
+      } catch (error) {
+        console.log("Error fetching category:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchCategory();
   }, []);
 
   const handleSearch = () => {
@@ -63,7 +83,6 @@ function SearchPage() {
       <Navbar />
       <div className="w-full h-fit flex justify-center items-center lg:px-14 py-10 md:px-10 px-4 bg-teal-600">
         <div className="bg-white xl:w-3/4 lg:w-11/12 w-full min-h-screen mt-14 border-2 rounded-md md:p-5">
-          {/* Search Bar */}
           <div className="flex mb-4">
             <input
               type="text"
@@ -94,8 +113,6 @@ function SearchPage() {
               </svg>
             </button>
           </div>
-
-          {/* Display search results or all courses */}
           {loading ? (
             <div className="w-full h-screen flex justify-center items-center">
               <div className="custom-loader p-2"></div>
@@ -158,16 +175,16 @@ function SearchPage() {
                     COURSE CATEGORY
                   </h2>
                   <div className="grid md:grid-cols-3 grid-cols-2 gap-4 p-5">
-                    {courses.map((course) => (
-                      <div key={course.slugCourse} className="shadow-lg">
+                    {categories.map((category) => (
+                      <div key={category.slugCategory} className="shadow-lg">
                         <div>
                           <img
                             className=""
-                            src={course.category.pathCategoryImage}
-                            alt={course.category.categoryName}
+                            src={category.pathCategoryImage}
+                            alt={category.categoryName}
                           />
-                          <h1 className="text-center py-2 font-semibold">
-                            {course.category.categoryName}
+                          <h1 className="text-center py-2 font-semibold md:text-lg sm:text-md text-sm">
+                            {category.categoryName}
                           </h1>
                         </div>
                       </div>

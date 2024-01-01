@@ -8,6 +8,7 @@ function Hero() {
     <div className="w-full bg-teal-600">
       <div className="bg-hero w-full md:h-fit md:block flex flex-col-reverse items-center md:px-6 px-5">
         <div className="hero-content  lg:w-3/5 md:w-2/4 w-full md:py-28 py-5 md:mb-0 mb-20 md:mt-10 mt-0 overflow-hidden md:block flex flex-col items-center">
+          {/* <h1 className="md:text-4xl text-3xl py-2 px-3 pb-4 rounded-md font-bold mb-3 text-white bg-gray-800 w-fit"><span className="text-teal-600 underline">Byte</span>Academy</h1> */}
           <h1 className="sm:text-4xl text-2xl font-bold text-white py-2 md:text-start text-center">
             Belajar Pemrograman Bersama Ahlinya di ByteAcademy
           </h1>

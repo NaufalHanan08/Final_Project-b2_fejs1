@@ -16,7 +16,7 @@ const Filter = ({ onFilterChange, onSearch }) => {
   const toggleSearch = () => {
     setIsSearchActive(!isSearchActive);
     setSearchText("");
-    onSearch("");
+    onSearch(""); // Panggil onSearch dengan parameter teks kosong saat toggleSearch
   };
 
   const handleSearchChange = (e) => {

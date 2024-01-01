@@ -90,11 +90,9 @@ const teams = [
 
 function Team() {
   return (
-    <div className="px-10 py-20">
+    <div className="md:px-10 px-5 py-20">
       <div className="text-center">
-        <h1 className="text-4xl py-1 font-bold mb-10">
-          Meet Our <span className="text-teal-600">Team</span>
-        </h1>
+        <h1 className="md:text-4xl sm:text-2xl text-xl py-1 font-bold mb-10">Meet Our <span className="text-teal-600">Team</span></h1>
       </div>
 
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 py-5">
@@ -103,9 +101,7 @@ function Team() {
             <img src={team.foto} alt={team.nama} />
             <div>
               <h2 className="text-xl font-bold mt-5">{team.nama}</h2>
-              <h3 className="text-sm text-gray-600 font-medium">
-                {team.jabatan}
-              </h3>
+              <h3 className="text-sm text-gray-600 font-medium">{team.jabatan}</h3>
               <ul className="flex mb-5 justify-end">
                 <li>
                   <a href={team.link.linkedinLink}>
@@ -118,6 +114,7 @@ function Team() {
                   </a>
                 </li>
               </ul>
+              {/* <p className="text-sm text-justify">{team.deskripsi}</p> */}
             </div>
           </div>
         ))}

@@ -20,7 +20,7 @@ const VideoPlayer = ({ videoLink }) => {
 
       setMaterialData(response.data.results);
     } catch (error) {
-      console.error("Error fetching API:", error);
+      console.error("Error fetching material:", error);
     }
   }, [apiUrl]);
 

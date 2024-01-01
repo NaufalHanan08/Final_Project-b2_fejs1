@@ -5,7 +5,6 @@ function Footer() {
         <div className="mr-12 hidden lg:block">
           <span>Terhubung dengan kami di media sosial:</span>
         </div>
-
         {/* <!-- Social media icons container --> */}
         <div className="flex justify-center">
           <a className="mr-6 text-neutral-600 dark:text-neutral-200 cursor-pointer">
@@ -77,7 +76,6 @@ function Footer() {
               skill.
             </p>
           </div>
-
           {/* <!-- Products section --> */}
           <div className="">
             <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
@@ -96,7 +94,6 @@ function Footer() {
               <a className="text-neutral-600 dark:text-neutral-200">Laravel</a>
             </p>
           </div>
-
           {/* <!-- Useful links section --> */}
           <div className="">
             <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
@@ -119,7 +116,6 @@ function Footer() {
               <a className="text-neutral-600 dark:text-neutral-200">Bantuan</a>
             </p>
           </div>
-
           {/* <!-- Contact section --> */}
           <div>
             <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">

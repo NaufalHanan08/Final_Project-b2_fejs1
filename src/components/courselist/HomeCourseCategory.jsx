@@ -11,7 +11,7 @@ export default function HomeCourseCategory() {
         console.log(res.data);
         setCourses(res.data.results.content);
       })
-      .catch((err) => console.log("error", err));
+      .catch((err) => console.log("Error fetching home category:", err));
   }, []);
 
   const displayedCourses = courses.slice(0, 4);

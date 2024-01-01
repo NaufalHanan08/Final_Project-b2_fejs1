@@ -12,11 +12,11 @@ function AboutPage() {
         <div className="about-bg flex flex-col w-full h-screen  bg-teal-600">
           <div className=" w-full h-screen flex items-center md:justify-start justify-center px-10 ">
             <div className="flex items-center px-8 py-5 lg:ml-24 ml-0 md:mb-20 md:mt-0 mt-20 shadow-2xl rounded-md">
-              <h1 className="text-white font-bold text-2xl flex items-center gap-3">
+              <h1 className="text-white font-bold md:text-2xl sm:text-xl text-lg flex flex-wrap items-center gap-3">
                 ABOUT{" "}
                 <span>
                   {" "}
-                  <h1 className="md:text-2xl text-xl py-2 px-3 pb-4 rounded-md font-bold text-white bg-gray-800 w-fit">
+                  <h1 className="md:text-2xl sm:text-xl text-lg py-2 px-3 pb-4 rounded-md font-bold text-white bg-gray-800 w-fit">
                     <span className="text-teal-600 underline">Byte</span>Academy
                   </h1>
                 </span>
@@ -38,7 +38,7 @@ function AboutPage() {
           className="flex md:flex-row flex-col items-center justify-center w-full md:h-screen md:gap-0 gap-10 md:py-0 py-10"
         >
           <div className="md:w-1/2 px-10">
-            <h1 className="text-4xl font-bold py-1 mb-10">
+            <h1 className="md:text-4xl sm:text-2xl text-xl font-bold py-1 mb-10">
               ABOUT <span className="text-teal-600">US</span>
             </h1>
             <p>

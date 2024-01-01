@@ -38,16 +38,12 @@ export function LoginPage() {
           Cookies.set('accessToken', accessToken);
           Cookies.set('refreshToken', refreshToken);
           console.log('Login berhasil');
-          console.log('AccessToken:', accessToken);
-          console.log('RefreshToken:', refreshToken);
           // Membawa user ke halaman Home
           navigate('/');
         } else {
-          // Tampilkan pesan kesalahan jika token tidak dapat diambil
           console.error('Token tidak ditemukan dalam respons API');
         }
       } else {
-        // Handle error login, misalnya, tampilkan pesan error
         const data = await response.json();
         setError(data.error || 'Login gagal');
         console.error('Login gagal:', data);

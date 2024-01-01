@@ -198,7 +198,6 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         >
           <option value="FREE">FREE</option>
           <option value="PREMIUM">PREMIUM</option>
-          {/* Add other options based on your API requirements */}
         </select>
       </label>
       <label className="block mb-4">
@@ -213,7 +212,6 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           <option value="BEGINNER">BEGINNER</option>
           <option value="INTERMEDIATE">INTERMEDIATE</option>
           <option value="ADVANCE">ADVANCE</option>
-          {/* Add other options based on your API requirements */}
         </select>
       </label>
       <label className="block mb-4">

@@ -51,7 +51,7 @@ function Navbar() {
             setIsLoggedIn(false);
           }
         } catch (error) {
-          console.error("Error:", error);
+          console.error("Anda belum login:", error);
           setIsLoggedIn(false);
         }
       } else {
@@ -68,7 +68,6 @@ function Navbar() {
   };
 
   useEffect(() => {
-    // Panggil fungsi untuk memuat notifikasi saat komponen dimuat
     loadNotifications();
   }, []);
 
@@ -85,22 +84,22 @@ function Navbar() {
       );
 
       if (response.status === 200) {
-        console.log(response.data);
         const data = response.data;
         setNotifications(data.results.content);
       } else {
         console.error("Failed to load notifications");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Notification error:", error);
     }
   };
 
   const markAsRead = async (id) => {
     try {
       const accessToken = Cookies.get("accessToken");
-      const response = await axios.post(
+      await axios.post(
         `http://byteacademy.as.r.appspot.com/api/v1/customer/${id}/read`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -108,15 +107,12 @@ function Navbar() {
         }
       );
 
-      console.log(response.data);
-
-      if (response.status === 200) {
-        loadNotifications();
-      } else {
-        console.error("Failed to mark notification as read");
-      }
+      // Remove the notification from the state after marking it as read
+      setNotifications((prevNotifications) =>
+        prevNotifications.filter((notification) => notification.id !== id)
+      );
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Failed to read notification:", error);
     }
   };
 
@@ -175,14 +171,32 @@ function Navbar() {
                 </div>
               </div>
             </div>
-            <div className="-mr-2 flex md:hidden">
-              {isLoggedIn ? (
-                <button
-                  onClick={handleLogout}
-                  type="button"
-                  className="bg-gray-900 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white mr-3"
-                >
-                  <span className="sr-only">Logout</span>
+            <div className="mr-2 flex lg:hidden">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                type="button"
+                className="bg-gray-900 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2"
+                aria-controls="mobile-menu"
+                aria-expanded="false"
+              >
+                <span className="sr-only">Open main menu</span>
+                {!isOpen ? (
+                  <svg
+                    className="block h-6 w-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                ) : (
                   <svg
                     className="block h-6 w-6"
                     xmlns="http://www.w3.org/2000/svg"
@@ -198,51 +212,9 @@ function Navbar() {
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
-                </button>
-              ) : (
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  type="button"
-                  className="bg-gray-900 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white mr-3"
-                  aria-controls="mobile-menu"
-                  aria-expanded="false"
-                >
-                  <span className="sr-only">Open main menu</span>
-                  {!isOpen ? (
-                    <svg
-                      className="block h-6 w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 6h16M4 12h16M4 18h16"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className="block h-6 w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  )}
-                </button>
-              )}
+                )}
+              </button>
+              {/* )} */}
             </div>
           </div>
         </div>
@@ -257,11 +229,11 @@ function Navbar() {
           leaveTo="opacity-0 scale-95"
         >
           {(ref) => (
-            <div className="md:hidden bg-teal-600" id="mobile-menu">
+            <div className="lg:hidden bg-teal-600" id="mobile-menu">
               <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <span
                   onClick={() => navigate("/search")}
-                  className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-2 transition-all text-2xl fixed top-14
+                  className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-4 transition-all text-2xl fixed top-14
                     end-3 sm:hidden block cursor-pointer z-50"
                 >
                   <svg
@@ -283,12 +255,12 @@ function Navbar() {
                 </span>
                 <span
                   onClick={toggleNotification}
-                  className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-2 transition-all text-2xl fixed top-3
-                  end-3 sm:hidden block cursor-pointer z-50"
+                  className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-4 transition-all text-xl fixed top-3
+                  end-4 sm:hidden block cursor-pointer z-50"
                 >
                   <FaRegBell />
                   {notifications.length > 0 && (
-                    <span className="bg-red-500 text-white px-2 py-1 rounded-full absolute top-1 right-1">
+                    <span className="text-sm bg-red-500 text-white font-bold w-6 h-6 flex justify-center items-center rounded-full absolute top-1 right-1">
                       {notifications.length}
                     </span>
                   )}
@@ -311,6 +283,7 @@ function Navbar() {
 
                 <a
                   href="#"
+                  onClick={() => navigate("/courses")}
                   className="text-gray-300 hover:text-teal-900 block px-3 py-2 rounded-md text-base font-medium"
                 >
                   COURSES
@@ -343,9 +316,9 @@ function Navbar() {
       </nav>
       <span
         onClick={() => navigate("/search")}
-        className={`text-white hover:bg-teal-700 hover:scale-90 rounded-full p-2 transition-all text-2xl fixed top-3 ${
-          isLoggedIn ? "md:end-44" : "md:end-72"
-        } end-32 sm:block hidden cursor-pointer z-50`}
+        className={`text-white hover:bg-teal-700 hover:scale-90 rounded-full p-4 transition-all text-2xl fixed top-2 ${
+          isLoggedIn ? "lg:end-44" : "lg:end-72"
+        } end-36 sm:block hidden cursor-pointer z-50`}
       >
         <svg
           width="24"
@@ -366,18 +339,18 @@ function Navbar() {
       </span>
       <span
         onClick={toggleNotification}
-        className={`text-white hover:bg-teal-700 hover:scale-90 rounded-full p-2 transition-all text-2xl fixed top-3 ${
-          isLoggedIn ? "md:end-32" : "md:end-60"
-        } end-20 sm:block hidden cursor-pointer z-50`}
+        className={`text-white hover:bg-teal-700 hover:scale-90 rounded-full p-4 transition-all text-xl fixed top-2 ${
+          isLoggedIn ? "lg:end-32" : "lg:end-60"
+        } end-24 sm:block hidden cursor-pointer z-50`}
       >
         <FaRegBell />
         {notifications.length > 0 && (
-          <span className="bg-red-500 text-white px-2 py-1 rounded-full absolute top-1 right-1">
+          <span className="text-sm bg-red-500 text-white font-bold w-6 h-6 flex justify-center items-center rounded-full absolute top-2 right-2">
             {notifications.length}
           </span>
         )}
       </span>
-      <div className="md:flex hidden gap-2 fixed top-3 md:end-5 end-20 z-50">
+      <div className="lg:flex hidden gap-2 fixed top-3 md:end-5 end-20 z-50">
         {isLoggedIn ? (
           <button
             onClick={handleLogout}
@@ -412,10 +385,10 @@ function Navbar() {
                 }`}
                 onClick={() => markAsRead(notification.id)}
               >
-                <p className="text-gray-800">
+                <p className="text-gray-800 font-bold">
                   {notification.notification.title}
                 </p>
-                <p className="text-gray-500">
+                <p className="text-gray-500 mb-2">
                   {notification.notification.body}
                 </p>
               </div>

@@ -1,19 +1,20 @@
-// TERBARU
-
+//TERBARU
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Navbar";
-import VideoPlayer from "./CourseMaterial";
 import { FaArrowLeft, FaStar } from "react-icons/fa";
 import { RiShieldStarLine } from "react-icons/ri";
 import { RiBook3Line } from "react-icons/ri";
 import { HiClock } from "react-icons/hi";
 import { HiChatAlt2 } from "react-icons/hi";
 import { MdOutlineVideoLibrary } from "react-icons/md";
+import { IoIosLock } from "react-icons/io";
 import { Typography } from "@material-tailwind/react";
+import VideoPlayer from "./CourseMaterial";
+import Cookies from "js-cookie";
 
-export default function CourseDetail() {
+const CourseDetail = () => {
   const { slugCourse } = useParams();
   const [detailCourses, setDetailCourses] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,6 +22,16 @@ export default function CourseDetail() {
   const [selectedMaterial, setSelectedMaterial] = useState(null);
 
   useEffect(() => {
+    // Load Snap.js script
+    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
+    const clientKey = import.meta.env.VITE_PAYMENT_CLIENT;
+    const script = document.createElement("script");
+    script.src = snapScript;
+    script.setAttribute("data-client-key", clientKey);
+    script.async = true;
+    document.body.appendChild(script);
+
+    // Fetch course detail
     const fetchCourseDetail = async () => {
       try {
         setLoading(true);
@@ -29,10 +40,13 @@ export default function CourseDetail() {
           `https://byteacademy.as.r.appspot.com/api/v1/course/${slugCourse}`
         );
 
+        console.log(response.data);
         if (response.data.code === 200) {
           setDetailCourses(response.data.results);
         } else {
-          setError(`Error: ${response.data.code} - ${response.data.message}`);
+          setError(
+            `Error fetching course detail: ${response.data.code} - ${response.data.message}`
+          );
         }
       } catch (error) {
         console.error("Error fetching course detail:", error);
@@ -43,14 +57,16 @@ export default function CourseDetail() {
     };
 
     fetchCourseDetail();
+
+    // Cleanup function to remove Snap.js script
+    return () => {
+      document.body.removeChild(script);
+    };
   }, [slugCourse]);
 
   const handleBuyCourse = async () => {
     try {
-      const accessToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("accessToken"))
-        .split("=")[1];
+      const accessToken = Cookies.get("accessToken");
 
       // Membuat sesi pembelian dengan Midtrans
       const midtransResponse = await axios.post(
@@ -65,11 +81,9 @@ export default function CourseDetail() {
 
       console.log(midtransResponse.data);
 
-      // Redirect ke halaman pembayaran Midtrans
-      // window.location.href = midtransResponse.data.redirect_url;
-
       // Gunakan Snap untuk menampilkan pop-up pembayaran
-      window.snap.pay(midtransResponse.data.token, {
+      window.snap.embed(midtransResponse.data.results.tokenPurchase, {
+        embedId: "snap-container",
         onSuccess: function (result) {
           console.log("Payment successful!", result);
         },
@@ -87,6 +101,56 @@ export default function CourseDetail() {
 
   const handleChapterClick = (material) => {
     setSelectedMaterial(material);
+
+    // Display data from the API for the selected material
+    const materialApiUrl = `http://byteacademy.as.r.appspot.com/api/v1/customer/material/${material?.slugMaterial}`;
+    const accessToken = Cookies.get("accessToken");
+    // Using axios to fetch data
+    axios
+      .get(materialApiUrl, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log("Material API Data:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching material data:", error);
+      });
+  };
+
+  // const handleChapterClick = (material) => {
+  //   setSelectedMaterial(material);
+  // };
+
+  const handleMaterialViewed = async (slugMaterial) => {
+    try {
+      const accessToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("accessToken"))
+        .split("=")[1];
+
+      const response = await axios.post(
+        `http://byteacademy.as.r.appspot.com/api/v1/customer/material/${slugMaterial}/complete`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.data.results && response.data.code === 200) {
+        console.log("Material marked as viewed successfully!");
+      } else {
+        console.error(
+          "Error marking material as viewed:",
+          response.data.message
+        );
+      }
+    } catch (error) {
+      console.error("Error marking material as viewed:", error);
+    }
   };
 
   if (loading) {
@@ -104,6 +168,7 @@ export default function CourseDetail() {
   return (
     <>
       <Navbar />
+      <div id="snap-container"></div>
       <div className="py-6">
         <div className="bg-gray-800 py-10 md:px-12 sm:px-8 px-4">
           <div className="inline-flex items-center mt-8">
@@ -170,18 +235,13 @@ export default function CourseDetail() {
                 />
               )}
             </div>
-            {/* <div className="w-full py-8 px-10">
-              <video className="flex justtify-center rounded-2xl" controls>
-                <source
-                  src="https://docs.material-tailwind.com/demo.mp4"
-                  type="video/mp4"
-                />
-                Your browser does not support the video tag.
-              </video>
-            </div> */}
             <VideoPlayer
               key={selectedMaterial?.slugMaterial}
               videoLink={`http://byteacademy.as.r.appspot.com/api/v1/customer/material/${selectedMaterial?.slugMaterial}`}
+              materialData={selectedMaterial}
+              onMaterialViewed={() =>
+                handleMaterialViewed(selectedMaterial?.slugMaterial)
+              }
             />
             <div className="lg:ps-12 lg:px-0 sm:px-12 px-6">
               <Typography className="heading-2 font-bold my-2 text-xl">
@@ -208,10 +268,7 @@ export default function CourseDetail() {
               {detailCourses.chapters.map((chapter, index) => (
                 <div key={index}>
                   <div className="flex sm:flex-row flex-col justify-between items-center">
-                    <h2
-                      className="text-teal-600 xl:text-lg text-xs font-bold"
-                      // onClick={() => handleChapterClick(chapter.materials[0])}
-                    >
+                    <h2 className="text-teal-600 xl:text-lg text-xs font-bold">
                       <span>Chapter {chapter.noChapter}</span> -
                       <span> {chapter.title}</span>
                     </h2>
@@ -223,10 +280,18 @@ export default function CourseDetail() {
                     {chapter.materials.map((material) => (
                       <li
                         key={material.slugMaterial}
-                        onClick={() => handleChapterClick(material)}
+                        onClick={() => {
+                          handleChapterClick(material);
+                          handleMaterialViewed(material.slugMaterial);
+                        }}
                         className="text-gray-800 hover:underline hover:font-extrabold transition-all cursor-pointer sm:text-start text-center text-xs font-semibold flex items-center gap-2"
                       >
-                        <MdOutlineVideoLibrary className="text-lg md:block hidden" />
+                        <span>{material.serialNumber}</span>
+                        {material.canBeWatched ? (
+                          <IoIosLock />
+                        ) : (
+                          <MdOutlineVideoLibrary className="text-lg md:block hidden" />
+                        )}
                         <span>{material.materialName}</span>
                       </li>
                     ))}
@@ -247,4 +312,6 @@ export default function CourseDetail() {
       </div>
     </>
   );
-}
+};
+
+export default CourseDetail;

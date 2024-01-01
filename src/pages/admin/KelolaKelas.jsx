@@ -1,19 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@material-tailwind/react";
 import Filter from "../../components/admin/Filter";
-import TambahKelasPopup from "../../components/admin/TambahKelasPopup";
 import axios from "axios";
 import Cookies from "js-cookie";
 import EditForm from "../../components/admin/EditForm";
+import TambahChapter from "../../components/admin/TambahChapter";
+import TambahForm from "../../components/admin/TambahForm";
 
 const KelolaKelas = () => {
   const [kelasData, setKelasData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [isTambahPopupOpen, setIsTambahPopupOpen] = useState(false);
+  const [isTambahChapterPopupOpen, setIsTambahChapterPopupOpen] =
+    useState(false);
   const [filterType, setFilterType] = useState("DESC");
   const [searchText, setSearchText] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(null);
 
-  // Function to handle sorting based on filterType
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
   const handleSort = useCallback(
     (data) => {
       const sortedData = [...data];
@@ -46,35 +54,31 @@ const KelolaKelas = () => {
           Authorization: `Bearer ${accessToken}`,
         };
 
-        const [page0Response, page1Response] = await Promise.all([
-          axios.get(
-            "http://byteacademy.as.r.appspot.com/api/v1/admin/course?page=0",
-            { headers }
-          ),
-          axios.get(
-            "http://byteacademy.as.r.appspot.com/api/v1/admin/course?page=1",
-            { headers }
-          ),
-        ]);
-        console.log(page0Response.data);
-        console.log(page1Response.data);
-        const page0Data = page0Response.data.results.content;
-        const page1Data = page1Response.data.results.content;
+        const response = await axios.get(
+          `http://byteacademy.as.r.appspot.com/api/v1/admin/course?page=${currentPage}`,
+          { headers }
+        );
 
-        const combinedData = [...page0Data, ...page1Data];
+        const data = response.data.results.content;
+        const totalPages = response.data.results.totalPages;
 
-        const sortedData = handleSort(combinedData);
+        const sortedData = handleSort(data);
         setKelasData(sortedData);
+        setTotalPages(totalPages);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching table course data:", error);
       }
     };
 
     fetchKelasData();
-  }, [handleSort, filterType]);
+  }, [handleSort, filterType, currentPage]);
 
   const toggleTambahPopup = () => {
     setIsTambahPopupOpen(!isTambahPopupOpen);
+  };
+
+  const toggleTambahChapterPopup = () => {
+    setIsTambahChapterPopupOpen(!isTambahChapterPopupOpen);
   };
 
   const handleFilterChange = (value) => {
@@ -140,8 +144,9 @@ const KelolaKelas = () => {
 
   return (
     <div>
+      {/* Header Section */}
       <div className="flex sm:flex-row flex-col sm:items-center justify-between mb-4 ps-5 sm:pt-0 pt-4 bg-gray-800">
-        <div className="text-2xl font-semibold text-white">
+        <div className="md:text-2xl text-lg font-semibold text-white">
           Kelola <span className="text-teal-600 font-bold">Kelas</span>
         </div>
         <div className="flex sm:justify-normal justify-end space-x-4 items-center">
@@ -158,6 +163,7 @@ const KelolaKelas = () => {
         </div>
       </div>
 
+      {/* Main Content */}
       <div className="lg:overflow-hidden overflow-x-scroll">
         {!selectedCourse ? (
           <table className="w-full bg-white border border-gray-300 lg:overflow-hidden overflow-x-scroll">
@@ -221,13 +227,38 @@ const KelolaKelas = () => {
           />
         )}
 
+        {/* Popup Components */}
         {isTambahPopupOpen && (
-          <TambahKelasPopup
+          <TambahForm
             isVisible={isTambahPopupOpen}
             togglePopup={toggleTambahPopup}
             setKelasData={setKelasData}
           />
         )}
+
+        {isTambahChapterPopupOpen && (
+          <TambahChapter
+            isVisible={isTambahChapterPopupOpen}
+            togglePopup={toggleTambahChapterPopup}
+            setKelasData={setKelasData}
+            selectedCourse={selectedCourse}
+          />
+        )}
+        <div className="flex justify-end p-4">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index)}
+              className={`mx-1 font-bold text-md px-5 ${
+                currentPage === index
+                  ? "bg-gray-800 text-white"
+                  : "bg-gray-300 text-teal-600"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

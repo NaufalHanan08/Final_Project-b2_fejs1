@@ -7,12 +7,12 @@ import { HiClock } from "react-icons/hi";
 export default function CourseCard({ courses }) {
   return (
     <>
-      <div className="grid xl:gap-2 md:gap-6 md:grid-cols-2 p-5">
+      <div className="grid xl:gap-2 md:gap-4 gap-2 md:grid-cols-2 grid-cols-1 p-5">
         {courses.map((result) => (
           <div key={result.slugCourse} className="shadow-lg rounded-2xl">
             <Link to={`/detail/${result.slugCourse}`}>
               <img
-                className="w-full h-48 object-cover"
+                className="w-full sm:h-48 h-28 object-cover"
                 src={result.pathCourseImage}
                 alt={result.category.categoryName}
               />
