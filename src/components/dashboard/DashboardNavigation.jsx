@@ -7,6 +7,8 @@ import {
   VscSignOut,
   VscArrowLeft,
 } from "react-icons/vsc";
+import { SiGoogleclassroom } from "react-icons/si";
+
 
 const DashboardNavigation = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -64,6 +66,15 @@ const DashboardNavigation = () => {
               </span>
             </Link>
             <Link
+              to="../courses"
+              className="w-full focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1"
+            >
+              <SiGoogleclassroom size={25} className="inline-block mb-1" />
+              <span className="tab tab-payment-history block text-xs">
+                Kelas Saya
+              </span>
+            </Link>
+            <Link
               to="/logout"
               className="w-full focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1"
             >
@@ -76,7 +87,7 @@ const DashboardNavigation = () => {
         <div className="flex flex-auto antialiased bg-gray-50 text-gray-800 ml-[-30rem] mr-[-0rem]">
           <div className="fixed flex flex-col top-0 left-0 w-64 bg-white h-full border-r">
             <div className="flex items-center justify-center h-14 border-b">
-              <div>Navigasi Sidebar</div>
+              <div>Dashboard Anda</div>
             </div>
             <div className="overflow-y-auto overflow-x-hidden flex-grow">
               <ul className="flex flex-col py-4 space-y-1">
@@ -129,6 +140,19 @@ const DashboardNavigation = () => {
                     </span>
                     <span className="ml-2 text-sm tracking-wide truncate">
                       Riwayat Pembayaran
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="../courses"
+                    className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 border-l-4 border-transparent pr-6"
+                  >
+                    <span className="inline-flex justify-center items-center ml-4">
+                      <SiGoogleclassroom size={25} className="mb-1" />
+                    </span>
+                    <span className="ml-2 text-sm tracking-wide truncate">
+                      Kelas Saya
                     </span>
                   </Link>
                 </li>

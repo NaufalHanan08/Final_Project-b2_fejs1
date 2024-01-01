@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Transition } from "@headlessui/react";
 import { FaRegBell } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -214,7 +215,6 @@ function Navbar() {
                   </svg>
                 )}
               </button>
-              {/* )} */}
             </div>
           </div>
         </div>
@@ -233,8 +233,8 @@ function Navbar() {
               <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <span
                   onClick={() => navigate("/search")}
-                  className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-4 transition-all text-2xl fixed top-14
-                    end-3 sm:hidden block cursor-pointer z-50"
+                  className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-4 transition-all text-2xl fixed top-24
+                    end-4 sm:hidden block cursor-pointer z-50"
                 >
                   <svg
                     width="24"
@@ -255,8 +255,8 @@ function Navbar() {
                 </span>
                 <span
                   onClick={toggleNotification}
-                  className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-4 transition-all text-xl fixed top-3
-                  end-4 sm:hidden block cursor-pointer z-50"
+                  className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-4 transition-all text-xl fixed top-14
+                  end-5 sm:hidden block cursor-pointer z-50"
                 >
                   <FaRegBell />
                   {notifications.length > 0 && (
@@ -289,12 +289,21 @@ function Navbar() {
                   COURSES
                 </a>
                 {isLoggedIn ? (
-                  <button
-                    onClick={handleLogout}
-                    className="w-24 mr-3 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2"
-                  >
-                    Logout
-                  </button>
+                  <>
+                    <button
+                      onClick={() => navigate("/dashboard-user")}
+                      className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-4 transition-all text-3xl fixed top-0
+                      end-3 lg:hidden block cursor-pointer z-50"
+                    >
+                      <FaUserCircle />
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="w-24 mr-3 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2"
+                    >
+                      Logout
+                    </button>
+                  </>
                 ) : (
                   <>
                     <Link to="/Login">
@@ -352,12 +361,21 @@ function Navbar() {
       </span>
       <div className="lg:flex hidden gap-2 fixed top-3 md:end-5 end-20 z-50">
         {isLoggedIn ? (
-          <button
-            onClick={handleLogout}
-            className="w-24 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2"
-          >
-            Logout
-          </button>
+          <>
+            <button
+              onClick={() => navigate("/dashboard-user")}
+              className="text-white p-2 transition-all text-2xl fixed top-4
+                        end-60 block cursor-pointer z-50"
+            >
+              <FaUserCircle />
+            </button>
+            <button
+              onClick={handleLogout}
+              className="w-24 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2"
+            >
+              Logout
+            </button>
+          </>
         ) : (
           <>
             <Link to="/Login">
