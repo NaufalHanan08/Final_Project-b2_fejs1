@@ -4,7 +4,7 @@ import Filter from "../../components/admin/Filter";
 import axios from "axios";
 import Cookies from "js-cookie";
 import EditForm from "../../components/admin/EditForm";
-import TambahChapter from "../../components/admin/TambahChapter";
+// import TambahChapter from "../../components/admin/TambahChapter";
 import TambahForm from "../../components/admin/TambahForm";
 
 const KelolaKelas = () => {
@@ -12,8 +12,8 @@ const KelolaKelas = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [isTambahPopupOpen, setIsTambahPopupOpen] = useState(false);
-  const [isTambahChapterPopupOpen, setIsTambahChapterPopupOpen] =
-    useState(false);
+  // const [isTambahChapterPopupOpen, setIsTambahChapterPopupOpen] =
+  //   useState(false);
   const [filterType, setFilterType] = useState("DESC");
   const [searchText, setSearchText] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -77,9 +77,9 @@ const KelolaKelas = () => {
     setIsTambahPopupOpen(!isTambahPopupOpen);
   };
 
-  const toggleTambahChapterPopup = () => {
-    setIsTambahChapterPopupOpen(!isTambahChapterPopupOpen);
-  };
+  // const toggleTambahChapterPopup = () => {
+  //   setIsTambahChapterPopupOpen(!isTambahChapterPopupOpen);
+  // };
 
   const handleFilterChange = (value) => {
     setFilterType(value);
@@ -236,14 +236,14 @@ const KelolaKelas = () => {
           />
         )}
 
-        {isTambahChapterPopupOpen && (
+        {/* {isTambahChapterPopupOpen && (
           <TambahChapter
             isVisible={isTambahChapterPopupOpen}
             togglePopup={toggleTambahChapterPopup}
             setKelasData={setKelasData}
             selectedCourse={selectedCourse}
           />
-        )}
+        )} */}
         <div className="flex justify-end p-4">
           {Array.from({ length: totalPages }, (_, index) => (
             <button

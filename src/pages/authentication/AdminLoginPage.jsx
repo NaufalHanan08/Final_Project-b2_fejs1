@@ -1,4 +1,3 @@
-// Import statements
 import { useState } from "react";
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,7 +14,7 @@ export function AdminLoginPage() {
 
     try {
       const response = await fetch(
-        "http://byteacademy.as.r.appspot.com/api/v1/auth/login",
+        "https://byteacademy.as.r.appspot.com/api/v1/auth/login",
         {
           method: "POST",
           headers: {
@@ -42,8 +41,6 @@ export function AdminLoginPage() {
           Cookies.set("accessToken", accessToken);
           Cookies.set("refreshToken", refreshToken);
           console.log("Login berhasil");
-          console.log("AccessToken:", accessToken);
-          console.log("RefreshToken:", refreshToken);
           // Membawa user ke halaman Home
           navigate("/dashboard");
         } else {

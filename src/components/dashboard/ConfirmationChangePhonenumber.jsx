@@ -1,16 +1,15 @@
 import { useState, useRef } from "react";
 import { Button, Typography } from "@material-tailwind/react";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 
-function OneTimePasswordPage() {
+function ConfirmationChangePhonenumber() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef([]);
-  const location = useLocation();
   const [showNotification, setShowNotification] = useState(false);
-  const [error, setError] = useState("");
 
-  const phoneNumber = location.state?.phoneNumber || "";
+  // Get newPhoneNumber from cookie
+  const newPhoneNumber = Cookies.get("newPhoneNumber") || "";
 
   const handleInputChange = (index, value) => {
     if (/^\d*$/.test(value)) {
@@ -31,9 +30,8 @@ function OneTimePasswordPage() {
       const otpValue = otp.join("");
 
       const response = await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/auth/verify-register-phone",
+        "http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone",
         {
-          phoneNumber: phoneNumber,
           otp: otpValue,
         }
       );
@@ -44,21 +42,19 @@ function OneTimePasswordPage() {
         setShowNotification(true);
       } else {
         console.error("Verifikasi gagal:", response.data);
-        setError("Verifikasi gagal. Silakan coba lagi.");
       }
     } catch (error) {
       console.error("Error selama verifikasi:", error);
-      setError("Terjadi kesalahan selama verifikasi. Silakan coba lagi.");
     }
   };
 
   const handleResendOTP = async () => {
     try {
-      console.log("Mengirim ulang OTP untuk nomor telepon:", phoneNumber);
+      console.log("Mengirim ulang OTP untuk nomor telepon:", newPhoneNumber);
       await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/auth/generate-otp-register",
+        "http://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone",
         {
-          phoneNumber,
+          phoneNumber: newPhoneNumber,
         }
       );
 
@@ -68,7 +64,6 @@ function OneTimePasswordPage() {
         "Error selama menghasilkan dan mengirimkan OTP baru:",
         error
       );
-      setError("Terjadi kesalahan saat mengirim ulang OTP. Silakan coba lagi.");
     }
   };
 
@@ -149,15 +144,8 @@ function OneTimePasswordPage() {
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
-                    Daftar
+                    Verifikasi
                   </Button>
-
-                  {/* Pesan error ditampilkan di sini */}
-                  {error && (
-                    <div className="mt-4 text-red-600 text-center">
-                      <p>{error}</p>
-                    </div>
-                  )}
 
                   <Typography
                     variant="p"
@@ -181,4 +169,4 @@ function OneTimePasswordPage() {
   );
 }
 
-export default OneTimePasswordPage;
+export default ConfirmationChangePhonenumber;

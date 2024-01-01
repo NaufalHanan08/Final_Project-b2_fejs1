@@ -36,14 +36,14 @@ const DashboardNavigation = () => {
               className="w-full focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1"
             >
               <VscArrowLeft size={25} className="inline-block mb-1" />
-              <span className="tab tab-back block text-xs">Back</span>
+              <span className="tab tab-back block text-xs">Kembali</span>
             </Link>
             <Link
               to="../dashboard-user/profile"
               className="w-full focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1"
             >
               <VscAccount size={25} className="inline-block mb-1" />
-              <span className="tab tab-profile block text-xs">Profile</span>
+              <span className="tab tab-profile block text-xs">Profil</span>
             </Link>
             <Link
               to="../dashboard-user/change-password"
@@ -51,16 +51,16 @@ const DashboardNavigation = () => {
             >
               <VscKey size={25} className="inline-block mb-1" />
               <span className="tab tab-change-password block text-xs">
-                Change Password
+                Ubah Kata Sandi
               </span>
             </Link>
             <Link
-              to="../dashboard-user/PaymentHistory"
+              to="../payment-history"
               className="w-full focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1"
             >
               <VscHistory size={25} className="inline-block mb-1" />
               <span className="tab tab-payment-history block text-xs">
-                Payment History
+                Riwayat Pembayaran
               </span>
             </Link>
             <Link
@@ -68,7 +68,7 @@ const DashboardNavigation = () => {
               className="w-full focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1"
             >
               <VscSignOut size={25} className="inline-block mb-1" />
-              <span className="tab tab-logout block text-xs">Logout</span>
+              <span className="tab tab-logout block text-xs">Keluar</span>
             </Link>
           </div>
         </nav>
@@ -76,7 +76,7 @@ const DashboardNavigation = () => {
         <div className="flex flex-auto antialiased bg-gray-50 text-gray-800 ml-[-30rem] mr-[-0rem]">
           <div className="fixed flex flex-col top-0 left-0 w-64 bg-white h-full border-r">
             <div className="flex items-center justify-center h-14 border-b">
-              <div>Sidebar Navigation</div>
+              <div>Navigasi Sidebar</div>
             </div>
             <div className="overflow-y-auto overflow-x-hidden flex-grow">
               <ul className="flex flex-col py-4 space-y-1">
@@ -89,7 +89,7 @@ const DashboardNavigation = () => {
                       <VscArrowLeft size={25} className="mb-1" />
                     </span>
                     <span className="ml-2 text-sm tracking-wide truncate">
-                      Back
+                      Kembali
                     </span>
                   </Link>
                 </li>
@@ -102,7 +102,7 @@ const DashboardNavigation = () => {
                       <VscAccount size={25} className="mb-1" />
                     </span>
                     <span className="ml-2 text-sm tracking-wide truncate">
-                      Profile
+                      Profil
                     </span>
                   </Link>
                 </li>
@@ -115,20 +115,20 @@ const DashboardNavigation = () => {
                       <VscKey size={25} className="mb-1" />
                     </span>
                     <span className="ml-2 text-sm tracking-wide truncate">
-                      Change Password
+                      Ubah Kata Sandi
                     </span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to="../dashboard-user/PaymentHistory"
+                    to="../payment-history"
                     className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 border-l-4 border-transparent pr-6"
                   >
                     <span className="inline-flex justify-center items-center ml-4">
                       <VscHistory size={25} className="mb-1" />
                     </span>
                     <span className="ml-2 text-sm tracking-wide truncate">
-                      Payment History
+                      Riwayat Pembayaran
                     </span>
                   </Link>
                 </li>
@@ -140,11 +140,9 @@ const DashboardNavigation = () => {
                     <span className="inline-flex justify-center items-center ml-4">
                       <VscSignOut size={25} className="mb-1" />
                     </span>
-                    <Link to="/">
-                      <span className="ml-2 text-sm tracking-wide truncate">
-                        Logout
-                      </span>
-                    </Link>
+                    <span className="ml-2 text-sm tracking-wide truncate">
+                      Keluar
+                    </span>
                   </Link>
                 </li>
               </ul>

@@ -1,13 +1,33 @@
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export function ConfirmationChangePassword() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [token, setToken] = useState(null); // Menambahkan state untuk menyimpan token
+
+  useEffect(() => {
+    // Menggunakan URLSearchParams untuk mengekstrak token dari query parameter
+    const tokenFromURL = new URLSearchParams(location.search).get("token");
+
+    // Memeriksa apakah token ada
+    if (!tokenFromURL) {
+      // Token tidak ada, mungkin perlu menangani kasus ini
+      console.error("Token not found");
+      navigate("/error"); // Ganti dengan rute yang sesuai untuk penanganan kesalahan
+      return;
+    }
+
+    // Menyimpan token dalam state
+    setToken(tokenFromURL);
+
+    // Jangan lupa untuk menyertakan tokenFromURL dalam dependency array jika digunakan dalam useEffect
+  }, [location.search, navigate]);
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -15,10 +35,11 @@ export function ConfirmationChangePassword() {
     try {
       // Kirim data ke API menggunakan metode POST
       const response = await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/auth/change-password",
+        "http://byteacademy.as.r.appspot.com/api/v1/auth/verify-forgot-password-email",
         {
-          newPassword,
+          password: newPassword,
           confirmPassword,
+          token: token, // Menggunakan token yang sudah disimpan dalam state
         }
       );
 
@@ -26,7 +47,7 @@ export function ConfirmationChangePassword() {
       console.log("Change password success:", response.data);
 
       // Arahkan pengguna ke halaman profil atau halaman lain setelah berhasil mengubah password
-      navigate("/profile");
+      navigate("/login");
     } catch (error) {
       // Tangani kesalahan jika terjadi
       console.error("Change password error:", error.response.data);
