@@ -34,7 +34,7 @@ function ConfirmationChangePhonenumber() {
 
     try {
       const response = await axios.post(
-        'http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone',
+        'https://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone',
         {
           otp: otpValue,
         },
@@ -45,6 +45,14 @@ function ConfirmationChangePhonenumber() {
           },
         }
       );
+
+      // try {
+      //   const response = await axios.post(`http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone?otp=${otpValue}`, null, {
+      //     headers: {
+      //       accept: 'application/json',
+      //       Authorization: `Bearer ${accessToken}`,
+      //     },
+      //   });
 
       if (response.status === 200) {
         console.log('Verifikasi berhasil');
@@ -73,7 +81,7 @@ function ConfirmationChangePhonenumber() {
       console.log('Mengirim ulang OTP untuk nomor telepon:', newPhoneNumber);
 
       await axios.post(
-        'http://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone',
+        'https://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone',
         {
           phoneNumber: newPhoneNumber,
         },

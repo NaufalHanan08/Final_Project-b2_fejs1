@@ -34,7 +34,7 @@ export function ConfirmationChangePassword() {
 
     try {
       // Kirim data ke API menggunakan metode POST
-      const response = await axios.post('http://byteacademy.as.r.appspot.com/api/v1/auth/verify-forgot-password-email', {
+      const response = await axios.post('https://byteacademy.as.r.appspot.com/api/v1/auth/verify-forgot-password-email', {
         password: newPassword,
         confirmPassword,
         token: token, // Menggunakan token yang sudah disimpan dalam state

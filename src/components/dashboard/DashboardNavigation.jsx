@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { VscAccount, VscKey, VscHistory, VscSignOut, VscArrowLeft } from 'react-icons/vsc';
+import { SiGoogleclassroom } from 'react-icons/si';
 import Cookies from 'js-cookie';
 
 const DashboardNavigation = () => {
-  const navigate = useNavigate(); // Menggunakan hook useNavigate dari react-router-dom
+  const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const DashboardNavigation = () => {
 
     try {
       // Melakukan permintaan POST ke API logout dengan menyertakan token akses
-      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/auth/logout', {
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/auth/logout', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -67,6 +68,10 @@ const DashboardNavigation = () => {
               <VscHistory size={25} className="inline-block mb-1" />
               <span className="tab tab-payment-history block text-xs">Riwayat Pembayaran</span>
             </Link>
+            <Link to="../courses" className="w-full focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+              <SiGoogleclassroom size={25} className="inline-block mb-1" />
+              <span className="tab tab-payment-history block text-xs">Kelas Saya</span>
+            </Link>
             <button onClick={handleLogout} className="w-full focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
               <VscSignOut size={25} className="inline-block mb-1" />
               <span className="tab tab-logout block text-xs">Keluar</span>
@@ -77,10 +82,7 @@ const DashboardNavigation = () => {
         <div className="flex flex-auto antialiased bg-gray-50 text-gray-800 ml-[-30rem] mr-[-0rem]">
           <div className="fixed flex flex-col top-0 left-0 w-64 bg-white h-full border-r">
             <div className="flex items-center justify-center h-14 border-b">
-              <h2 className="text-2xl font-bold text-white bg-gray-800 py-1 px-3 pb-2 rounded-md">
-                <span className="text-teal-600 underline">Byte</span>
-                Academy
-              </h2>
+              <div>Dashboard Anda</div>
             </div>
             <div className="overflow-y-auto overflow-x-hidden flex-grow">
               <ul className="flex flex-col py-4 space-y-1">
@@ -114,6 +116,14 @@ const DashboardNavigation = () => {
                       <VscHistory size={25} className="mb-1" />
                     </span>
                     <span className="ml-2 text-sm tracking-wide truncate">Riwayat Pembayaran</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="../courses" className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-teal-500 border-l-4 border-transparent pr-6">
+                    <span className="inline-flex justify-center items-center ml-4">
+                      <SiGoogleclassroom size={25} className="mb-1" />
+                    </span>
+                    <span className="ml-2 text-sm tracking-wide truncate">Kelas Saya</span>
                   </Link>
                 </li>
                 <li>

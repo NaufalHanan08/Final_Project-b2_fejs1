@@ -23,7 +23,7 @@ function ChangePhoneNumber() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone', {
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone', {
         method: 'POST',
         headers: {
           accept: 'application/json',

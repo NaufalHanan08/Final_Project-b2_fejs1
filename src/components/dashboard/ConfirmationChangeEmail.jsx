@@ -26,7 +26,7 @@ const ConfirmationChangeEmail = () => {
     try {
       const accessToken = Cookies.get('accessToken');
       const response = await axios.post(
-        'http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-email',
+        'https://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-email',
         {
           token: verificationToken,
         },
@@ -54,7 +54,7 @@ const ConfirmationChangeEmail = () => {
       const newEmail = Cookies.get('newEmail');
 
       const response = await axios.post(
-        'http://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change',
+        'https://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change',
         {
           email: newEmail,
         },

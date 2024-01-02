@@ -1,0 +1,53 @@
+{
+    "course": [
+        {
+            "category": "Product Management",
+            "courseName": "Scrum dalam tim kompleks",
+            "courseType": "GRATIS",
+            "level": "Beginner",
+            "price": 0
+
+        },
+        {
+            
+            "category": "UI/UX Design",
+            "courseName": "Belajar Web Designer dengan Figma",
+            "courseType": "GRATIS",
+            "level": "Beginner",
+            "price": 0
+
+        },
+        {  
+            "category": "Web Development",
+            "courseName": "CSS dan HTML dalam seminggu",
+            "courseType": "GRATIS",
+            "level": "Beginner",
+            "price": 0
+
+        },
+        {   
+            "category": "Android Development",
+            "courseName": "Mengenal Android Studio",
+            "courseType": "GRATIS",
+            "level": "Beginner",
+            "price": 0
+
+        },
+        {
+            "category": "iOS Development",
+            "courseName": "Mengenal iOS Studio",
+            "courseType": "PREMIUM",
+            "level": "Advanced",
+            "price": 199000
+
+        },
+        {
+            "category": "Data Science",
+            "courseName": "Data Cleaning untuk Professional",
+            "courseType": "PREMIUM",
+            "level": "Advanced",
+            "price": 199000
+
+        }
+    ]
+}

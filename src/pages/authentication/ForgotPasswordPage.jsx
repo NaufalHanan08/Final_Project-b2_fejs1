@@ -15,7 +15,7 @@ function ForgotPasswordPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/auth/forgot-password-email', {
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/auth/forgot-password-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

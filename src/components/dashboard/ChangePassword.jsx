@@ -15,7 +15,7 @@ function ChangePassword() {
     const accessToken = Cookies.get('accessToken');
 
     try {
-      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/setting/change-password', {
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/setting/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

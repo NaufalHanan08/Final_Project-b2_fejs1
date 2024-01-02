@@ -22,7 +22,7 @@ function ChangeEmail() {
 
     try {
       const accessToken = Cookies.get('accessToken');
-      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change', {
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

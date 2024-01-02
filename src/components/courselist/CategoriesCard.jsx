@@ -1,56 +1,31 @@
-import FigmaLogo from "../../assets/images/figma_logo.png";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-// Dummy data untuk konten kartu
-const cardContents = [
-  {
-    title: "Title 1",
-    description: "Deskripsi untuk kartu 1.",
-    price: "$399",
-    logo: FigmaLogo,
-  },
-  {
-    title: "Title 2",
-    description: "Deskripsi untuk kartu 2.",
-    price: "$499",
-    logo: FigmaLogo,
-  },
-  {
-    title: "Title 2",
-    description: "Deskripsi untuk kartu 2.",
-    price: "$499",
-    logo: FigmaLogo,
-  },
-  {
-    title: "Title 2",
-    description: "Deskripsi untuk kartu 2.",
-    price: "$499",
-    logo: FigmaLogo,
-  },
-  // ... tambahkan data lain sesuai kebutuhan
-];
+export default function CardComponent() {
+  const [courses, setCourses] = useState([]);
 
-function CategoriesCard() {
+  useEffect(() => {
+    axios
+      .get('https://byteacademy.as.r.appspot.com/api/v1/course/search?page=0')
+      .then((res) => {
+        console.log(res.data);
+        setCourses(res.data.results.content);
+      })
+      .catch((err) => console.log('error', err));
+  }, []);
+
   return (
-    <div className="flex overflow-x-auto flex-wrap justify-start">
-      {cardContents.map((content, index) => (
-        <div
-          key={index}
-          className="w-full sm:w-64 p-4 mb-8 sm:mb-0 sm:mr-5 overflow-hidden bg-white shadow-lg rounded-2xl relative"
-        >
-          <img
-            alt="moto"
-            src={content.logo}
-            className="w-30 mb-4 -bottom-4 left-1/2 transform -translate-x-1/2"
-          />
-          <div className="w-4/6">
-            <p className="mb-2 text-lg font-medium text-gray-800">{content.title}</p>
-            <p className="text-xs text-gray-400">{content.description}</p>
-            <p className="text-xl font-medium text-indigo-500">{content.price}</p>
+    <>
+      <div className="grid xl:gap-2 md:gap-6 xl:grid-cols-4 md:grid-cols-2 p-5">
+        {courses.map((course, key) => (
+          <div className="w-full rounded-lg shadow-md lg:max-w-sm hover:shadow-md hover:shadow-black transition-all" key={key}>
+            <img className="object-cover w-full h-48" src={course.category.pathCategoryImage} alt={course.categoryName} />
+            <div className="p-4">
+              <h4 className="text-lg text-center font-semibold text-black">{course.category.categoryName}</h4>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 }
-
-export default CategoriesCard;

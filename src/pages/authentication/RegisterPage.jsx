@@ -18,7 +18,7 @@ function RegisterPage() {
 
     try {
       // Mengelola pendaftaran pertama
-      const response = await axios.post('http://byteacademy.as.r.appspot.com/api/v1/auth/register', {
+      const response = await axios.post('https://byteacademy.as.r.appspot.com/api/v1/auth/register', {
         username,
         email,
         password,
