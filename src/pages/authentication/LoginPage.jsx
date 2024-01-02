@@ -77,7 +77,7 @@ export function LoginPage() {
               <Input
                 id="email"
                 name="email"
-                type="email"
+                type="text"
                 autoComplete="email"
                 required
                 size="md"

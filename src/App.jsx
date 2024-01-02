@@ -16,6 +16,7 @@ import CourseDetail from './components/coursedetail/CourseDetail';
 import ConfirmationChangePassword from './pages/authentication/ConfirmationChangePassword';
 import ConfirmationEmail from './pages/authentication/ConfirmationEmail';
 import ConfirmationChangeEmail from './components/dashboard/ConfirmationChangeEmail';
+import ConfirmationChangePhonenumber from './components/dashboard/ConfirmationChangePhonenumber';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/email-verify-forgot-password" element={<ConfirmationChangePassword />} />
         <Route path="/email-verify-register" element={<ConfirmationEmail />} />
         <Route path="/email-verify-change" element={<ConfirmationChangeEmail />} />
+        <Route path="/phone-verify-change" element={<ConfirmationChangePhonenumber />} />
 
         {/* Halaman Authentication */}
         <Route

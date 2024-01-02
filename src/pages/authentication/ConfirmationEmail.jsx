@@ -12,11 +12,13 @@ const ConfirmationEmail = () => {
     const token = new URLSearchParams(location.search).get('token');
 
     if (token) {
+      console.log('Token dari URL:', token);
       verifyEmail(token);
     } else {
       console.error('Token tidak ditemukan dalam URL.');
       setVerificationStatus('Tautan konfirmasi tidak valid.');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search, navigate]);
 
   const verifyEmail = async (token) => {
@@ -33,14 +35,18 @@ const ConfirmationEmail = () => {
 
       setVerificationStatus(responseData.message);
 
-      if (responseData.success) {
-        navigate('/login', { state: { successMessage: 'Registrasi berhasil. Anda sekarang dapat masuk.' } });
+      if (response.status === 200) {
+        setTimeout(() => {
+          navigate('/login', { state: { successMessage: 'Registrasi berhasil. Anda sekarang dapat masuk.' } });
+        }, 5000);
       }
     } catch (error) {
-      console.error('Error verifying email:', error);
+      console.error('Terjadi kesalahan saat memverifikasi email:', error);
+
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
-        console.error('Server response:', error);
+        console.error('Terjadi kesalahan saat berkomunikasi dengan server.');
       }
+
       setVerificationStatus('Terjadi kesalahan saat memverifikasi email. Tolong periksa email Anda.');
     }
   };

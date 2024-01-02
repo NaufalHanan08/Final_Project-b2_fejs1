@@ -2,14 +2,13 @@ import { useState, useRef } from 'react';
 import { Button, Typography } from '@material-tailwind/react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 function ConfirmationChangePhonenumber() {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const inputRefs = useRef([]);
-  const [showNotification, setShowNotification] = useState(false);
-
-  // Get newPhoneNumber from cookie
-  const newPhoneNumber = Cookies.get('newPhoneNumber') || '';
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
 
   const handleInputChange = (index, value) => {
     if (/^\d*$/.test(value)) {
@@ -26,34 +25,69 @@ function ConfirmationChangePhonenumber() {
 
   const handleVerification = async (e) => {
     e.preventDefault();
-    try {
-      const otpValue = otp.join('');
+    const accessToken = Cookies.get('accessToken');
+    const otpValue = otp.join('');
 
-      const response = await axios.post('http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone', {
-        otp: otpValue,
+    try {
+      const response = await axios.post(`http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone?otp=${otpValue}`, null, {
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
       if (response.status === 200) {
         console.log('Verifikasi berhasil');
-        // Set state to show notification
-        setShowNotification(true);
+        navigate('/dashboard-user');
       } else {
+        setError('Verifikasi gagal. Silakan coba lagi.');
+        setTimeout(() => {
+          setError('');
+        }, 5000);
         console.error('Verifikasi gagal:', response.data);
       }
     } catch (error) {
+      setError('Error selama verifikasi. Silakan coba lagi.');
+      setTimeout(() => {
+        setError('');
+      }, 5000);
       console.error('Error selama verifikasi:', error);
     }
   };
 
   const handleResendOTP = async () => {
+    const accessToken = Cookies.get('accessToken');
+    const newPhoneNumber = Cookies.get('newPhoneNumber');
+
     try {
       console.log('Mengirim ulang OTP untuk nomor telepon:', newPhoneNumber);
-      await axios.post('http://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone', {
-        phoneNumber: newPhoneNumber,
-      });
 
-      console.log('OTP baru dihasilkan dan dikirimkan dengan berhasil');
+      await axios.post(
+        'http://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone',
+        {
+          phoneNumber: newPhoneNumber,
+        },
+        {
+          headers: {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      setError('OTP baru dihasilkan dan berhasil terkirim.');
+      setTimeout(() => {
+        setError('');
+      }, 5000);
+
+      console.log('OTP baru dihasilkan dan berhasil terkirim');
     } catch (error) {
+      setError('Error selama menghasilkan dan mengirimkan OTP baru. Silakan coba lagi.');
+      setTimeout(() => {
+        setError('');
+      }, 5000);
+
       console.error('Error selama menghasilkan dan mengirimkan OTP baru:', error);
     }
   };
@@ -61,21 +95,6 @@ function ConfirmationChangePhonenumber() {
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12">
       <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
-        {showNotification && (
-          <div className="px-8 py-6 bg-green-400 text-white flex justify-between rounded">
-            <div className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 mr-6" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-              </svg>
-              <p>Verifikasi no HP Anda telah berhasil. Sekarang cek email Anda untuk melakukan verifikasi email.</p>
-            </div>
-            <button className="text-green-100 hover:text-white" onClick={() => setShowNotification(false)}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        )}
         <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
           <div className="flex flex-col items-center justify-center text-center space-y-2">
             <div className="font-semibold text-3xl">
@@ -105,6 +124,7 @@ function ConfirmationChangePhonenumber() {
                     </div>
                   ))}
                 </div>
+                {error && <div className="mt-4 text-red-500 text-sm font-medium text-center">{error}</div>}
 
                 <div>
                   <Button

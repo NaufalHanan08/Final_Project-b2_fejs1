@@ -31,10 +31,10 @@ function RegisterPage() {
       Cookies.set('registeredEmail', email);
 
       // Langsung arahkan ke halaman OTP setelah berhasil mendaftar
-      navigate('/otp', { state: { phoneNumber } }); // Pass phoneNumber as a prop
+      navigate('/otp', { state: { phoneNumber } });
     } catch (error) {
       console.error('Error saat mendaftar:', error.response?.data || error.message);
-      setError('Pendaftaran gagal. Periksa input Anda dan coba lagi.');
+      setError(error.response?.data?.message || 'Terjadi kesalahan saat daftar');
     }
   };
 

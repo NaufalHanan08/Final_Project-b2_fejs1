@@ -2,22 +2,29 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card, Typography } from '@material-tailwind/react';
 import Cookies from 'js-cookie';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const ConfirmationChangeEmail = () => {
   const [verificationStatus, setVerificationStatus] = useState('');
-  const { token } = useParams(); // Ambil token dari URL
+  const [resendError, setResendError] = useState('');
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Lakukan verifikasi ketika komponen dimount dengan token dari URL
+    const token = new URLSearchParams(location.search).get('token');
     if (token) {
       console.log('Token dari URL:', token);
       verifyEmailChange(token);
+    } else {
+      console.error('Token tidak ditemukan dalam URL.');
+      setVerificationStatus('Tautan konfirmasi tidak valid.');
     }
-  }, [token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   const verifyEmailChange = async (verificationToken) => {
     try {
+      const accessToken = Cookies.get('accessToken');
       const response = await axios.post(
         'http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-email',
         {
@@ -25,13 +32,16 @@ const ConfirmationChangeEmail = () => {
         },
         {
           headers: {
-            accept: 'application/json',
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
 
       setVerificationStatus(response.data.message);
+
+      if (response.status === 200) {
+        navigate('/dashboard-user');
+      }
     } catch (error) {
       console.error('Error verifying email change', error);
       setVerificationStatus('Terjadi kesalahan saat memverifikasi perubahan email. Silakan coba lagi.');
@@ -41,7 +51,7 @@ const ConfirmationChangeEmail = () => {
   const resendVerificationLink = async () => {
     try {
       const accessToken = Cookies.get('accessToken');
-      const newEmail = Cookies.get('newEmail'); // Ambil email baru dari cookie
+      const newEmail = Cookies.get('newEmail');
 
       const response = await axios.post(
         'http://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change',
@@ -57,13 +67,14 @@ const ConfirmationChangeEmail = () => {
         }
       );
 
-      setVerificationStatus(response.data.message); // Jika verifikasi berhasil, redirect ke halaman dashboard-user
+      setVerificationStatus(response.data.message);
+      setResendError('');
       if (response.data.success) {
-        history.push('/dashboard-user');
+        console.log('Tautan berhasil terkirim');
       }
     } catch (error) {
-      console.error('Error verifying email change', error);
-      setVerificationStatus('Terjadi kesalahan saat memverifikasi perubahan email. Silakan coba lagi.');
+      console.error('Error resending email verification', error);
+      setResendError('Terjadi kesalahan saat mengirim ulang tautan verifikasi email. Silakan coba lagi.');
     }
   };
 
@@ -79,6 +90,8 @@ const ConfirmationChangeEmail = () => {
         <div className="mt-10 text-center text-sm text-gray-500">
           <p>{verificationStatus || 'Tunggu sebentar saat kami memverifikasi alamat email Anda.'}</p>
           {verificationStatus && verificationStatus.includes('error') && <div className="mt-4 text-red-500 text-sm font-medium">{verificationStatus}</div>}
+
+          {resendError && <div className="mt-4 text-red-500 text-sm font-medium">{resendError}</div>}
         </div>
 
         <div className="mt-6">

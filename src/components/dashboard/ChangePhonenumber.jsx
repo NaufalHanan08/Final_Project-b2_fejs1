@@ -1,13 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
-// import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 function ChangePhoneNumber() {
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  // const history = useHistory();
+  const navigate = useNavigate();
+
+  const clearMessages = () => {
+    setError('');
+    setSuccessMessage('');
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(clearMessages, 5000);
+    return () => clearTimeout(timeoutId);
+  }, [error, successMessage]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,22 +28,20 @@ function ChangePhoneNumber() {
         headers: {
           accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('accessToken')}`,
         },
         body: JSON.stringify({
           phoneNumber: newPhoneNumber,
         }),
       });
 
-      console.log('Nomor Telepon Berhasil Diubah:', newPhoneNumber);
-      console.log('Response:', response);
+      const responseData = await response.json(); // tambahkan ini untuk melihat pesan kesalahan dari server
+      console.log(responseData);
 
       if (response.ok) {
-        // Simpan nomor telepon baru ke dalam cookie
         Cookies.set('newPhoneNumber', newPhoneNumber);
-
         setSuccessMessage('OTP berhasil terkirim.');
-        // Navigasi ke halaman ConfirmationChangePhonenumber
-        // history.push('/ConfirmationChangePhonenumber');
+        navigate('/phone-verify-change');
       } else {
         setError('Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi.');
       }

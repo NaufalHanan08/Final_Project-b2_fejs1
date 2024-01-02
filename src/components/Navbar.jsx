@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { VscAccount } from 'react-icons/vsc';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,11 +26,67 @@ function Navbar() {
     };
   }, [scrolled]);
 
-  const navbar = `bg-${scrolled ? 'gray-800' : 'teal-800'} fixed w-full z-50`;
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      const accessToken = Cookies.get('accessToken');
+      if (accessToken) {
+        try {
+          const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/customer/user/me', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          if (response.ok) {
+            setIsLoggedIn(true);
+          } else {
+            setIsLoggedIn(false);
+          }
+        } catch (error) {
+          console.error('Error checking user login:', error);
+          setIsLoggedIn(false);
+        }
+      } else {
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkLoggedIn();
+  }, [location]); // Perubahan pada URL akan memicu pengecekan ulang
+
+  const handleLogout = async () => {
+    const accessToken = Cookies.get('accessToken');
+
+    try {
+      // Melakukan permintaan POST ke API logout dengan menyertakan token akses
+      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/auth/logout', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      // Memeriksa apakah permintaan berhasil
+      if (response.ok) {
+        // Lakukan logika logout tambahan di sini (misalnya, mengarahkan pengguna ke halaman login)
+        console.log('Logout berhasil');
+        navigate('/'); // Menggunakan navigate untuk mengarahkan pengguna ke halaman '/'
+      } else {
+        // Tangani kasus kesalahan
+        console.error('Logout gagal');
+      }
+    } catch (error) {
+      console.error('Error selama logout:', error);
+    }
+  };
+
+  const navbar = `bg-${scrolled ? 'gray-800' : 'teal-600'} fixed w-full z-50`;
 
   return (
     <div>
-      <nav className={navbar + 'bg-gray-800 fixed w-full z-50 transition-all duration-300'}>
+      <nav className={navbar + 'bg-gray-800 border-b-2 border-teal-600 fixed w-full z-50 transition-all duration-300'}>
         <div className="mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -45,31 +105,45 @@ function Navbar() {
                   <a href="#" onClick={() => navigate('/about')} className="text-gray-300 hover:text-teal-900 px-3 py-2 rounded-md text-sm font-medium">
                     ABOUT
                   </a>
-                  <a href="#" className="text-gray-300 hover:text-teal-900 px-3 py-2 rounded-md text-sm font-medium">
+
+                  <a href="#" onClick={() => navigate('/courses')} className="text-gray-300 hover:text-teal-900 px-3 py-2 rounded-md text-sm font-medium">
                     COURSES
                   </a>
                 </div>
               </div>
             </div>
             <div className="-mr-2 flex md:hidden">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                type="button"
-                className="bg-gray-900 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white mr-3"
-                aria-controls="mobile-menu"
-                aria-expanded="false"
-              >
-                <span className="sr-only">Open main menu</span>
-                {!isOpen ? (
-                  <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                ) : (
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  type="button"
+                  className="bg-gray-900 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white mr-3"
+                >
+                  <span className="sr-only">Logout</span>
                   <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                )}
-              </button>
+                </button>
+              ) : (
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  type="button"
+                  className="bg-gray-900 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white mr-3"
+                  aria-controls="mobile-menu"
+                  aria-expanded="false"
+                >
+                  <span className="sr-only">Open main menu</span>
+                  {!isOpen ? (
+                    <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                  ) : (
+                    <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -89,24 +163,33 @@ function Navbar() {
                 <a href="#" onClick={() => navigate('/')} className="hover:text-teal-900 text-white block px-3 py-2 rounded-md text-base font-medium">
                   HOME
                 </a>
+
                 <a href="#" onClick={() => navigate('/about')} className="text-gray-300 hover:text-teal-900 block px-3 py-2 rounded-md text-base font-medium">
                   ABOUT
                 </a>
+
                 <a href="#" className="text-gray-300 hover:text-teal-900 block px-3 py-2 rounded-md text-base font-medium">
                   COURSES
                 </a>
-                <Link to="/Login">
-                  <button className="w-24 mr-3 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">Login</button>
-                </Link>
-                <Link to="/Register">
-                  <button className="w-24 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">Register</button>
-                </Link>
+                {isLoggedIn ? (
+                  <button onClick={handleLogout} className="w-24 mr-3 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">
+                    Logout
+                  </button>
+                ) : (
+                  <>
+                    <Link to="/Login">
+                      <button className="w-24 mr-3 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">Login</button>
+                    </Link>
+                    <Link to="/Register">
+                      <button className="w-24 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">Register</button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           )}
         </Transition>
       </nav>
-
       <span onClick={() => navigate('/search')} className="text-white hover:bg-teal-700 hover:scale-90 rounded-full p-2 transition-all text-2xl fixed top-3 md:end-60 end-20 cursor-pointer z-50">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -120,12 +203,30 @@ function Navbar() {
         </svg>
       </span>
       <div className="md:flex hidden gap-2 fixed top-3 md:end-5 end-20 z-50">
-        <Link to="/Login">
-          <button className="w-24 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">Login</button>
-        </Link>
-        <Link to="/Register">
-          <button className="w-24 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">Register</button>
-        </Link>
+        {
+          isLoggedIn ? (
+            <button
+              onClick={() => navigate('/dashboard-user')}
+              className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-teal-600 mr-3"
+            >
+              <VscAccount className="block h-6 w-6" />
+            </button>
+          ) : null /* Tombol dashboard hanya muncul jika isLoggedIn adalah true */
+        }
+        {isLoggedIn ? (
+          <button onClick={handleLogout} className="w-24 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">
+            Logout
+          </button>
+        ) : (
+          <>
+            <Link to="/Login">
+              <button className="w-24 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">Login</button>
+            </Link>
+            <Link to="/Register">
+              <button className="w-24 bg-gray-800 border border-teal-700 hover:bg-teal-600 transition-all rounded-md text-white font-semibold text-sm py-2">Register</button>
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

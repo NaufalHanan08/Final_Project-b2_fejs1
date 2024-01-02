@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Input, Button, Typography } from '@material-tailwind/react';
 import Cookies from 'js-cookie';
 
 function ChangeEmail() {
   const [newEmail, setNewEmail] = useState('');
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  const clearMessages = () => {
+    setError('');
+    setSuccessMessage('');
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(clearMessages, 5000);
+    return () => clearTimeout(timeoutId);
+  }, [error, successMessage]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,12 +37,10 @@ function ChangeEmail() {
       const data = await response.json();
 
       if (response.ok) {
-        Cookies.set('newEmail', newEmail); // Simpan email baru di dalam cookie
+        Cookies.set('newEmail', newEmail);
         setSuccessMessage(`Tautan verifikasi telah dikirim ke ${newEmail}, silakan cek email anda`);
-        console.log('Email Berhasil Diubah:', data);
       } else {
         setError(data.error);
-        console.error('Gagal mengubah email:', data);
       }
     } catch (error) {
       setError('Terjadi kesalahan');
@@ -78,8 +86,9 @@ function ChangeEmail() {
               Ganti Email
             </Button>
           </div>
-          {error && <div className="mt-4 text-center text-red-500 text-sm">{error}</div>}
+
           {successMessage && <div className="mt-4 text-center text-green-500 text-sm">{successMessage}</div>}
+          {error && <div className="mt-4 text-center text-red-500 text-sm">{error}</div>}
         </form>
       </Card>
     </div>
