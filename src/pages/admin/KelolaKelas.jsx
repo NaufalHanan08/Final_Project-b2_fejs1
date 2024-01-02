@@ -4,7 +4,6 @@ import Filter from "../../components/admin/Filter";
 import axios from "axios";
 import Cookies from "js-cookie";
 import EditForm from "../../components/admin/EditForm";
-// import TambahChapter from "../../components/admin/TambahChapter";
 import TambahForm from "../../components/admin/TambahForm";
 
 const KelolaKelas = () => {
@@ -12,8 +11,6 @@ const KelolaKelas = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [isTambahPopupOpen, setIsTambahPopupOpen] = useState(false);
-  // const [isTambahChapterPopupOpen, setIsTambahChapterPopupOpen] =
-  //   useState(false);
   const [filterType, setFilterType] = useState("DESC");
   const [searchText, setSearchText] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -55,7 +52,7 @@ const KelolaKelas = () => {
         };
 
         const response = await axios.get(
-          `http://byteacademy.as.r.appspot.com/api/v1/admin/course?page=${currentPage}`,
+          `https://byteacademy.as.r.appspot.com/api/v1/admin/course?page=${currentPage}`,
           { headers }
         );
 
@@ -76,10 +73,6 @@ const KelolaKelas = () => {
   const toggleTambahPopup = () => {
     setIsTambahPopupOpen(!isTambahPopupOpen);
   };
-
-  // const toggleTambahChapterPopup = () => {
-  //   setIsTambahChapterPopupOpen(!isTambahChapterPopupOpen);
-  // };
 
   const handleFilterChange = (value) => {
     setFilterType(value);
@@ -116,15 +109,13 @@ const KelolaKelas = () => {
         Authorization: `Bearer ${accessToken}`,
       };
 
-      // Make the DELETE request to the API using the slugCourse
       await axios.delete(
-        `http://byteacademy.as.r.appspot.com/api/v1/admin/course/${slugCourse}`,
+        `https://byteacademy.as.r.appspot.com/api/v1/admin/course/${slugCourse}`,
         {
           headers: headers,
         }
       );
 
-      // Update state by filtering out the deleted course
       const updatedData = kelasData.filter(
         (course) => course.slugCourse !== slugCourse
       );
@@ -235,15 +226,6 @@ const KelolaKelas = () => {
             setKelasData={setKelasData}
           />
         )}
-
-        {/* {isTambahChapterPopupOpen && (
-          <TambahChapter
-            isVisible={isTambahChapterPopupOpen}
-            togglePopup={toggleTambahChapterPopup}
-            setKelasData={setKelasData}
-            selectedCourse={selectedCourse}
-          />
-        )} */}
         <div className="flex justify-end p-4">
           {Array.from({ length: totalPages }, (_, index) => (
             <button

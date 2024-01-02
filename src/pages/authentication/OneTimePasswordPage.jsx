@@ -31,7 +31,7 @@ function OneTimePasswordPage() {
       const otpValue = otp.join("");
 
       const response = await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/auth/verify-register-phone",
+        "https://byteacademy.as.r.appspot.com/api/v1/auth/verify-register-phone",
         {
           phoneNumber: phoneNumber,
           otp: otpValue,
@@ -40,7 +40,6 @@ function OneTimePasswordPage() {
 
       if (response.status === 200) {
         console.log("Verifikasi berhasil");
-        // Set state to show notification
         setShowNotification(true);
       } else {
         console.error("Verifikasi gagal:", response.data);
@@ -56,7 +55,7 @@ function OneTimePasswordPage() {
     try {
       console.log("Mengirim ulang OTP untuk nomor telepon:", phoneNumber);
       await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/auth/generate-otp-register",
+        "https://byteacademy.as.r.appspot.com/api/v1/auth/generate-otp-register",
         {
           phoneNumber,
         }

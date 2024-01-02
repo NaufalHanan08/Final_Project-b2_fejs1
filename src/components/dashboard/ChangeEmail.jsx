@@ -13,7 +13,7 @@ function ChangeEmail() {
     try {
       const accessToken = Cookies.get("accessToken");
       const response = await fetch(
-        "http://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change",
+        "https://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change",
         {
           method: "POST",
           headers: {
@@ -30,7 +30,7 @@ function ChangeEmail() {
       const data = await response.json();
 
       if (response.ok) {
-        Cookies.set("newEmail", newEmail); // Simpan email baru di dalam cookie
+        Cookies.set("newEmail", newEmail);
         setSuccessMessage(
           `Tautan verifikasi telah dikirim ke ${newEmail}, silakan cek email anda`
         );

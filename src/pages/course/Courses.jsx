@@ -2,15 +2,19 @@ import CourseCard from "../../components/courselist/CourseCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
+import Cookies from "js-cookie";
+import MyCourseCard from "../../components/courselist/MyCourseCard";
 
 function AllCourses() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState([]);
+  const [myCourses, setMyCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [filter, setFilter] = useState("all");
   const [categoryFilters, setCategoryFilters] = useState({});
+  const [showMyCourses, setShowMyCourses] = useState(false);
   const [levelFilters, setLevelFilters] = useState({
     BEGINNER: false,
     INTERMEDIATE: false,
@@ -33,6 +37,7 @@ function AllCourses() {
           `https://byteacademy.as.r.appspot.com/api/v1/course/search?page=${currentPage}`
         );
 
+        console.log("Course:", response.data);
         const responseData = response.data.results;
 
         setTotalPages(responseData.totalPages);
@@ -139,6 +144,49 @@ function AllCourses() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentPage]);
+
+  useEffect(() => {
+    const fetchMyCourse = async () => {
+      try {
+        setLoading(true);
+        const accessToken = Cookies.get("accessToken");
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        };
+        const response = await axios.get(
+          `https://byteacademy.as.r.appspot.com/api/v1/customer/course?page=${currentPage}`,
+          { headers }
+        );
+
+        console.log("My Course:", response.data);
+        const responseData = response.data.results;
+
+        setTotalPages(responseData.totalPages);
+        setMyCourses(responseData.content);
+        setLoading(false);
+
+        const uniqueCategories = Array.from(
+          new Set(
+            responseData.content.map(
+              (myCourses) => myCourses.category.categoryName
+            )
+          )
+        );
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.log("Error fetching courses data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchMyCourse();
+  }, [currentPage]);
+
+  const handleFilterChange = (newFilter, showMyCourses = false) => {
+    setFilter(newFilter);
+    setShowMyCourses(showMyCourses);
+  };
 
   return (
     <>
@@ -349,7 +397,9 @@ function AllCourses() {
 
         {/* MAIN CONTENT */}
 
-        <div className="md:w-3/4 w-full md:p-4 py-2 px-1 ml-auto">
+        <div
+          className="md:w-3/4 w-full md:p-4 py-2 px-1 ml-auto"
+        >
           {loading ? (
             <div className="w-full h-screen flex justify-center items-center">
               <div className="custom-loader p-2"></div>
@@ -363,7 +413,7 @@ function AllCourses() {
                       ? "bg-gray-800 text-white"
                       : "bg-gray-300 text-teal-600"
                   } font-bold w-28 py-2 rounded-2xl`}
-                  onClick={() => setFilter("all")}
+                  onClick={() => handleFilterChange("all")}
                 >
                   All
                 </button>
@@ -373,7 +423,7 @@ function AllCourses() {
                       ? "bg-gray-800 text-white"
                       : "bg-gray-300 text-teal-600"
                   } text-teal-600 font-bold lg:w-72 md:w-56 w-28 rounded-2xl`}
-                  onClick={() => setFilter("FREE")}
+                  onClick={() => handleFilterChange("FREE")}
                 >
                   Gratis
                 </button>
@@ -383,22 +433,25 @@ function AllCourses() {
                       ? "bg-gray-800 text-white"
                       : "bg-gray-300 text-teal-600"
                   } text-teal-600 font-bold md:w-56 w-28 rounded-2xl`}
-                  onClick={() => setFilter("PREMIUM")}
+                  onClick={() => handleFilterChange("PREMIUM")}
                 >
                   Premium
                 </button>
                 <button
-                  className={`${
-                    filter === "myCourses"
-                      ? "bg-gray-800 text-white"
-                      : "bg-gray-300 text-teal-600"
-                  } text-teal-600 font-bold md:w-56 w-28 rounded-2xl`}
-                  onClick={() => setFilter("myCourses")}
+                  className={`text-teal-600 font-bold md:w-56 w-28 rounded-2xl ${
+                    showMyCourses ? "bg-gray-800 text-white" : "bg-gray-300"
+                  }`}
+                  onClick={() => handleFilterChange("", true)}
                 >
                   Kelas Saya
                 </button>
               </div>
-              <CourseCard courses={coursesToShow} />
+              {showMyCourses ? (
+                <MyCourseCard myCourses={myCourses} />
+              ) : (
+                <CourseCard courses={coursesToShow} />
+              )}
+
               <div className="flex justify-center mt-4">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}

@@ -20,7 +20,7 @@ const Dashboard = () => {
         };
 
         const response = await axios.get(
-          `http://byteacademy.as.r.appspot.com/api/v1/admin/purchase?page=${currentPage}`,
+          `https://byteacademy.as.r.appspot.com/api/v1/admin/purchase?page=${currentPage}`,
           { headers }
         );
 

@@ -22,7 +22,7 @@ export function Profil() {
       try {
         const accessToken = Cookies.get("accessToken");
         const response = await axios.get(
-          "http://byteacademy.as.r.appspot.com/api/v1/customer/user/me",
+          "https://byteacademy.as.r.appspot.com/api/v1/customer/user/me",
           {
             headers: {
               accept: "application/json",
@@ -57,7 +57,7 @@ export function Profil() {
       const accessToken = Cookies.get("accessToken");
 
       await axios.put(
-        "http://byteacademy.as.r.appspot.com/api/v1/setting/update-customer-detail",
+        "https://byteacademy.as.r.appspot.com/api/v1/setting/update-customer-detail",
         {
           name: userData.name,
           country: userData.country,

@@ -22,7 +22,7 @@ const ConfirmationEmail = () => {
   const verifyEmail = async (token) => {
     try {
       const response = await fetch(
-        "http://byteacademy.as.r.appspot.com/api/v1/auth/verify-register-email",
+        "https://byteacademy.as.r.appspot.com/api/v1/auth/verify-register-email",
         {
           method: "POST",
           headers: {
@@ -66,7 +66,7 @@ const ConfirmationEmail = () => {
       }
 
       const response = await fetch(
-        "http://byteacademy.as.r.appspot.com/api/v1/auth/generate-email-register",
+        "https://byteacademy.as.r.appspot.com/api/v1/auth/generate-email-register",
         {
           method: "POST",
           headers: {

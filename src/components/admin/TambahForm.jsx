@@ -39,7 +39,7 @@ const TambahForm = ({ isVisible, togglePopup, setKelasData }) => {
           Authorization: `Bearer ${accessToken}`,
         };
         const response = await axios.get(
-          "http://byteacademy.as.r.appspot.com/api/v1/admin/category/list",
+          "https://byteacademy.as.r.appspot.com/api/v1/admin/category/list",
           { headers }
         );
 
@@ -88,7 +88,7 @@ const TambahForm = ({ isVisible, togglePopup, setKelasData }) => {
 
       // Tambah kelas
       const responseKelas = await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/admin/course",
+        "https://byteacademy.as.r.appspot.com/api/v1/admin/course",
         inputData,
         { headers }
       );
@@ -154,7 +154,7 @@ const TambahForm = ({ isVisible, togglePopup, setKelasData }) => {
       console.log('Chapters to Save:', chaptersToSave);
   
       await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/admin/chapter",
+        "https://byteacademy.as.r.appspot.com/api/v1/admin/chapter",
         chaptersToSave[0],
         { headers }
       );
@@ -235,7 +235,7 @@ const TambahForm = ({ isVisible, togglePopup, setKelasData }) => {
       };
 
       const response = await axios.get(
-        "http://byteacademy.as.r.appspot.com/api/v1/admin/course",
+        "https://byteacademy.as.r.appspot.com/api/v1/admin/course",
         { headers }
       );
 

@@ -14,7 +14,7 @@ const Navbar = () => {
       if (accessToken) {
         try {
           const response = await axios.get(
-            "http://byteacademy.as.r.appspot.com/api/v1/admin/user/me",
+            "https://byteacademy.as.r.appspot.com/api/v1/admin/user/me",
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,

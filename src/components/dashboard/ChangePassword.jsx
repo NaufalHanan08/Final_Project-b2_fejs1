@@ -16,7 +16,7 @@ function ChangePassword() {
 
     try {
       const response = await fetch(
-        "http://byteacademy.as.r.appspot.com/api/v1/setting/change-password",
+        "https://byteacademy.as.r.appspot.com/api/v1/setting/change-password",
         {
           method: "POST",
           headers: {

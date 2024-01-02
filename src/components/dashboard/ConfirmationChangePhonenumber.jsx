@@ -30,7 +30,7 @@ function ConfirmationChangePhonenumber() {
       const otpValue = otp.join("");
 
       const response = await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone",
+        "https://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone",
         {
           otp: otpValue,
         }
@@ -38,7 +38,6 @@ function ConfirmationChangePhonenumber() {
 
       if (response.status === 200) {
         console.log("Verifikasi berhasil");
-        // Set state to show notification
         setShowNotification(true);
       } else {
         console.error("Verifikasi gagal:", response.data);
@@ -52,7 +51,7 @@ function ConfirmationChangePhonenumber() {
     try {
       console.log("Mengirim ulang OTP untuk nomor telepon:", newPhoneNumber);
       await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone",
+        "https://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone",
         {
           phoneNumber: newPhoneNumber,
         }

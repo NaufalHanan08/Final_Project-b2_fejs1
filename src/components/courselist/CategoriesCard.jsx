@@ -5,7 +5,6 @@ export default function CardComponent() {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    // Fetch all courses initially
     axios
       .get("https://byteacademy.as.r.appspot.com/api/v1/course/search?page=0")
       .then((res) => {

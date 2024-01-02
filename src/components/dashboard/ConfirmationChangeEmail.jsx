@@ -6,10 +6,9 @@ import { useParams } from "react-router-dom";
 
 const ConfirmationChangeEmail = () => {
   const [verificationStatus, setVerificationStatus] = useState("");
-  const { token } = useParams(); // Ambil token dari URL
+  const { token } = useParams();
 
   useEffect(() => {
-    // Lakukan verifikasi ketika komponen dimount dengan token dari URL
     if (token) {
       console.log("Token dari URL:", token);
       verifyEmailChange(token);
@@ -19,7 +18,7 @@ const ConfirmationChangeEmail = () => {
   const verifyEmailChange = async (verificationToken) => {
     try {
       const response = await axios.post(
-        "http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-email",
+        "https://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-email",
         {
           token: verificationToken,
         },
@@ -43,7 +42,7 @@ const ConfirmationChangeEmail = () => {
   const resendVerificationLink = async () => {
     try {
       const accessToken = Cookies.get("accessToken");
-      const newEmail = Cookies.get("newEmail"); // Ambil email baru dari cookie
+      const newEmail = Cookies.get("newEmail");
 
       const response = await axios.post(
         "http://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change",
@@ -59,7 +58,7 @@ const ConfirmationChangeEmail = () => {
         }
       );
 
-      setVerificationStatus(response.data.message); // Jika verifikasi berhasil, redirect ke halaman dashboard-user
+      setVerificationStatus(response.data.message);
       if (response.data.success) {
         history.push("/dashboard-user");
       }

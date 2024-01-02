@@ -20,19 +20,20 @@ import Dashboard from "./pages/admin/Dashboard";
 import KelolaKelas from "./pages/admin/KelolaKelas";
 import AdminLoginPage from "./pages/authentication/AdminLoginPage";
 import VideoPlayer from "./components/coursedetail/CourseMaterial";
+import MyCourseDetail from "./components/coursedetail/MyCourseDetail";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/dashboard-user/*" element={<DashboardUser />} />
         <Route path="/courses" element={<AllCourse />} />
         <Route path="/detail/:slugCourse" element={<CourseDetail />} />
         <Route path="/material/:slugMaterial" element={<VideoPlayer />} />
-        <Route path="/material/:slugMaterial" element={<CourseDetail />} />
-        <Route path="/" element={<HomePage />} />
+        <Route path="/my-detail/:slugCourse" element={<MyCourseDetail />} />
         <Route
           path="/email-verify-forgot-password"
           element={<ConfirmationChangePassword />}
@@ -43,6 +44,7 @@ function App() {
           element={<ConfirmationChangeEmail />}
         />
 
+        {/* Halaman Admin */}
         <Route
           path="/dashboard"
           element={

@@ -1,19 +1,18 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import axios from "axios";
+import { Typography } from "@material-tailwind/react";
 import Navbar from "../Navbar";
-import { FaArrowLeft, FaStar } from "react-icons/fa";
+import VideoPlayer from "./CourseMaterial";
 import { RiShieldStarLine } from "react-icons/ri";
 import { RiBook3Line } from "react-icons/ri";
 import { HiClock } from "react-icons/hi";
 import { HiChatAlt2 } from "react-icons/hi";
+import { FaArrowLeft } from "react-icons/fa";
+import { FaStar } from "react-icons/fa6";
 import { MdOutlineVideoLibrary } from "react-icons/md";
-import { IoIosLock } from "react-icons/io";
-import { Typography } from "@material-tailwind/react";
-import VideoPlayer from "./CourseMaterial";
-import Cookies from "js-cookie";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const CourseDetail = () => {
+export default function MyCourseDetail() {
   const { slugCourse } = useParams();
   const [detailCourses, setDetailCourses] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,14 +20,6 @@ const CourseDetail = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(null);
 
   useEffect(() => {
-    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
-    const clientKey = import.meta.env.VITE_PAYMENT_CLIENT;
-    const script = document.createElement("script");
-    script.src = snapScript;
-    script.setAttribute("data-client-key", clientKey);
-    script.async = true;
-    document.body.appendChild(script);
-
     const fetchCourseDetail = async () => {
       try {
         setLoading(true);
@@ -36,109 +27,26 @@ const CourseDetail = () => {
         const response = await axios.get(
           `https://byteacademy.as.r.appspot.com/api/v1/course/${slugCourse}`
         );
-
         console.log(response.data);
         if (response.data.code === 200) {
           setDetailCourses(response.data.results);
         } else {
-          setError(
-            `Error fetching course detail: ${response.data.code} - ${response.data.message}`
-          );
+          setError(`Error: ${response.data.code} - ${response.data.message}`);
         }
       } catch (error) {
         console.error("Error fetching course detail:", error);
         setError("Failed to get course detail");
+        setLoading(false);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCourseDetail();
-
-    return () => {
-      document.body.removeChild(script);
-    };
   }, [slugCourse]);
-
-  const handleBuyCourse = async () => {
-    try {
-      const accessToken = Cookies.get("accessToken");
-
-      const midtransResponse = await axios.post(
-        `https://byteacademy.as.r.appspot.com/api/v1/customer/purchase/${slugCourse}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      console.log(midtransResponse.data);
-
-      window.snap.embed(midtransResponse.data.results.tokenPurchase, {
-        embedId: "snap-container",
-        onSuccess: function (result) {
-          console.log("Payment successful!", result);
-        },
-        onError: function (result) {
-          console.error("Payment failed!", result);
-        },
-        onClose: function () {
-          console.log("Pop-up closed without payment");
-        },
-      });
-    } catch (error) {
-      console.error("Error initiating purchase:", error);
-    }
-  };
 
   const handleChapterClick = (material) => {
     setSelectedMaterial(material);
-
-    const materialApiUrl = `https://byteacademy.as.r.appspot.com/api/v1/customer/material/${material?.slugMaterial}`;
-    const accessToken = Cookies.get("accessToken");
-    axios
-      .get(materialApiUrl, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        console.log("Material API Data:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching material data:", error);
-      });
-  };
-
-  const handleMaterialViewed = async (slugMaterial) => {
-    try {
-      const accessToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("accessToken"))
-        .split("=")[1];
-
-      const response = await axios.post(
-        `https://byteacademy.as.r.appspot.com/api/v1/customer/material/${slugMaterial}/complete`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      if (response.data.results && response.data.code === 200) {
-        console.log("Material marked as viewed successfully!");
-      } else {
-        console.error(
-          "Error marking material as viewed:",
-          response.data.message
-        );
-      }
-    } catch (error) {
-      console.error("Error marking material as viewed:", error);
-    }
   };
 
   if (loading) {
@@ -156,7 +64,6 @@ const CourseDetail = () => {
   return (
     <>
       <Navbar />
-      <div id="snap-container"></div>
       <div className="py-6">
         <div className="bg-gray-800 py-10 md:px-12 sm:px-8 px-4">
           <div className="inline-flex items-center mt-8">
@@ -226,10 +133,6 @@ const CourseDetail = () => {
             <VideoPlayer
               key={selectedMaterial?.slugMaterial}
               videoLink={`https://byteacademy.as.r.appspot.com/api/v1/customer/material/${selectedMaterial?.slugMaterial}`}
-              materialData={selectedMaterial}
-              onMaterialViewed={() =>
-                handleMaterialViewed(selectedMaterial?.slugMaterial)
-              }
             />
             <div className="lg:ps-12 lg:px-0 sm:px-12 px-6">
               <Typography className="heading-2 font-bold my-2 text-xl">
@@ -256,7 +159,9 @@ const CourseDetail = () => {
               {detailCourses.chapters.map((chapter, index) => (
                 <div key={index}>
                   <div className="flex sm:flex-row flex-col justify-between items-center">
-                    <h2 className="text-teal-600 xl:text-lg text-xs font-bold">
+                    <h2
+                      className="text-teal-600 xl:text-lg text-xs font-bold"
+                    >
                       <span>Chapter {chapter.noChapter}</span> -
                       <span> {chapter.title}</span>
                     </h2>
@@ -268,18 +173,10 @@ const CourseDetail = () => {
                     {chapter.materials.map((material) => (
                       <li
                         key={material.slugMaterial}
-                        onClick={() => {
-                          handleChapterClick(material);
-                          handleMaterialViewed(material.slugMaterial);
-                        }}
+                        onClick={() => handleChapterClick(material)}
                         className="text-gray-800 hover:underline hover:font-extrabold transition-all cursor-pointer sm:text-start text-center text-xs font-semibold flex items-center gap-2"
                       >
-                        <span>{material.serialNumber}</span>
-                        {material.canBeWatched ? (
-                          <IoIosLock />
-                        ) : (
-                          <MdOutlineVideoLibrary className="text-lg md:block hidden" />
-                        )}
+                        <MdOutlineVideoLibrary className="text-lg md:block hidden" />
                         <span>{material.materialName}</span>
                       </li>
                     ))}
@@ -290,16 +187,6 @@ const CourseDetail = () => {
           </div>
         </div>
       </div>
-      <div className="w-full h-fit sm:pb-4 pb-0 sm:px-8 px-0">
-        <button
-          className="flex justify-center w-full sm:rounded-lg rounded-none border border-teal-600 bg-teal-600 py-2 text-white hover:bg-white hover:text-teal-600 transition-all text-2xl font-bold"
-          onClick={handleBuyCourse}
-        >
-          Beli Course
-        </button>
-      </div>
     </>
   );
-};
-
-export default CourseDetail;
+}

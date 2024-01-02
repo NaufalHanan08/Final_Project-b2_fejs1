@@ -1,20 +1,18 @@
 import { useState } from "react";
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
-// import { useHistory } from 'react-router-dom';
 import Cookies from "js-cookie";
 
 function ChangePhoneNumber() {
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  // const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await fetch(
-        "http://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone",
+        "https://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone",
         {
           method: "POST",
           headers: {
@@ -31,12 +29,9 @@ function ChangePhoneNumber() {
       console.log("Response:", response);
 
       if (response.ok) {
-        // Simpan nomor telepon baru ke dalam cookie
         Cookies.set("newPhoneNumber", newPhoneNumber);
 
         setSuccessMessage("OTP berhasil terkirim.");
-        // Navigasi ke halaman ConfirmationChangePhonenumber
-        // history.push('/ConfirmationChangePhonenumber');
       } else {
         setError(
           "Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi."

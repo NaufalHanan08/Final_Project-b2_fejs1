@@ -26,14 +26,17 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData({ ...formData, pathCourseImage: reader.result });
+        setFormData({
+          ...formData,
+          pathCourseImage: reader.result,
+          pathCourseImageFile: file,
+        });
       };
       reader.readAsDataURL(file);
     }
   };
 
   useEffect(() => {
-    // Set the form data based on the selected course
     if (selectedCourse) {
       setFormData({
         courseName: selectedCourse.courseName || "",
@@ -62,13 +65,24 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
       }
 
       const headers = {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       };
 
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        formDataToSend.append(key, formData[key]);
+      }
+
+      if (formData.pathCourseImageFile) {
+        formDataToSend.append(
+          "pathCourseImageFile",
+          formData.pathCourseImageFile
+        );
+      }
+
       const response = await axios.put(
-        `http://byteacademy.as.r.appspot.com/api/v1/admin/course/${selectedCourse.slugCourse}`,
-        formData,
+        `https://byteacademy.as.r.appspot.com/api/v1/admin/course/${selectedCourse.slugCourse}`,
+        formDataToSend,
         { headers }
       );
 
@@ -82,10 +96,7 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         onUpdate();
       }, 2000);
     } catch (error) {
-      console.error("Error updating course:", error);
-      toast.error("Gagal menambahkan kelas. Silakan coba lagi.", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      console.log("Update gagal:", error)
     }
   };
 
@@ -93,7 +104,6 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <h2 className="text-2xl font-semibold mb-4">Edit Course</h2>
 
-      {/* Your form JSX with input fields */}
       <label className="block mb-4">
         <span className="text-gray-700">Nama Kelas</span>
         <input
@@ -101,7 +111,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.courseName}
           onChange={(e) =>
-            setFormData({ ...formData, courseName: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              courseName: e.target.value,
+            }))
           }
         />
       </label>
@@ -112,7 +125,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.instructorName}
           onChange={(e) =>
-            setFormData({ ...formData, instructorName: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              instructorName: e.target.value,
+            }))
           }
         />
       </label>
@@ -122,7 +138,12 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           type="number"
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.price}
-          onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+          onChange={(e) =>
+            setFormData((prevData) => ({
+              ...prevData,
+              price: e.target.value,
+            }))
+          }
         />
       </label>
       <label className="block mb-4">
@@ -132,7 +153,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.courseDuration}
           onChange={(e) =>
-            setFormData({ ...formData, courseDuration: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              courseDuration: e.target.value,
+            }))
           }
         />
       </label>
@@ -142,7 +166,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.courseDescription}
           onChange={(e) =>
-            setFormData({ ...formData, courseDescription: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              courseDescription: e.target.value,
+            }))
           }
         />
       </label>
@@ -152,7 +179,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.targetMarket}
           onChange={(e) =>
-            setFormData({ ...formData, targetMarket: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              targetMarket: e.target.value,
+            }))
           }
         />
       </label>
@@ -163,7 +193,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.slugCourse}
           onChange={(e) =>
-            setFormData({ ...formData, slugCourse: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              slugCourse: e.target.value,
+            }))
           }
         />
       </label>
@@ -183,7 +216,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.groupLink}
           onChange={(e) =>
-            setFormData({ ...formData, groupLink: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              groupLink: e.target.value,
+            }))
           }
         />
       </label>
@@ -193,7 +229,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.courseType}
           onChange={(e) =>
-            setFormData({ ...formData, courseType: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              courseType: e.target.value,
+            }))
           }
         >
           <option value="FREE">FREE</option>
@@ -206,7 +245,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.courseLevel}
           onChange={(e) =>
-            setFormData({ ...formData, courseLevel: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              courseLevel: e.target.value,
+            }))
           }
         >
           <option value="BEGINNER">BEGINNER</option>
@@ -220,7 +262,10 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full"
           value={formData.courseStatus}
           onChange={(e) =>
-            setFormData({ ...formData, courseStatus: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              courseStatus: e.target.value,
+            }))
           }
         >
           <option value="ACTIVE">ACTIVE</option>
@@ -233,11 +278,13 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
           className="form-input mt-1 block w-full border-2 py-1 px-2"
           value={formData.slugCategory}
           onChange={(e) =>
-            setFormData({ ...formData, slugCategory: e.target.value })
+            setFormData((prevData) => ({
+              ...prevData,
+              slugCategory: e.target.value,
+            }))
           }
         />
       </label>
-
       <div className="flex justify-end gap-2">
         <button
           onClick={handleUpdate}
