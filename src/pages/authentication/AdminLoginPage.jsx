@@ -1,4 +1,3 @@
-// Import statements
 import { useState } from "react";
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,7 +14,7 @@ export function AdminLoginPage() {
 
     try {
       const response = await fetch(
-        "http://byteacademy.as.r.appspot.com/api/v1/auth/login",
+        "https://byteacademy.as.r.appspot.com/api/v1/auth/login",
         {
           method: "POST",
           headers: {
@@ -33,25 +32,18 @@ export function AdminLoginPage() {
 
         console.log("Data Respons API:", data);
 
-        // Mengakses token
         const accessToken = data.results?.accessToken;
         const refreshToken = data.results?.refreshToken;
 
         if (accessToken && refreshToken) {
-          // Token berhasil diambil
           Cookies.set("accessToken", accessToken);
           Cookies.set("refreshToken", refreshToken);
           console.log("Login berhasil");
-          console.log("AccessToken:", accessToken);
-          console.log("RefreshToken:", refreshToken);
-          // Membawa user ke halaman Home
           navigate("/dashboard");
         } else {
-          // Tampilkan pesan kesalahan jika token tidak dapat diambil
           console.error("Token tidak ditemukan dalam respons API");
         }
       } else {
-        // Handle error login, misalnya, tampilkan pesan error
         const data = await response.json();
         setError(data.error || "Login gagal");
         console.error("Login gagal:", data);

@@ -2,13 +2,19 @@ import CourseCard from "../../components/courselist/CourseCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
+import Cookies from "js-cookie";
+import MyCourseCard from "../../components/courselist/MyCourseCard";
 
 function AllCourses() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState([]);
+  const [myCourses, setMyCourses] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [filter, setFilter] = useState("all");
   const [categoryFilters, setCategoryFilters] = useState({});
+  const [showMyCourses, setShowMyCourses] = useState(false);
   const [levelFilters, setLevelFilters] = useState({
     BEGINNER: false,
     INTERMEDIATE: false,
@@ -27,36 +33,31 @@ function AllCourses() {
       try {
         setLoading(true);
 
-        const [page0Response, page1Response] = await Promise.all([
-          axios.get(
-            "https://byteacademy.as.r.appspot.com/api/v1/course/search?page=0"
-          ),
-          axios.get(
-            "https://byteacademy.as.r.appspot.com/api/v1/course/search?page=1"
-          ),
-        ]);
+        const response = await axios.get(
+          `https://byteacademy.as.r.appspot.com/api/v1/course/search?page=${currentPage}`
+        );
 
-        const page0Data = page0Response.data.results.content;
-        const page1Data = page1Response.data.results.content;
-        const allCourses = [...page0Data, ...page1Data];
+        console.log("Course:", response.data);
+        const responseData = response.data.results;
 
-        setCourses(allCourses);
-
+        setTotalPages(responseData.totalPages);
+        setCourses(responseData.content);
         setLoading(false);
 
-        // Extracting unique categories from the API response
         const uniqueCategories = Array.from(
-          new Set(allCourses.map((course) => course.category.categoryName))
+          new Set(
+            responseData.content.map((course) => course.category.categoryName)
+          )
         );
         setCategories(uniqueCategories);
       } catch (error) {
-        console.log("Error fetching data:", error);
+        console.log("Error fetching courses data:", error);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     if (filter === "all") {
@@ -134,10 +135,62 @@ function AllCourses() {
 
   const coursesToShow = filteredCourses.length > 0 ? filteredCourses : courses;
 
+  const handlePageChange = async (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
+  useEffect(() => {
+    const fetchMyCourse = async () => {
+      try {
+        setLoading(true);
+        const accessToken = Cookies.get("accessToken");
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        };
+        const response = await axios.get(
+          `https://byteacademy.as.r.appspot.com/api/v1/customer/course?page=${currentPage}`,
+          { headers }
+        );
+
+        console.log("My Course:", response.data);
+        const responseData = response.data.results;
+
+        setTotalPages(responseData.totalPages);
+        setMyCourses(responseData.content);
+        setLoading(false);
+
+        const uniqueCategories = Array.from(
+          new Set(
+            responseData.content.map(
+              (myCourses) => myCourses.category.categoryName
+            )
+          )
+        );
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.log("Error fetching courses data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchMyCourse();
+  }, [currentPage]);
+
+  const handleFilterChange = (newFilter, showMyCourses = false) => {
+    setFilter(newFilter);
+    setShowMyCourses(showMyCourses);
+  };
+
   return (
     <>
       <Navbar />
-      {/* <div className="w-full bg-gray-800">tes</div> */}
       <div className="flex">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -182,7 +235,6 @@ function AllCourses() {
           className={`md:w-1/4 sm:w-2/5 w-full p-4 fixed h-full flex flex-col sm:justify-center justify-evenly sm:py-0 py-16 sm:gap-4 overflow-y-auto bg-gray-800 text-white transform ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-300 md:translate-x-0`}
-          // className="md:w-1/4 w-2/6 p-4 fixed h-full flex flex-col md:justify-center justify-evenly gap-4 overflow-y-auto bg-gray-800 text-white"
         >
           <div>
             <h1 className="md:text-lg sm:text-md text-sm font-bold text-teal-600">
@@ -347,16 +399,9 @@ function AllCourses() {
 
         <div
           className="md:w-3/4 w-full md:p-4 py-2 px-1 ml-auto"
-          // className={`${
-          //   sidebarOpen ? "md:w-3/4 w-2/3" : "w-full"
-          // } md:p-4 py-2 px-1 ml-auto md:w-3/4`}
         >
-          {/* Your existing code */}
           {loading ? (
             <div className="w-full h-screen flex justify-center items-center">
-              {/* <p className="text-4xl text-teal-600 font-extrabold">
-                Loading...
-              </p> */}
               <div className="custom-loader p-2"></div>
             </div>
           ) : (
@@ -368,7 +413,7 @@ function AllCourses() {
                       ? "bg-gray-800 text-white"
                       : "bg-gray-300 text-teal-600"
                   } font-bold w-28 py-2 rounded-2xl`}
-                  onClick={() => setFilter("all")}
+                  onClick={() => handleFilterChange("all")}
                 >
                   All
                 </button>
@@ -378,7 +423,7 @@ function AllCourses() {
                       ? "bg-gray-800 text-white"
                       : "bg-gray-300 text-teal-600"
                   } text-teal-600 font-bold lg:w-72 md:w-56 w-28 rounded-2xl`}
-                  onClick={() => setFilter("FREE")}
+                  onClick={() => handleFilterChange("FREE")}
                 >
                   Gratis
                 </button>
@@ -388,22 +433,44 @@ function AllCourses() {
                       ? "bg-gray-800 text-white"
                       : "bg-gray-300 text-teal-600"
                   } text-teal-600 font-bold md:w-56 w-28 rounded-2xl`}
-                  onClick={() => setFilter("PREMIUM")}
+                  onClick={() => handleFilterChange("PREMIUM")}
                 >
                   Premium
                 </button>
                 <button
-                  className={`${
-                    filter === "myCourses"
-                      ? "bg-gray-800 text-white"
-                      : "bg-gray-300 text-teal-600"
-                  } text-teal-600 font-bold md:w-56 w-28 rounded-2xl`}
-                  onClick={() => setFilter("myCourses")}
+                  className={`text-teal-600 font-bold md:w-56 w-28 rounded-2xl ${
+                    showMyCourses ? "bg-gray-800 text-white" : "bg-gray-300"
+                  }`}
+                  onClick={() => handleFilterChange("", true)}
                 >
                   Kelas Saya
                 </button>
               </div>
-              <CourseCard courses={coursesToShow} />
+              {showMyCourses ? (
+                <MyCourseCard myCourses={myCourses} />
+              ) : (
+                <CourseCard courses={coursesToShow} />
+              )}
+
+              <div className="flex justify-center mt-4">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 0}
+                  className="bg-gray-800 text-white font-bold py-2 w-20 rounded-l"
+                >
+                  Previous
+                </button>
+                <span className="bg-teal-600 text-white font-bold py-2 px-4">
+                  {currentPage + 1} of {totalPages}
+                </span>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages - 1}
+                  className="bg-gray-800 text-white font-bold py-2 w-20 rounded-r"
+                >
+                  Next
+                </button>
+              </div>
             </>
           )}
         </div>

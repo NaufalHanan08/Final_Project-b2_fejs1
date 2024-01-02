@@ -89,15 +89,24 @@ const Layout = ({ children }) => {
   React.useEffect(() => {
     const fetchDashboardData = async () => {
       try {
+        const accessToken = Cookies.get("accessToken");
+
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+
         const response = await axios.get(
-          "http://byteacademy.as.r.appspot.com/api/v1/admin/dashboard"
+          "https://byteacademy.as.r.appspot.com//api/v1/admin/dashboard",
+          { headers }
         );
+
+        console.log(response.data);
 
         const { results } = response.data;
 
         setDashboardData(results);
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        console.error("Error fetching admin card data:", error);
       }
     };
 
@@ -146,7 +155,6 @@ const Layout = ({ children }) => {
           <RiMenu5Line className="w-6 h-6" />
         )}
       </button>
-
       {/* Sidebar */}
       <div
         className={`md:w-1/4 sm:w-2/5 w-full h-screen space-y-6 items-center bg-gray-800 text-white fixed z-30 ${

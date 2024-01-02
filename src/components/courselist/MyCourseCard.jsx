@@ -4,13 +4,13 @@ import { RiShieldStarLine } from 'react-icons/ri';
 import { RiBook3Line } from 'react-icons/ri';
 import { HiClock } from 'react-icons/hi';
 
-export default function CourseCard({ courses }) {
+export default function MyCourseCard({ myCourses }) {
   return (
     <>
       <div className="grid xl:gap-2 md:gap-4 gap-2 md:grid-cols-2 grid-cols-1 p-5">
-        {courses.map((result) => (
+        {myCourses.map((result) => (
           <div key={result.slugCourse} className="shadow-lg rounded-2xl">
-            <Link to={`/detail/${result.slugCourse}`}>
+            <Link to={`/my-detail/${result.slugCourse}`}>
               <img className="w-full sm:h-48 h-28 object-cover" src={result.pathCourseImage} alt={result.category.categoryName} />
               <div className="px-4 pb-2 pt-1">
                 <h2 className="lg:text-lg md:text-xl text-md text-teal-600">{result.category.categoryName}</h2>
@@ -23,14 +23,13 @@ export default function CourseCard({ courses }) {
                   </p>
                   <p className="sm:text-sm text-xs flex items-center gap-1">
                     <RiBook3Line className="text-green-600 text-lg" />
-                    {result.totalChapters} Modul
+                    {result.totalChapter} Modul
                   </p>
                   <p className="sm:text-sm text-xs flex items-center gap-1">
                     <HiClock className="text-green-600 text-lg" />
                     {result.courseDuration} Menit
                   </p>
                 </div>
-                <button className="bg-teal-600 text-white text-sm font-medium py-1 px-4 rounded-full">{result.courseType}</button>
               </div>
             </Link>
           </div>
@@ -41,8 +40,8 @@ export default function CourseCard({ courses }) {
 }
 
 // Prop types
-CourseCard.propTypes = {
-  courses: PropTypes.arrayOf(
+MyCourseCard.propTypes = {
+  myCourses: PropTypes.arrayOf(
     PropTypes.shape({
       slugCourse: PropTypes.string.isRequired,
       pathCourseImage: PropTypes.string.isRequired,
