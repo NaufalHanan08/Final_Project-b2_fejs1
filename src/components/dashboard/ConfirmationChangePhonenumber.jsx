@@ -25,16 +25,26 @@ function ConfirmationChangePhonenumber() {
 
   const handleVerification = async (e) => {
     e.preventDefault();
+    // Menampilkan nilai OTP di console
     const accessToken = Cookies.get('accessToken');
-    const otpValue = otp.join('');
+    const otpValue = otp.join(''); // Deklarasikan otpValue menggunakan let
+
+    // Tampilkan nilai OTP di console
+    console.log('OTP yang dimasukkan:', otpValue);
 
     try {
-      const response = await axios.post(`http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone?otp=${otpValue}`, null, {
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+      const response = await axios.post(
+        'http://byteacademy.as.r.appspot.com/api/v1/setting/verify-change-phone',
+        {
+          otp: otpValue,
         },
-      });
+        {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         console.log('Verifikasi berhasil');
