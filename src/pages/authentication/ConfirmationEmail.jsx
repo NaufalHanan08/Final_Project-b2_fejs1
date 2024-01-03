@@ -31,9 +31,7 @@ const ConfirmationEmail = () => {
         body: JSON.stringify({ token: token }),
       });
 
-      const responseData = await response.json();
-
-      setVerificationStatus(responseData.message);
+      setVerificationStatus(response.data.message);
 
       if (response.status === 200) {
         setTimeout(() => {
@@ -41,13 +39,8 @@ const ConfirmationEmail = () => {
         }, 5000);
       }
     } catch (error) {
-      console.error('Terjadi kesalahan saat memverifikasi email:', error);
-
-      if (error instanceof TypeError && error.message === 'Failed to fetch') {
-        console.error('Terjadi kesalahan saat berkomunikasi dengan server.');
-      }
-
-      setVerificationStatus('Terjadi kesalahan saat memverifikasi email. Tolong periksa email Anda.');
+      console.error('Error verifying email change', error);
+      setVerificationStatus('Terjadi kesalahan saat memverifikasi perubahan email. Silakan coba lagi.');
     }
   };
 
