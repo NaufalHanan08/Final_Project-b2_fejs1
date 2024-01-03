@@ -7,6 +7,7 @@ const ConfirmationEmail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [verificationStatus, setVerificationStatus] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const token = new URLSearchParams(location.search).get('token');
@@ -45,9 +46,10 @@ const ConfirmationEmail = () => {
 
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
         console.error('Terjadi kesalahan saat berkomunikasi dengan server.');
+        setVerificationStatus('Gagal terhubung ke server. Periksa koneksi internet Anda.');
+      } else {
+        setVerificationStatus('Terjadi kesalahan saat memverifikasi email. Tolong periksa email Anda.');
       }
-
-      setVerificationStatus('Terjadi kesalahan saat memverifikasi email. Tolong periksa email Anda.');
     }
   };
 
@@ -59,6 +61,8 @@ const ConfirmationEmail = () => {
         setVerificationStatus('Alamat email tidak ditemukan. Silakan coba lagi.');
         return;
       }
+
+      setIsLoading(true);
 
       const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/auth/generate-email-register', {
         method: 'POST',
@@ -73,7 +77,7 @@ const ConfirmationEmail = () => {
       if (responseData.success) {
         setVerificationStatus('Tautan verifikasi baru telah dikirim ke email Anda.');
       } else {
-        console.error('Failed to resend verification link:', responseData.message);
+        console.error('Gagal mengirim ulang tautan verifikasi:', responseData.message);
 
         if (responseData.message.includes('User not found or already verified')) {
           setVerificationStatus('Email tidak ditemukan atau sudah diverifikasi sebelumnya.');
@@ -82,8 +86,10 @@ const ConfirmationEmail = () => {
         }
       }
     } catch (error) {
-      console.error('Error resending verification link:', error);
+      console.error('Terjadi kesalahan saat mengirim ulang tautan verifikasi:', error);
       setVerificationStatus('Terjadi kesalahan saat mengirim ulang tautan verifikasi. Coba lagi nanti.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -105,9 +111,12 @@ const ConfirmationEmail = () => {
           <button
             type="button"
             onClick={resendVerificationLink}
-            className="flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            disabled={isLoading}
+            className={`flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
+              isLoading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
           >
-            Kirim Ulang Tautan Verifikasi
+            {isLoading ? 'Mengirim ulang...' : 'Kirim Ulang Tautan Verifikasi'}
           </button>
         </div>
       </Card>
