@@ -22,6 +22,7 @@ import AdminLoginPage from './pages/authentication/AdminLoginPage';
 import VideoPlayer from './components/coursedetail/CourseMaterial';
 import MyCourseDetail from './components/coursedetail/MyCourseDetail';
 import ConfirmationChangePhonenumber from './components/dashboard/ConfirmationChangePhonenumber';
+import Thanks from './pages/payment/Thanks';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/email-verify-register" element={<ConfirmationEmail />} />
         <Route path="/email-verify-change" element={<ConfirmationChangeEmail />} />
         <Route path="/phone-verify-change" element={<ConfirmationChangePhonenumber />} />
+        <Route path="/thanks" element={<Thanks />} />
 
         {/* Halaman Admin */}
         <Route
