@@ -63,7 +63,7 @@ function Navbar() {
   const handleLogout = async () => {
     try {
       // Lakukan permintaan POST ke endpoint logout API
-      const response = await fetch('http://byteacademy.as.r.appspot.com/api/v1/auth/logout', {
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/auth/logout', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
