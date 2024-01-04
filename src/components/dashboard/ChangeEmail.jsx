@@ -34,13 +34,14 @@ function ChangeEmail() {
         }),
       });
 
-      const data = await response.json();
+      const responseData = await response.json();
+      console.log(responseData);
 
       if (response.ok) {
         Cookies.set('newEmail', newEmail);
         setSuccessMessage(`Tautan verifikasi telah dikirim ke ${newEmail}, silakan cek email anda`);
       } else {
-        setError(data.error);
+        setError(responseData.message || 'Gagal menirim tautan ke ${newEmail}');
       }
     } catch (error) {
       setError('Terjadi kesalahan');

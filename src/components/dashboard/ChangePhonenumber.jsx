@@ -43,7 +43,7 @@ function ChangePhoneNumber() {
         setSuccessMessage('OTP berhasil terkirim.');
         navigate('/phone-verify-change');
       } else {
-        setError('Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi.');
+        setError(responseData.message || 'Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi.');
       }
     } catch (error) {
       setError('Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi.');
