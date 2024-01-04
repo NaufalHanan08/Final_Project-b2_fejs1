@@ -21,7 +21,7 @@ const CourseDetail = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(null);
 
   useEffect(() => {
-    const snapScript = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    const snapScript = 'http://app.sandbox.midtrans.com/snap/snap.js';
     const clientKey = import.meta.env.VITE_PAYMENT_CLIENT;
     const script = document.createElement('script');
     script.src = snapScript;
@@ -61,7 +61,7 @@ const CourseDetail = () => {
       const accessToken = Cookies.get('accessToken');
 
       const midtransResponse = await axios.post(
-        `https://byteacademy.as.r.appspot.com/api/v1/customer/purchase/${slugCourse}`,
+        `http://byteacademy.as.r.appspot.com/api/v1/customer/purchase/${slugCourse}`,
         {},
         {
           headers: {
@@ -146,7 +146,6 @@ const CourseDetail = () => {
   return (
     <>
       <Navbar />
-      <div id="snap-container"></div>
       <div className="py-6">
         <div className="bg-gray-800 py-10 md:px-12 sm:px-8 px-4">
           <div className="inline-flex items-center mt-8">
@@ -240,6 +239,7 @@ const CourseDetail = () => {
           </div>
         </div>
       </div>
+      <div id="snap-container flex justify-center"></div>
       <div className="w-full h-fit sm:pb-4 pb-0 sm:px-8 px-0">
         <button className="flex justify-center w-full sm:rounded-lg rounded-none border border-teal-600 bg-teal-600 py-2 text-white hover:bg-white hover:text-teal-600 transition-all text-2xl font-bold" onClick={handleBuyCourse}>
           Beli Course
