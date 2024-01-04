@@ -35,6 +35,10 @@ function RegisterPage() {
     } catch (error) {
       console.error('Error saat mendaftar:', error.response?.data || error.message);
       setError(error.response?.data?.message || 'Terjadi kesalahan saat daftar');
+      // Menampilkan pesan error selama 5 detik
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
     }
   };
 
@@ -156,9 +160,8 @@ function RegisterPage() {
               Daftar
             </Button>
           </div>
+          {error && <div className="mt-4 text-center text-red-500 text-sm">{error}</div>}
         </form>
-
-        {error && <div className="text-red-500 text-sm font-medium">{error}</div>}
 
         <Typography variant="p" className="mt-10 text-center text-sm text-gray-500">
           Sudah punya akun?{' '}
