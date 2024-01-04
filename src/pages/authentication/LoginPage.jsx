@@ -14,9 +14,7 @@ export function LoginPage() {
     e.preventDefault();
 
     try {
-
       const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/auth/login', {
-
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,8 +27,6 @@ export function LoginPage() {
 
       if (response.ok) {
         const data = await response.json();
-
-        console.log('Data Respons API:', data);
 
         // Mengakses token
         const accessToken = data.results?.accessToken;
