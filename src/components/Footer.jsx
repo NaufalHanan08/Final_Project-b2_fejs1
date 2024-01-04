@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 function Footer() {
+  const navigate = useNavigate("");
+
   return (
     <footer className="bg-neutral-100 text-center text-neutral-600 dark:bg-neutral-600 dark:text-neutral-200 lg:text-left">
       <div className="flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-neutral-500 lg:justify-between">
@@ -79,19 +83,21 @@ function Footer() {
           {/* <!-- Products section --> */}
           <div className="">
             <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
-              Products
+              Tech Stack
             </h6>
             <p className="mb-4">
-              <a className="text-neutral-600 dark:text-neutral-200">Angular</a>
+              <a className="text-neutral-600 dark:text-neutral-200">Java 17</a>
             </p>
             <p className="mb-4">
-              <a className="text-neutral-600 dark:text-neutral-200">React</a>
+              <a className="text-neutral-600 dark:text-neutral-200">
+                React + Vite
+              </a>
             </p>
             <p className="mb-4">
-              <a className="text-neutral-600 dark:text-neutral-200">Vue</a>
+              <a className="text-neutral-600 dark:text-neutral-200">Tailwind</a>
             </p>
             <p>
-              <a className="text-neutral-600 dark:text-neutral-200">Laravel</a>
+              <a className="text-neutral-600 dark:text-neutral-200">Maven</a>
             </p>
           </div>
           {/* <!-- Useful links section --> */}
@@ -100,20 +106,36 @@ function Footer() {
               Useful links
             </h6>
             <p className="mb-4">
-              <a className="text-neutral-600 dark:text-neutral-200">
+              <a
+                onClick={() => navigate("/about")}
+                className="text-teal-600 dark:text-neutral-200 hover:text-gray-800 cursor-pointer"
+              >
                 Tentang Kami
               </a>
             </p>
             <p className="mb-4">
-              <a className="text-neutral-600 dark:text-neutral-200">Courses</a>
+              <a
+                onClick={() => navigate("/courses")}
+                className="text-teal-600 dark:text-neutral-200 hover:text-gray-800 cursor-pointer"
+              >
+                Courses
+              </a>
             </p>
             <p className="mb-4">
-              <a className="text-neutral-600 dark:text-neutral-200">
+              <a
+                onClick={() => navigate("/register")}
+                className="text-teal-600 dark:text-neutral-200 hover:text-gray-800 cursor-pointer"
+              >
                 Pendaftaran
               </a>
             </p>
             <p>
-              <a className="text-neutral-600 dark:text-neutral-200">Bantuan</a>
+              <a
+                onClick={() => navigate("/admin-login")}
+                className="text-teal-600 dark:text-neutral-200 hover:text-gray-800 cursor-pointer"
+              >
+                Dashboard
+              </a>
             </p>
           </div>
           {/* <!-- Contact section --> */}

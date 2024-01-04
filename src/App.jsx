@@ -43,6 +43,10 @@ function App() {
           path="/email-verify-change"
           element={<ConfirmationChangeEmail />}
         />
+        <Route
+          path="/payment-success"
+          element={<Payment />}
+        />
 
         {/* Halaman Admin */}
         <Route

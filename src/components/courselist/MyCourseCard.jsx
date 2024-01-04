@@ -38,9 +38,6 @@ export default function MyCourseCard({ myCourses }) {
                     {result.courseDuration} Menit
                   </p>
                 </div>
-                <button className="bg-teal-600 text-white text-sm font-medium py-1 px-4 rounded-full">
-                  
-                </button>
               </div>
             </Link>
           </div>
@@ -50,7 +47,6 @@ export default function MyCourseCard({ myCourses }) {
   );
 }
 
-// Prop types
 MyCourseCard.propTypes = {
   myCourses: PropTypes.arrayOf(
     PropTypes.shape({

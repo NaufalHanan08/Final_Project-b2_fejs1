@@ -36,7 +36,7 @@ function Navbar() {
       if (accessToken) {
         try {
           const response = await axios.get(
-            "http://byteacademy.as.r.appspot.com/api/v1/customer/user/me",
+            "https://byteacademy.as.r.appspot.com/api/v1/customer/user/me",
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -76,7 +76,7 @@ function Navbar() {
     try {
       const accessToken = Cookies.get("accessToken");
       const response = await axios.get(
-        "http://byteacademy.as.r.appspot.com/api/v1/customer/notification?page=0",
+        "https://byteacademy.as.r.appspot.com/api/v1/customer/notification?page=0",
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -99,7 +99,7 @@ function Navbar() {
     try {
       const accessToken = Cookies.get("accessToken");
       await axios.post(
-        `http://byteacademy.as.r.appspot.com/api/v1/customer/${id}/read`,
+        `https://byteacademy.as.r.appspot.com/api/v1/customer/${id}/read`,
         {},
         {
           headers: {

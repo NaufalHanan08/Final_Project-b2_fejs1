@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../Navbar";
 import { FaArrowLeft, FaStar } from "react-icons/fa";
@@ -19,6 +19,7 @@ const CourseDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMaterial, setSelectedMaterial] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
@@ -80,6 +81,7 @@ const CourseDetail = () => {
         embedId: "snap-container",
         onSuccess: function (result) {
           console.log("Payment successful!", result);
+          navigate("/payment-success");
         },
         onError: function (result) {
           console.error("Payment failed!", result);

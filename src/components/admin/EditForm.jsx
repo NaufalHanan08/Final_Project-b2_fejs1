@@ -21,19 +21,38 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
     slugCategory: "",
   });
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({
-          ...formData,
-          pathCourseImage: reader.result,
-          pathCourseImageFile: file,
-        });
-      };
-      reader.readAsDataURL(file);
+      const base64 = await convertToBase64(file);
+      handleInputChange({
+        target: { name: "pathCourseImage", value: base64 },
+      });
     }
+  };
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   useEffect(() => {
@@ -66,37 +85,38 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
 
       const headers = {
         Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
       };
 
-      const formDataToSend = new FormData();
-      for (const key in formData) {
-        formDataToSend.append(key, formData[key]);
-      }
+      const payload = { ...formData };
 
-      if (formData.pathCourseImageFile) {
-        formDataToSend.append(
-          "pathCourseImageFile",
-          formData.pathCourseImageFile
-        );
-      }
+      // Menghilangkan properti yang tidak perlu diupdate (seperti pathCourseImageFile)
+      delete payload.pathCourseImageFile;
+
+      // Ubah data ke format JSON
+      const jsonData = JSON.stringify(payload);
 
       const response = await axios.put(
         `https://byteacademy.as.r.appspot.com/api/v1/admin/course/${selectedCourse.slugCourse}`,
-        formDataToSend,
+        jsonData,
         { headers }
       );
 
-      onUpdate(response.data);
+      if (response.status === 200) {
+        onUpdate(response.data);
 
-      toast.success("Kelas berhasil diupdate", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+        toast.success("Kelas berhasil diupdate", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
 
-      setTimeout(() => {
-        onUpdate();
-      }, 2000);
+        setTimeout(() => {
+          onUpdate();
+        }, 2000);
+      } else {
+        console.error("Gagal mengupdate kelas. Status:", response.status);
+      }
     } catch (error) {
-      console.log("Update gagal:", error)
+      console.log("Update gagal:", error);
     }
   };
 
@@ -109,13 +129,9 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <input
           type="text"
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="courseName"
           value={formData.courseName}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              courseName: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         />
       </label>
       <label className="block mb-4">
@@ -123,13 +139,9 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <input
           type="text"
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="instructorName"
           value={formData.instructorName}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              instructorName: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         />
       </label>
       <label className="block mb-4">
@@ -137,13 +149,9 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <input
           type="number"
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="price"
           value={formData.price}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              price: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         />
       </label>
       <label className="block mb-4">
@@ -151,39 +159,27 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <input
           type="number"
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="courseDuration"
           value={formData.courseDuration}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              courseDuration: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         />
       </label>
       <label className="block mb-4">
         <span className="text-gray-700">Deskripsi Kelas</span>
         <textarea
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="courseDescription"
           value={formData.courseDescription}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              courseDescription: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         />
       </label>
       <label className="block mb-4">
         <span className="text-gray-700">Target Market</span>
         <textarea
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="targetMarket"
           value={formData.targetMarket}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              targetMarket: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         />
       </label>
       <label className="block mb-4">
@@ -191,13 +187,9 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <input
           type="text"
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="slugCourse"
           value={formData.slugCourse}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              slugCourse: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         />
       </label>
       <label className="block mb-4">
@@ -205,7 +197,7 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <input
           type="file"
           accept="image/*"
-          onChange={handleImageChange}
+          onChange={handleFileChange}
           className="form-input mt-1 block w-full border-2 py-1 px-2"
         />
       </label>
@@ -214,26 +206,18 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <input
           type="text"
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="groupLink"
           value={formData.groupLink}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              groupLink: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         />
       </label>
       <label className="block mb-4">
         <span className="text-gray-700">Tipe Kelas</span>
         <select
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="courseType"
           value={formData.courseType}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              courseType: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         >
           <option value="FREE">FREE</option>
           <option value="PREMIUM">PREMIUM</option>
@@ -243,13 +227,9 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <span className="text-gray-700">Level Kelas</span>
         <select
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="courseLevel"
           value={formData.courseLevel}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              courseLevel: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         >
           <option value="BEGINNER">BEGINNER</option>
           <option value="INTERMEDIATE">INTERMEDIATE</option>
@@ -260,13 +240,9 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <span className="text-gray-700">Status Kelas</span>
         <select
           className="form-input mt-1 block w-full"
+          name="courseStatus"
           value={formData.courseStatus}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              courseStatus: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         >
           <option value="ACTIVE">ACTIVE</option>
         </select>
@@ -276,13 +252,9 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
         <input
           type="text"
           className="form-input mt-1 block w-full border-2 py-1 px-2"
+          name="slugCategory"
           value={formData.slugCategory}
-          onChange={(e) =>
-            setFormData((prevData) => ({
-              ...prevData,
-              slugCategory: e.target.value,
-            }))
-          }
+          onChange={handleInputChange}
         />
       </label>
       <div className="flex justify-end gap-2">
