@@ -61,29 +61,29 @@ function Navbar() {
   }, [location]);
 
   const handleLogout = async () => {
+    const accessToken = Cookies.get('accessToken');
+
     try {
-      // Lakukan permintaan POST ke endpoint logout API
+      // Melakukan permintaan POST ke API logout dengan menyertakan token akses
       const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/auth/logout', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({}),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      // Memeriksa apakah permintaan berhasil
+      if (response.ok) {
+        // Lakukan logika logout tambahan di sini (misalnya, mengarahkan pengguna ke halaman login)
+        console.log('Logout berhasil');
+        navigate('/'); // Menggunakan navigate untuk mengarahkan pengguna ke halaman '/'
+      } else {
+        // Tangani kasus kesalahan
+        console.error('Logout gagal');
       }
-
-      // Hapus cookie accessToken
-      Cookies.remove('accessToken');
-
-      // Tetapkan state isLoggedIn ke false
-      setIsLoggedIn(false);
     } catch (error) {
-      // Tangani kesalahan jika ada
-      console.error('Error:', error.message);
+      console.error('Error selama logout:', error);
     }
   };
 
