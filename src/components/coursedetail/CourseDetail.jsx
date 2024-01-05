@@ -21,7 +21,7 @@ const CourseDetail = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(null);
 
   useEffect(() => {
-    const snapScript = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    const snapScript = 'http://app.sandbox.midtrans.com/snap/snap.js';
     const clientKey = import.meta.env.VITE_PAYMENT_CLIENT;
     const script = document.createElement('script');
     script.src = snapScript;
