@@ -239,7 +239,7 @@ const CourseDetail = () => {
           </div>
         </div>
       </div>
-      <div id="snap-container flex justify-center"></div>
+      <div id="snap-container justify-center"></div>
       <div className="w-full h-fit sm:pb-4 pb-0 sm:px-8 px-0">
         <button className="flex justify-center w-full sm:rounded-lg rounded-none border border-teal-600 bg-teal-600 py-2 text-white hover:bg-white hover:text-teal-600 transition-all text-2xl font-bold" onClick={handleBuyCourse}>
           Beli Course
