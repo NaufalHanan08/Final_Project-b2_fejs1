@@ -21,7 +21,7 @@ const CourseDetail = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(null);
 
   useEffect(() => {
-    const snapScript = 'http://app.sandbox.midtrans.com/snap/snap.js';
+    const snapScript = 'https://app.sandbox.midtrans.com/snap/snap.js';
     const clientKey = import.meta.env.VITE_PAYMENT_CLIENT;
     const script = document.createElement('script');
     script.src = snapScript;
@@ -61,7 +61,7 @@ const CourseDetail = () => {
       const accessToken = Cookies.get('accessToken');
 
       const midtransResponse = await axios.post(
-        `http://byteacademy.as.r.appspot.com/api/v1/customer/purchase/${slugCourse}`,
+        `https://byteacademy.as.r.appspot.com/api/v1/customer/purchase/${slugCourse}`,
         {},
         {
           headers: {
