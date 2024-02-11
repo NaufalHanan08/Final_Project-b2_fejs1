@@ -24,7 +24,6 @@ const DashboardNavigation = () => {
     const accessToken = Cookies.get('accessToken');
 
     try {
-      // Melakukan permintaan POST ke API logout dengan menyertakan token akses
       const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/auth/logout', {
         method: 'POST',
         headers: {
@@ -33,13 +32,10 @@ const DashboardNavigation = () => {
         },
       });
 
-      // Memeriksa apakah permintaan berhasil
       if (response.ok) {
-        // Lakukan logika logout tambahan di sini (misalnya, mengarahkan pengguna ke halaman login)
         console.log('Logout berhasil');
-        navigate('/'); // Menggunakan navigate untuk mengarahkan pengguna ke halaman '/'
+        navigate('/');
       } else {
-        // Tangani kasus kesalahan
         console.error('Logout gagal');
       }
     } catch (error) {

@@ -17,7 +17,6 @@ function RegisterPage() {
     e.preventDefault();
 
     try {
-      // Mengelola pendaftaran pertama
       const response = await axios.post('https://byteacademy.as.r.appspot.com/api/v1/auth/register', {
         username,
         email,
@@ -27,15 +26,12 @@ function RegisterPage() {
       });
 
       console.log('Pendaftaran berhasil:', response.data);
-      // Set email dalam cookie setelah berhasil mendaftar
       Cookies.set('registeredEmail', email);
 
-      // Langsung arahkan ke halaman OTP setelah berhasil mendaftar
       navigate('/otp', { state: { phoneNumber } });
     } catch (error) {
       console.error('Error saat mendaftar:', error.response?.data || error.message);
       setError(error.response?.data?.message || 'Terjadi kesalahan saat daftar');
-      // Menampilkan pesan error selama 5 detik
       setTimeout(() => {
         setError(null);
       }, 5000);

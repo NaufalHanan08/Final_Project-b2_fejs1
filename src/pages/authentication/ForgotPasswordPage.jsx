@@ -43,7 +43,7 @@ function ForgotPasswordPage() {
           <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Lupa password?</h1>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Ingat password Anda?{' '}
-            <Link to="/login" className="text-teal-600 font-semibold leading-6 text-teal-600 hover:text-gray-800">
+            <Link to="/login" className="font-semibold leading-6 text-teal-600 hover:text-gray-800">
               Masuk di sini
             </Link>
           </p>

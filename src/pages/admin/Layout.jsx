@@ -66,11 +66,9 @@ const Layout = ({ children }) => {
 
   const handleLogout = () => {
     try {
-      // Hapus AccessToken dari cookie
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
 
-      // Redirect ke halaman login setelah logout berhasil
       window.location.href = "/admin-login";
     } catch (error) {
       console.error("Error saat logout:", error);
@@ -99,8 +97,6 @@ const Layout = ({ children }) => {
           "https://byteacademy.as.r.appspot.com//api/v1/admin/dashboard",
           { headers }
         );
-
-        console.log(response.data);
 
         const { results } = response.data;
 

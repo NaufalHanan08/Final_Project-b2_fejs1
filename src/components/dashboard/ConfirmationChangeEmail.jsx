@@ -13,7 +13,7 @@ const ConfirmationChangeEmail = () => {
   useEffect(() => {
     const token = new URLSearchParams(location.search).get('token');
     if (token) {
-      console.log('Token dari URL:', token);
+      // console.log('Token dari URL:', token);
       verifyEmailChange(token);
     } else {
       console.error('Token tidak ditemukan dalam URL.');

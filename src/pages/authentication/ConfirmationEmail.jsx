@@ -12,7 +12,6 @@ const ConfirmationEmail = () => {
     const token = new URLSearchParams(location.search).get('token');
 
     if (token) {
-      console.log('Token dari URL:', token);
       verifyEmail(token);
     } else {
       console.error('Token tidak ditemukan dalam URL.');

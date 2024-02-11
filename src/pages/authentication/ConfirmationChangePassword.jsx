@@ -9,44 +9,34 @@ export function ConfirmationChangePassword() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const [token, setToken] = useState(null); // Menambahkan state untuk menyimpan token
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    // Menggunakan URLSearchParams untuk mengekstrak token dari query parameter
     const tokenFromURL = new URLSearchParams(location.search).get('token');
 
-    // Memeriksa apakah token ada
     if (!tokenFromURL) {
-      // Token tidak ada, mungkin perlu menangani kasus ini
       console.error('Token not found');
-      navigate('/error'); // Ganti dengan rute yang sesuai untuk penanganan kesalahan
+      navigate('/error');
       return;
     }
 
-    // Menyimpan token dalam state
     setToken(tokenFromURL);
 
-    // Jangan lupa untuk menyertakan tokenFromURL dalam dependency array jika digunakan dalam useEffect
   }, [location.search, navigate]);
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
     try {
-      // Kirim data ke API menggunakan metode POST
       const response = await axios.post('https://byteacademy.as.r.appspot.com/api/v1/auth/verify-forgot-password-email', {
         password: newPassword,
         confirmPassword,
-        token: token, // Menggunakan token yang sudah disimpan dalam state
+        token: token,
       });
 
-      // Tanggapi respons dari API
       console.log('Change password success:', response.data);
-
-      // Arahkan pengguna ke halaman profil atau halaman lain setelah berhasil mengubah password
       navigate('/login');
     } catch (error) {
-      // Tangani kesalahan jika terjadi
       console.error('Change password error:', error.response.data);
       setError('Failed to change password. Please check your input and try again.');
     }

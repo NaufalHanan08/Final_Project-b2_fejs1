@@ -23,7 +23,6 @@ const TambahForm = ({ isVisible, togglePopup, setKelasData }) => {
   });
   const [chapterData, setChapterData] = useState({
     chapters: [
-      // Sample initial chapter
       { title: "", chapterDuration: 0, noChapter: 0, slugChapter: "" },
     ],
   });
@@ -86,23 +85,19 @@ const TambahForm = ({ isVisible, togglePopup, setKelasData }) => {
         Authorization: `Bearer ${accessToken}`,
       };
 
-      // Tambah kelas
       const responseKelas = await axios.post(
         "https://byteacademy.as.r.appspot.com/api/v1/admin/course",
         inputData,
         { headers }
       );
 
-      // Setelah kelas berhasil ditambahkan, perbarui slugCourse
       setInputData((prevData) => ({
         ...prevData,
         slugCourse: responseKelas.data.slugCourse,
       }));
 
-      // Setelah kelas berhasil ditambahkan, tambahkan bab
       await saveChapter();
 
-      // Refresh data kelas setelah penambahan berhasil
       const updatedData = await fetchData();
       setKelasData(updatedData);
 
@@ -150,8 +145,6 @@ const TambahForm = ({ isVisible, togglePopup, setKelasData }) => {
         ...chapter,
         slugCourse: inputData.slugCourse,
       }));
-  
-      console.log('Chapters to Save:', chaptersToSave);
   
       await axios.post(
         "https://byteacademy.as.r.appspot.com/api/v1/admin/chapter",

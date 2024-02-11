@@ -44,7 +44,6 @@ function SearchPage() {
         setLoading(true);
 
         const response = await axios.get('https://byteacademy.as.r.appspot.com/api/v1/category?page=0');
-        console.log(response.data);
         setCategories(response.data.results.content);
       } catch (error) {
         console.log('Error fetching category:', error);

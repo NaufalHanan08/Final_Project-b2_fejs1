@@ -22,8 +22,6 @@ const Navbar = () => {
             }
           );
 
-          console.log(response.data);
-
           if (response.status === 200) {
             setIsLoggedIn(true);
             setUsername(response.data.results);

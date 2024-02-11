@@ -37,7 +37,6 @@ function OneTimePasswordPage() {
 
       if (response.status === 200) {
         console.log('Verifikasi berhasil');
-        // Set state to show notification
         setShowNotification(true);
       } else {
         console.error('Verifikasi gagal:', response.data);

@@ -90,10 +90,8 @@ const EditForm = ({ selectedCourse, onUpdate, onCancel }) => {
 
       const payload = { ...formData };
 
-      // Menghilangkan properti yang tidak perlu diupdate (seperti pathCourseImageFile)
       delete payload.pathCourseImageFile;
 
-      // Ubah data ke format JSON
       const jsonData = JSON.stringify(payload);
 
       const response = await axios.put(`https://byteacademy.as.r.appspot.com/api/v1/admin/course/${selectedCourse.slugCourse}`, jsonData, { headers });

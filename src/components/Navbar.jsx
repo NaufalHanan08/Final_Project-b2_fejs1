@@ -41,8 +41,6 @@ function Navbar() {
             },
           });
 
-          console.log(response.data);
-
           if (response.status === 200) {
             setIsLoggedIn(true);
           } else {
@@ -64,7 +62,6 @@ function Navbar() {
     const accessToken = Cookies.get('accessToken');
 
     try {
-      // Melakukan permintaan POST ke API logout dengan menyertakan token akses
       const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/auth/logout', {
         method: 'POST',
         headers: {
@@ -73,13 +70,10 @@ function Navbar() {
         },
       });
 
-      // Memeriksa apakah permintaan berhasil
       if (response.ok) {
-        // Lakukan logika logout tambahan di sini (misalnya, mengarahkan pengguna ke halaman login)
         console.log('Logout berhasil');
-        navigate('/'); // Menggunakan navigate untuk mengarahkan pengguna ke halaman '/'
+        navigate('/');
       } else {
-        // Tangani kasus kesalahan
         console.error('Logout gagal');
       }
     } catch (error) {
@@ -124,14 +118,12 @@ function Navbar() {
         }
       );
 
-      // Remove the notification from the state after marking it as read
       setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
     } catch (error) {
       console.error('Failed to read notification:', error);
     }
   };
 
-  // Fungsi untuk menampilkan atau menyembunyikan notifikasi
   const toggleNotification = () => {
     setShowNotification(!showNotification);
   };
