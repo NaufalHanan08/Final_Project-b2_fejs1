@@ -114,6 +114,7 @@ function Team() {
                   </a>
                 </li>
               </ul>
+              {/* <p className="text-sm text-justify">{team.deskripsi}</p> */}
             </div>
           </div>
         ))}

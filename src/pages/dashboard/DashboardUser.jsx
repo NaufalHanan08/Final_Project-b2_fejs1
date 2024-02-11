@@ -1,9 +1,9 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import DashboardNavigation from "../../components/dashboard/DashboardNavigation";
-import Profile from "../../components/dashboard/Profile";
-import ChangePassword from "../../components/dashboard/ChangePassword";
-import ChangeEmail from "../../components/dashboard/ChangeEmail";
-import ChangePhoneNumber from "../../components/dashboard/ChangePhonenumber";
+import { Routes, Route, Navigate } from 'react-router-dom';
+import DashboardNavigation from '../../components/dashboard/DashboardNavigation';
+import Profile from '../../components/dashboard/Profile';
+import ChangePassword from '../../components/dashboard/ChangePassword';
+import ChangeEmail from '../../components/dashboard/ChangeEmail';
+import ChangePhoneNumber from '../../components/dashboard/ChangePhonenumber';
 
 const DashboardUser = () => {
   return (

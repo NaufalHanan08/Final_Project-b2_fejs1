@@ -8,7 +8,6 @@ export default function HomeCourseCategory() {
     axios
       .get("https://byteacademy.as.r.appspot.com/api/v1/course/search?page=0")
       .then((res) => {
-        console.log(res.data);
         setCourses(res.data.results.content);
       })
       .catch((err) => console.log("Error fetching home category:", err));

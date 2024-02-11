@@ -1,38 +1,34 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { Card, Input, Button, Typography } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import { Link } from 'react-router-dom';
 
 export function Profil() {
   const [userData, setUserData] = useState({
-    username: "",
-    name: "",
-    email: "",
-    phoneNumber: "",
-    country: "",
-    city: "",
+    username: '',
+    name: '',
+    email: '',
+    phoneNumber: '',
+    country: '',
+    city: '',
   });
 
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const accessToken = Cookies.get("accessToken");
-        const response = await axios.get(
-          "https://byteacademy.as.r.appspot.com/api/v1/customer/user/me",
-          {
-            headers: {
-              accept: "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const accessToken = Cookies.get('accessToken');
+        const response = await axios.get('https://byteacademy.as.r.appspot.com/api/v1/customer/user/me', {
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
-        const { customerDetail, email, phoneNumber, username } =
-          response.data.results;
+        const { customerDetail, email, phoneNumber, username } = response.data.results;
         setUserData({
           username,
           name: customerDetail.name,
@@ -42,9 +38,9 @@ export function Profil() {
           city: customerDetail.city,
         });
       } catch (error) {
-        console.error("Error fetching user data", error);
-        console.error("Error details:", error.response);
-        setError("Error saat mengambil data pengguna. Silakan coba lagi."); // Set the error state
+        console.error('Error fetching user data', error);
+        console.error('Error details:', error.response);
+        setError('Error saat mengambil data pengguna. Silakan coba lagi.'); // Set the error state
       }
     };
 
@@ -54,10 +50,10 @@ export function Profil() {
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     try {
-      const accessToken = Cookies.get("accessToken");
+      const accessToken = Cookies.get('accessToken');
 
       await axios.put(
-        "https://byteacademy.as.r.appspot.com/api/v1/setting/update-customer-detail",
+        'https://byteacademy.as.r.appspot.com/api/v1/setting/update-customer-detail',
         {
           name: userData.name,
           country: userData.country,
@@ -65,20 +61,20 @@ export function Profil() {
         },
         {
           headers: {
-            accept: "application/json",
-            "Content-Type": "application/json",
+            accept: 'application/json',
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
 
-      setSuccessMessage("Profil berhasil diperbarui");
+      setSuccessMessage('Profil berhasil diperbarui');
       setTimeout(() => {
-        setSuccessMessage("");
+        setSuccessMessage('');
       }, 5000);
     } catch (error) {
-      console.error("Error updating profile", error);
-      setError("Error saat memperbarui profil. Silakan coba lagi."); // Set the error state
+      console.error('Error updating profile', error);
+      setError('Error saat memperbarui profil. Silakan coba lagi.'); // Set the error state
     }
   };
 
@@ -86,10 +82,7 @@ export function Profil() {
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <Card className="mt-[-32px] sm:mx-auto sm:w-full sm:max-w-sm">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Typography
-            variant="h2"
-            className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
-          >
+          <Typography variant="h2" className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Profil Pengguna
           </Typography>
         </div>
@@ -101,10 +94,7 @@ export function Profil() {
             </div>
 
             <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+              <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
                 Nama
               </label>
               <div className="mt-2">
@@ -118,26 +108,18 @@ export function Profil() {
                   placeholder="Nama Anda"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   value={userData.name}
-                  onChange={(e) =>
-                    setUserData({ ...userData, name: e.target.value })
-                  }
+                  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
+                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                   Email
                 </label>
                 <div className="text-sm">
-                  <Link
-                    to="../change-email"
-                    className="font-semibold text-teal-600 hover:text-gray-800"
-                  >
+                  <Link to="../change-email" className="font-semibold text-teal-600 hover:text-gray-800">
                     Ganti Email
                   </Link>
                 </div>
@@ -153,26 +135,19 @@ export function Profil() {
                   placeholder="nama@mail.com"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   value={userData.email}
-                  onChange={(e) =>
-                    setUserData({ ...userData, email: e.target.value })
-                  }
+                  onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                  disabled // Menonaktifkan input
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
-                <label
-                  htmlFor="phoneNumber"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
+                <label htmlFor="phoneNumber" className="block text-sm font-medium leading-6 text-gray-900">
                   Nomor Telepon
                 </label>
                 <div className="text-sm">
-                  <Link
-                    to="../change-phonenumber"
-                    className="font-semibold text-teal-600 hover:text-gray-800"
-                  >
+                  <Link to="../change-phonenumber" className="font-semibold text-teal-600 hover:text-gray-800">
                     Ganti Nomor Telepon
                   </Link>
                 </div>
@@ -188,18 +163,14 @@ export function Profil() {
                   placeholder="Nomor Telepon Anda"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   value={userData.phoneNumber}
-                  onChange={(e) =>
-                    setUserData({ ...userData, phoneNumber: e.target.value })
-                  }
+                  onChange={(e) => setUserData({ ...userData, phoneNumber: e.target.value })}
+                  disabled // Menonaktifkan input
                 />
               </div>
             </div>
 
             <div>
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+              <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
                 Negara
               </label>
               <div className="mt-2">
@@ -213,18 +184,13 @@ export function Profil() {
                   placeholder="Negara Anda"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   value={userData.country}
-                  onChange={(e) =>
-                    setUserData({ ...userData, country: e.target.value })
-                  }
+                  onChange={(e) => setUserData({ ...userData, country: e.target.value })}
                 />
               </div>
             </div>
 
             <div>
-              <label
-                htmlFor="city"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+              <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
                 Kota
               </label>
               <div className="mt-2">
@@ -238,9 +204,7 @@ export function Profil() {
                   placeholder="Kota Anda"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   value={userData.city}
-                  onChange={(e) =>
-                    setUserData({ ...userData, city: e.target.value })
-                  }
+                  onChange={(e) => setUserData({ ...userData, city: e.target.value })}
                 />
               </div>
             </div>

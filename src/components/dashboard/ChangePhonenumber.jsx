@@ -1,47 +1,53 @@
-import { useState } from "react";
-import { Card, Input, Button, Typography } from "@material-tailwind/react";
-import Cookies from "js-cookie";
+import { useState, useEffect } from 'react';
+import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 function ChangePhoneNumber() {
-  const [newPhoneNumber, setNewPhoneNumber] = useState("");
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [newPhoneNumber, setNewPhoneNumber] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
+
+  const clearMessages = () => {
+    setError('');
+    setSuccessMessage('');
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(clearMessages, 5000);
+    return () => clearTimeout(timeoutId);
+  }, [error, successMessage]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        "https://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone",
-        {
-          method: "POST",
-          headers: {
-            accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            phoneNumber: newPhoneNumber,
-          }),
-        }
-      );
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/setting/generate-otp-change-phone', {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Cookies.get('accessToken')}`,
+        },
+        body: JSON.stringify({
+          phoneNumber: newPhoneNumber,
+        }),
+      });
 
-      console.log("Nomor Telepon Berhasil Diubah:", newPhoneNumber);
-      console.log("Response:", response);
+      const responseData = await response.json();
+      console.log(responseData);
 
       if (response.ok) {
-        Cookies.set("newPhoneNumber", newPhoneNumber);
-
-        setSuccessMessage("OTP berhasil terkirim.");
+        Cookies.set('newPhoneNumber', newPhoneNumber);
+        setSuccessMessage('OTP berhasil terkirim.');
+        navigate('/phone-verify-change');
       } else {
-        setError(
-          "Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi."
-        );
+        setError(responseData.message || 'Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi.');
       }
     } catch (error) {
-      setError(
-        "Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi."
-      );
-      console.error("Error mengubah nomor telepon:", error);
+      setError('Terjadi kesalahan. Pastikan nomor telepon benar dan coba lagi.');
+      console.error('Error mengubah nomor telepon:', error);
     }
   };
 
@@ -49,20 +55,14 @@ function ChangePhoneNumber() {
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <Card className="mt-[-20px] sm:mx-auto sm:w-full sm:max-w-sm p-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Typography
-            variant="h2"
-            className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
-          >
+          <Typography variant="h2" className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Ganti Nomor Telepon
           </Typography>
         </div>
 
         <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label
-              htmlFor="newPhoneNumber"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="newPhoneNumber" className="block text-sm font-medium leading-6 text-gray-900">
               Nomor Telepon Baru
             </label>
             <div className="mt-2">
@@ -90,14 +90,8 @@ function ChangePhoneNumber() {
             </Button>
           </div>
 
-          {successMessage && (
-            <div className="mt-4 text-center text-green-500 text-sm">
-              {successMessage}
-            </div>
-          )}
-          {error && (
-            <div className="mt-4 text-center text-red-500 text-sm">{error}</div>
-          )}
+          {successMessage && <div className="mt-4 text-center text-green-500 text-sm">{successMessage}</div>}
+          {error && <div className="mt-4 text-center text-red-500 text-sm">{error}</div>}
         </form>
       </Card>
     </div>

@@ -1,47 +1,51 @@
-import { useState } from "react";
-import { Card, Input, Button, Typography } from "@material-tailwind/react";
-import Cookies from "js-cookie";
+import { useState, useEffect } from 'react';
+import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import Cookies from 'js-cookie';
 
 function ChangeEmail() {
-  const [newEmail, setNewEmail] = useState("");
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [newEmail, setNewEmail] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const clearMessages = () => {
+    setError('');
+    setSuccessMessage('');
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(clearMessages, 5000);
+    return () => clearTimeout(timeoutId);
+  }, [error, successMessage]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const accessToken = Cookies.get("accessToken");
-      const response = await fetch(
-        "https://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            email: newEmail,
-          }),
-        }
-      );
+      const accessToken = Cookies.get('accessToken');
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/setting/generate-email-change', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          email: newEmail,
+        }),
+      });
 
-      const data = await response.json();
+      const responseData = await response.json();
+      console.log(responseData);
 
       if (response.ok) {
-        Cookies.set("newEmail", newEmail);
-        setSuccessMessage(
-          `Tautan verifikasi telah dikirim ke ${newEmail}, silakan cek email anda`
-        );
-        console.log("Email Berhasil Diubah:", data);
+        Cookies.set('newEmail', newEmail);
+        setSuccessMessage(`Tautan verifikasi telah dikirim ke ${newEmail}, silakan cek email anda`);
       } else {
-        setError(data.error);
-        console.error("Gagal mengubah email:", data);
+        setError(responseData.message || 'Gagal menirim tautan ke ${newEmail}');
       }
     } catch (error) {
-      setError("Terjadi kesalahan");
-      console.error("Terjadi kesalahan:", error);
+      setError('Terjadi kesalahan');
+      console.error('Terjadi kesalahan:', error);
     }
   };
 
@@ -49,20 +53,14 @@ function ChangeEmail() {
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <Card className="mt-[-20px] sm:mx-auto sm:w-full sm:max-w-sm p-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Typography
-            variant="h2"
-            className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
-          >
+          <Typography variant="h2" className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Ganti Email
           </Typography>
         </div>
 
         <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label
-              htmlFor="newEmail"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="newEmail" className="block text-sm font-medium leading-6 text-gray-900">
               Email Baru
             </label>
             <div className="mt-2">
@@ -89,14 +87,9 @@ function ChangeEmail() {
               Ganti Email
             </Button>
           </div>
-          {error && (
-            <div className="mt-4 text-center text-red-500 text-sm">{error}</div>
-          )}
-          {successMessage && (
-            <div className="mt-4 text-center text-green-500 text-sm">
-              {successMessage}
-            </div>
-          )}
+
+          {successMessage && <div className="mt-4 text-center text-green-500 text-sm">{successMessage}</div>}
+          {error && <div className="mt-4 text-center text-red-500 text-sm">{error}</div>}
         </form>
       </Card>
     </div>

@@ -23,7 +23,6 @@ const TambahForm = ({ isVisible, togglePopup, setKelasData }) => {
   });
   const [chapterData, setChapterData] = useState({
     chapters: [
-      // Sample initial chapter
       { title: "", chapterDuration: 0, noChapter: 0, slugChapter: "" },
     ],
   });
@@ -93,16 +92,13 @@ const TambahForm = ({ isVisible, togglePopup, setKelasData }) => {
         { headers }
       );
 
-      // Setelah kelas berhasil ditambahkan, perbarui slugCourse
       setInputData((prevData) => ({
         ...prevData,
         slugCourse: responseKelas.data.slugCourse,
       }));
 
-      // Setelah kelas berhasil ditambahkan, tambahkan bab
       await saveChapter();
 
-      // Refresh data kelas setelah penambahan berhasil
       const updatedData = await fetchData();
       setKelasData(updatedData);
 

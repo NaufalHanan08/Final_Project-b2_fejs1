@@ -30,7 +30,7 @@ export function AdminLoginPage() {
       if (response.ok) {
         const data = await response.json();
 
-        console.log("Data Respons API:", data);
+        // console.log("Data Respons API:", data);
 
         const accessToken = data.results?.accessToken;
         const refreshToken = data.results?.refreshToken;

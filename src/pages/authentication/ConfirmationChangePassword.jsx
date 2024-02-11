@@ -1,22 +1,22 @@
-import { Card, Input, Button, Typography } from "@material-tailwind/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export function ConfirmationChangePassword() {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    const tokenFromURL = new URLSearchParams(location.search).get("token");
+    const tokenFromURL = new URLSearchParams(location.search).get('token');
 
     if (!tokenFromURL) {
-      console.error("Token not found");
-      navigate("/error");
+      console.error('Token not found');
+      navigate('/error');
       return;
     }
 
@@ -28,23 +28,18 @@ export function ConfirmationChangePassword() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "https://byteacademy.as.r.appspot.com/api/v1/auth/verify-forgot-password-email",
-        {
-          password: newPassword,
-          confirmPassword,
-          token: token,
-        }
-      );
+      const response = await axios.post('https://byteacademy.as.r.appspot.com/api/v1/auth/verify-forgot-password-email', {
+        password: newPassword,
+        confirmPassword,
+        token: token,
+      });
 
-      console.log("Change password success:", response.data);
+      console.log('Change password success:', response.data);
 
-      navigate("/login");
+      navigate('/login');
     } catch (error) {
-      console.error("Change password error:", error.response.data);
-      setError(
-        "Failed to change password. Please check your input and try again."
-      );
+      console.error('Change password error:', error.response.data);
+      setError('Failed to change password. Please check your input and try again.');
     }
   };
 
@@ -52,25 +47,14 @@ export function ConfirmationChangePassword() {
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <Card className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Typography
-            variant="h2"
-            className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
-          >
+          <Typography variant="h2" className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Change Password
           </Typography>
         </div>
 
-        <form
-          className="mt-10 space-y-6"
-          action="#"
-          method="POST"
-          onSubmit={handleChangePassword}
-        >
+        <form className="mt-10 space-y-6" action="#" method="POST" onSubmit={handleChangePassword}>
           <div>
-            <Typography
-              variant="label"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
               New Password
             </Typography>
             <div className="mt-2">
@@ -90,10 +74,7 @@ export function ConfirmationChangePassword() {
           </div>
 
           <div>
-            <Typography
-              variant="label"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
               Confirm New Password
             </Typography>
             <div className="mt-2">
@@ -112,9 +93,7 @@ export function ConfirmationChangePassword() {
             </div>
           </div>
 
-          {error && (
-            <div className="text-red-500 text-sm font-medium">{error}</div>
-          )}
+          {error && <div className="text-red-500 text-sm font-medium">{error}</div>}
 
           <div>
             <Button

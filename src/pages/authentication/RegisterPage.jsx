@@ -1,15 +1,15 @@
-import { useState } from "react";
-import { Card, Input, Button, Typography } from "@material-tailwind/react";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useState } from 'react';
+import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function RegisterPage() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -17,27 +17,24 @@ function RegisterPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "https://byteacademy.as.r.appspot.com/api/v1/auth/register",
-        {
-          username,
-          email,
-          password,
-          name,
-          phoneNumber,
-        }
-      );
+      const response = await axios.post('https://byteacademy.as.r.appspot.com/api/v1/auth/register', {
+        username,
+        email,
+        password,
+        name,
+        phoneNumber,
+      });
 
-      console.log("Pendaftaran berhasil:", response.data);
-      Cookies.set("registeredEmail", email);
+      console.log('Pendaftaran berhasil:', response.data);
+      Cookies.set('registeredEmail', email);
 
-      navigate("/otp", { state: { phoneNumber } });
+      navigate('/otp', { state: { phoneNumber } });
     } catch (error) {
-      console.error(
-        "Error saat mendaftar:",
-        error.response?.data || error.message
-      );
-      setError("Pendaftaran gagal. Periksa input Anda dan coba lagi.");
+      console.error('Error saat mendaftar:', error.response?.data || error.message);
+      setError(error.response?.data?.message || 'Terjadi kesalahan saat daftar');
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
     }
   };
 
@@ -45,25 +42,14 @@ function RegisterPage() {
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <Card className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Typography
-            variant="h2"
-            className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
-          >
+          <Typography variant="h2" className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Daftar
           </Typography>
         </div>
 
-        <form
-          className="mt-10 space-y-6"
-          action="#"
-          method="POST"
-          onSubmit={handleRegister}
-        >
+        <form className="mt-10 space-y-6" action="#" method="POST" onSubmit={handleRegister}>
           <div>
-            <Typography
-              variant="label"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
               Nama Pengguna
             </Typography>
             <div className="mt-2">
@@ -83,10 +69,7 @@ function RegisterPage() {
           </div>
 
           <div>
-            <Typography
-              variant="label"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
               Nama Anda
             </Typography>
             <div className="mt-2">
@@ -106,10 +89,7 @@ function RegisterPage() {
           </div>
 
           <div>
-            <Typography
-              variant="label"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
               Email Anda
             </Typography>
             <div className="mt-2">
@@ -129,10 +109,7 @@ function RegisterPage() {
           </div>
 
           <div>
-            <Typography
-              variant="label"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
               Nomor Telepon Anda
             </Typography>
             <div className="mt-2">
@@ -152,10 +129,7 @@ function RegisterPage() {
           </div>
 
           <div>
-            <Typography
-              variant="label"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <Typography variant="label" className="block text-sm font-medium leading-6 text-gray-900">
               Kata Sandi
             </Typography>
             <div className="mt-2">
@@ -182,21 +156,12 @@ function RegisterPage() {
               Daftar
             </Button>
           </div>
+          {error && <div className="mt-4 text-center text-red-500 text-sm">{error}</div>}
         </form>
 
-        {error && (
-          <div className="text-red-500 text-sm font-medium">{error}</div>
-        )}
-
-        <Typography
-          variant="p"
-          className="mt-10 text-center text-sm text-gray-500"
-        >
-          Sudah punya akun?{" "}
-          <Link
-            to="/login"
-            className="font-semibold leading-6 text-teal-600 hover:text-gray-800"
-          >
+        <Typography variant="p" className="mt-10 text-center text-sm text-gray-500">
+          Sudah punya akun?{' '}
+          <Link to="/login" className="font-semibold leading-6 text-teal-600 hover:text-gray-800">
             Masuk
           </Link>
         </Typography>

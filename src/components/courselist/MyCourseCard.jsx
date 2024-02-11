@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { RiShieldStarLine } from "react-icons/ri";
-import { RiBook3Line } from "react-icons/ri";
-import { HiClock } from "react-icons/hi";
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { RiShieldStarLine } from 'react-icons/ri';
+import { RiBook3Line } from 'react-icons/ri';
+import { HiClock } from 'react-icons/hi';
 
 export default function MyCourseCard({ myCourses }) {
   return (
@@ -11,18 +11,10 @@ export default function MyCourseCard({ myCourses }) {
         {myCourses.map((result) => (
           <div key={result.slugCourse} className="shadow-lg rounded-2xl">
             <Link to={`/my-detail/${result.slugCourse}`}>
-              <img
-                className="w-full sm:h-48 h-28 object-cover"
-                src={result.pathCourseImage}
-                alt={result.category.categoryName}
-              />
+              <img className="w-full sm:h-48 h-28 object-cover" src={result.pathCourseImage} alt={result.category.categoryName} />
               <div className="px-4 pb-2 pt-1">
-                <h2 className="lg:text-lg md:text-xl text-md text-teal-600">
-                  {result.category.categoryName}
-                </h2>
-                <h1 className="lg:text-xl md:text-2xl sm:text-xl text-lg font-semibold">
-                  {result.courseName}
-                </h1>
+                <h2 className="lg:text-lg md:text-xl text-md text-teal-600">{result.category.categoryName}</h2>
+                <h1 className="lg:text-xl md:text-2xl sm:text-xl text-lg font-semibold">{result.courseName}</h1>
                 <p className="text-xs font-light">by {result.instructorName}</p>
                 <div className="flex justify-around flex-wrap md:gap-2 py-2">
                   <p className="text-blue-700 font-bold sm:text-sm text-xs flex items-center gap-1">

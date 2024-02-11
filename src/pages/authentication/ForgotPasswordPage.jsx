@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleEmailChange = (e) => {
     const emailValue = e.target.value;
@@ -15,49 +15,35 @@ function ForgotPasswordPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        "https://byteacademy.as.r.appspot.com/api/v1/auth/forgot-password-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/auth/forgot-password-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Terjadi kesalahan");
+        throw new Error(errorData.message || 'Terjadi kesalahan');
       }
 
-      setSuccess(
-        "Instruksi reset password telah dikirim. Silakan cek email Anda."
-      );
-      setError("");
+      setSuccess('Instruksi reset password telah dikirim. Silakan cek email Anda.');
+      setError('');
     } catch (error) {
-      setError(error.message || "Terjadi kesalahan");
-      setSuccess("");
+      setError(error.message || 'Terjadi kesalahan');
+      setSuccess('');
     }
   };
 
   return (
-    <main
-      id="content"
-      role="main"
-      className="flex items-center justify-center min-h-screen"
-    >
+    <main id="content" role="main" className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 p-4 sm:p-7">
         <div className="text-center">
-          <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
-            Lupa password?
-          </h1>
+          <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Lupa password?</h1>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Ingat password Anda?{" "}
-            <Link
-              to="/login"
-              className="text-teal-600 font-semibold leading-6 hover:text-gray-800"
-            >
+            Ingat password Anda?{' '}
+            <Link to="/login" className="font-semibold leading-6 text-teal-600 hover:text-gray-800">
               Masuk di sini
             </Link>
           </p>
@@ -67,10 +53,7 @@ function ForgotPasswordPage() {
           <form>
             <div className="grid gap-y-4">
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-bold ml-1 mb-2 dark:text-white"
-                >
+                <label htmlFor="email" className="block text-sm font-bold ml-1 mb-2 dark:text-white">
                   Alamat Email
                 </label>
                 <div className="relative">

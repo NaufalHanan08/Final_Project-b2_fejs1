@@ -1,62 +1,56 @@
-import { useState } from "react";
-import { Card, Input, Button, Typography } from "@material-tailwind/react";
-import Cookies from "js-cookie";
+import { useState } from 'react';
+import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import Cookies from 'js-cookie';
 
 function ChangePassword() {
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [error, setError] = useState("");
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [error, setError] = useState('');
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
-    const accessToken = Cookies.get("accessToken");
+    const accessToken = Cookies.get('accessToken');
 
     try {
-      const response = await fetch(
-        "https://byteacademy.as.r.appspot.com/api/v1/setting/change-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            currentPassword: oldPassword,
-            newPassword: newPassword,
-            confirmPassword: confirmPassword,
-          }),
-        }
-      );
+      const response = await fetch('https://byteacademy.as.r.appspot.com/api/v1/setting/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          currentPassword: oldPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
+        }),
+      });
 
       if (response.ok) {
-        setSuccessMessage("Kata sandi berhasil diubah!");
-        setError("");
+        setSuccessMessage('Kata sandi berhasil diubah!');
+        setError('');
 
         setTimeout(() => {
-          setSuccessMessage("");
+          setSuccessMessage('');
         }, 5000);
       } else {
         const data = await response.json();
-        setSuccessMessage("");
-        setError(data.message || "Gagal mengganti kata sandi");
+        setSuccessMessage('');
+        setError(data.message || 'Gagal mengganti kata sandi');
 
         setTimeout(() => {
-          setError("");
+          setError('');
         }, 5000);
       }
     } catch (error) {
-      console.error(
-        "Terjadi kesalahan saat mengganti kata sandi:",
-        error.message
-      );
-      setSuccessMessage("");
-      setError("Terjadi kesalahan yang tidak terduga.");
+      console.error('Terjadi kesalahan saat mengganti kata sandi:', error.message);
+      setSuccessMessage('');
+      setError('Terjadi kesalahan yang tidak terduga.');
 
       setTimeout(() => {
-        setError("");
+        setError('');
       }, 5000);
     }
   };
@@ -65,20 +59,14 @@ function ChangePassword() {
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <Card className="mt-[-20px] sm:mx-auto sm:w-full sm:max-w-sm p-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Typography
-            variant="h2"
-            className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
-          >
+          <Typography variant="h2" className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Ubah Kata Sandi
           </Typography>
         </div>
 
         <form className="mt-10 space-y-6" onSubmit={handleChangePassword}>
           <div>
-            <label
-              htmlFor="oldPassword"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="oldPassword" className="block text-sm font-medium leading-6 text-gray-900">
               Kata Sandi Lama
             </label>
             <div className="mt-2">
@@ -98,10 +86,7 @@ function ChangePassword() {
           </div>
 
           <div>
-            <label
-              htmlFor="newPassword"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="newPassword" className="block text-sm font-medium leading-6 text-gray-900">
               Kata Sandi Baru
             </label>
             <div className="mt-2">
@@ -121,10 +106,7 @@ function ChangePassword() {
           </div>
 
           <div>
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
+            <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
               Konfirmasi Kata Sandi Baru
             </label>
             <div className="mt-2">
