@@ -27,7 +27,6 @@ export default function MyCourseDetail() {
         const response = await axios.get(
           `https://byteacademy.as.r.appspot.com/api/v1/course/${slugCourse}`
         );
-        console.log(response.data);
         if (response.data.code === 200) {
           setDetailCourses(response.data.results);
         } else {

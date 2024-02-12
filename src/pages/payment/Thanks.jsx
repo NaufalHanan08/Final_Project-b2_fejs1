@@ -1,4 +1,3 @@
-// Thanks.js
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -7,7 +6,6 @@ const Thanks = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    // Mengarahkan ke "/courses" saat tombol diklik
     navigate('/courses');
   };
 

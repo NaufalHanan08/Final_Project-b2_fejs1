@@ -39,7 +39,6 @@ export default function MyCourseCard({ myCourses }) {
   );
 }
 
-// Prop types
 MyCourseCard.propTypes = {
   myCourses: PropTypes.arrayOf(
     PropTypes.shape({

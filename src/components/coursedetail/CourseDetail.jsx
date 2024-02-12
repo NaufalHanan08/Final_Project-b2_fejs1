@@ -100,8 +100,8 @@ const CourseDetail = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then((response) => {
-        console.log('Material API Data:', response.data);
+      .then(() => {
+        console.log('Material API Data');
       })
       .catch((error) => {
         console.error('Error fetching material data:', error);

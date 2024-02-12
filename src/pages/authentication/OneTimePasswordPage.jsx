@@ -37,7 +37,6 @@ function OneTimePasswordPage() {
 
       if (response.status === 200) {
         console.log('Verifikasi berhasil');
-        // Set state to show notification
         setShowNotification(true);
       } else {
         console.error('Verifikasi gagal:', response.data);
@@ -119,7 +118,6 @@ function OneTimePasswordPage() {
                     Daftar
                   </Button>
 
-                  {/* Pesan error ditampilkan di sini */}
                   {error && (
                     <div className="mt-4 text-red-600 text-center">
                       <p>{error}</p>

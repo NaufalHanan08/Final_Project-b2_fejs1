@@ -37,7 +37,6 @@ function AllCourses() {
           `https://byteacademy.as.r.appspot.com/api/v1/course/search?page=${currentPage}`
         );
 
-        console.log("Course:", response.data);
         const responseData = response.data.results;
 
         setTotalPages(responseData.totalPages);
@@ -159,7 +158,6 @@ function AllCourses() {
           { headers }
         );
 
-        console.log("My Course:", response.data);
         const responseData = response.data.results;
 
         setTotalPages(responseData.totalPages);

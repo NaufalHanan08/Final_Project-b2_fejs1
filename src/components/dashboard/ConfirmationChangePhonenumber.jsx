@@ -25,11 +25,9 @@ function ConfirmationChangePhonenumber() {
 
   const handleVerification = async (e) => {
     e.preventDefault();
-    // Menampilkan nilai OTP di console
     const accessToken = Cookies.get('accessToken');
-    const otpValue = otp.join(''); // Deklarasikan otpValue menggunakan let
+    const otpValue = otp.join('');
 
-    // Tampilkan nilai OTP di console
     console.log('OTP yang dimasukkan:', otpValue);
 
     try {

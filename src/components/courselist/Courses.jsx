@@ -12,7 +12,7 @@ const AllCourse = () => {
       <span className="text-2xl lg:text-5xl font-bold mb-2 overflow-y-clip flex items-start pb-2">
         Katalog Kelas
       </span>
-      <h3 className="text-base text-lg mb-8 mx-px sm:text-lg md:h-fit">
+      <h3 className="text-base mb-8 mx-px sm:text-lg md:h-fit">
         Belajar dari kelas kami untuk skill yang lebih menarik
       </h3>
       <span className="text-xl lg:text-4xl font-bold mb-2">

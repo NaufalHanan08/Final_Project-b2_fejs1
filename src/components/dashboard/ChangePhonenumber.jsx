@@ -35,7 +35,7 @@ function ChangePhoneNumber() {
         }),
       });
 
-      const responseData = await response.json(); // tambahkan ini untuk melihat pesan kesalahan dari server
+      const responseData = await response.json();
       console.log(responseData);
 
       if (response.ok) {

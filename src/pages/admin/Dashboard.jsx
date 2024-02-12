@@ -24,7 +24,6 @@ const Dashboard = () => {
           { headers }
         );
 
-        console.log(response.data);
         setPaymentsData(response.data.results.content);
         setTotalPages(response.data.results.totalPages);
       } catch (error) {
